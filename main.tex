@@ -1,0 +1,105 @@
+\documentclass[a4paper]{report}
+\usepackage{setspace}
+%\usepackage{subfigure}
+
+\pagestyle{plain}
+\input{Packages}
+\usepackage[a4paper, margin = 3cm, bottom = 2.5cm]{geometry}
+
+\newtheorem{theorem}{THEOREM}
+\newtheorem{lemma}[theorem]{LEMMA}
+\newtheorem{corollary}[theorem]{COROLLARY}
+\newtheorem{proposition}[theorem]{PROPOSITION}
+\newtheorem{remark}[theorem]{REMARK}
+\newtheorem{definition}[theorem]{DEFINITION}
+\newtheorem{fact}[theorem]{FACT}
+
+\newcommand{\nats}{\mbox{\( \mathbb N \)}}
+\newcommand{\rat}{\mbox{\(\mathbb Q\)}}
+\newcommand{\rats}{\mbox{\(\mathbb Q\)}}
+\newcommand{\reals}{\mbox{\(\mathbb R\)}}
+\newcommand{\ints}{\mbox{\(\mathbb Z\)}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ========================================
+% Title Page
+% ========================================
+\title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
+{{\vspace{2em} \Huge Numerical Benchmarking on Inverse Z-Transform and Its Uses in Discrete Pricing Options}}\\
+{\large Final Year Project Report}\\
+}
+\date{Submission date: \today}
+\author{Roman Ryan Karim\thanks{
+{\bf Disclaimer:}
+This report is submitted as part requirement for the MEng degree in Mathematical Computation at UCL. It is substantially the result of my own work except where explicitly indicated in the text. The report may be freely copied and distributed provided the source is explicitly acknowledged.}
+\\ \\ Dr Carolyn Phelan
+\\ \\ \\ \\ Department of Computer Science
+\\ University College London
+\\ \\
+}
+
+
+% ========================================
+% Report
+% ========================================
+\begin{document}
+ 
+\onehalfspacing
+\maketitle
+\begin{abstract}
+
+\end{abstract}
+
+% ========================================
+% Contents
+% ========================================
+\tableofcontents
+\setcounter{page}{1}
+
+% ========================================
+% Introduction
+% ========================================
+\input{1.introduction}
+
+% ========================================
+% Context
+% ========================================
+\input{2.context}
+
+% ========================================
+% Analysis and Implementation
+% ========================================
+\input{3.analysis_and_implementation}
+
+% ========================================
+% Testing
+% ========================================
+\input{4.testing}
+
+% ========================================
+% Conclusions
+% ========================================
+\input{5.conclusions}
+
+% ========================================
+% References 
+% ========================================
+\addcontentsline{toc}{chapter}{References}
+\bibliography{references}
+\bibliographystyle{apalike}
+
+% ========================================
+% Appendix
+% ========================================
+\begin{appendices}
+
+\chapter{Initial Project Plan}
+
+\includepdf[pages=-]{initial_project_plan.pdf}
+
+\chapter{Interim Project Plan}
+    
+\end{appendices}
+
+\end{document}
