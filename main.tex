@@ -79,22 +79,39 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % ========================================
 % Background
 % ========================================
-\chapter{Mathematical Background}
-\section{Complex Numbers and Contours}
-% Other names:
-% Complex Analysis Primer
-% Complex Analysis Introduction
-% Intro to Complex Analysis
-% Complex Analysis Basics
-% Complex Analysis Fundamentals
-
+\chapter{Background}
 "By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \cite{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
 
-\section{Transform Methods}
 
-\section{Inverse Z-Transform}
+\section{$\mathcal{Z}$-Transform}
+\todo[inline]{Come up with a more catchy Z-Transform title}
+
+The $z$-transform is a transformation of a real or complex continuous time function $x(t)$, often used for discrete time signals and is commonly described as the discrete time Fourier transform (DTFT). Taking the Fourier transform of a sampled function results in
+
+\begin{equation}
+\mathcal{F}\bigg[x(t) \sum^{\infty}_{n = -\infty} \delta(t - n \triangle t)\bigg] = \int^{\infty}_{-\infty} x(t)	 \sum_{n = - \infty}^{\infty} \delta (t - n\triangle t)e^{-j\omega t} dt 
+\end{equation}
+
+\noindent We can then make use of the sifting property of the delta function.
+
+\begin{equation}
+	= \sum_{n = - \infty}^{\infty} \int^{\infty}_{-\infty} x(t) \delta (t - n\triangle t)e^{-j\omega t} dt 
+\end{equation}
+
+\begin{equation}
+	= \sum^{\infty}_{n=-\infty} x(n \triangle t)e^{-j\omega nt}
+\end{equation}
+
+\noindent If we normalise the sampling interval to 1, we get
+
+\begin{equation}
+	\sum^{\infty}_{n = - \infty} x(n)e^{-j n \omega}
+\end{equation}
+The sequence $x(n)$ is sampled at discrete time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples \cite{LovelessGuido2021}. 
 
 \section{Discrete Pricing Options}
+
+\section{Optimisation Techniques}
 
 % ========================================
 % Experiment
