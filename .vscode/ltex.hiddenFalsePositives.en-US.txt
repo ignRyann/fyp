@@ -1,0 +1,1 @@
+{"rule":"ADVERB_OR_HYPHENATED_ADJECTIVE","sentence":"^\\Qwhere \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q is a complex variable represented by \\E(?:Dummy|Ina|Jimmy-)[0-9]+$"}

@@ -62,19 +62,9 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \chapter{Introduction}
 \section{Motivation}
 
-\todo[inline]{High-Level overview for pricing options.}
-
-\todo[inline]{How this problem relates to the inverse Z-transform.}
-
 \section{Aims and Objectives}
 
-\todo[inline]{Implementing widely used numerical methods for the inverse Z-transform.}
-\todo[inline]{Testing out Levendorskii's method}
-\todo[inline]{Benchmarking the performance of these methods.}
-
 \section{Overview}
-
-\todo[inline]{2-3 sentences of each chapter}
 
 % ========================================
 % Background
@@ -83,7 +73,7 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 "By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \cite{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
 
 
-\section{$\mathcal{Z}$-Transform}
+\section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 \todo[inline]{Come up with a more catchy Z-Transform title}
 
 The $z$-transform is a transformation of a real or complex continuous time function $x(t)$, often used for discrete time signals and is commonly described as the discrete time Fourier transform (DTFT). Taking the Fourier transform of a sampled function results in
@@ -104,14 +94,50 @@ The $z$-transform is a transformation of a real or complex continuous time funct
 
 \noindent If we normalise the sampling interval to 1, we get
 
-\begin{equation}
+\begin{equation}\label{dtft}
 	\sum^{\infty}_{n = - \infty} x(n)e^{-j n \omega}
 \end{equation}
-The sequence $x(n)$ is sampled at discrete time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples \cite{LovelessGuido2021}. 
+The sequence $x(n)$ is sampled at discrete time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples. The DTFT is a periodic function of $\omega$ with period $2\pi$. The existence of the DTFT relies on the condition of absolute summability of the sequence $x(n)$; all the terms must converge to a finite value. This requirement is mathematically expressed as
+
+\begin{equation}
+	\sum^{\infty}_{n = -\infty} |x(n)| < \infty
+\end{equation}
+
+We can extend our analysis to the $Z$-transform, which generalizes the discrete time Fourier transform to the complex plane, not just the unit circle where $r = 1$. The $Z$-transform of a sequence $x(n)$ is formally given by
+
+\begin{equation}\label{bilateral_z-transform}
+	X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
+\end{equation}
+
+For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ (often written as $\omega$ in the context of the unit circle for the DTFT) represents the angle of $z$ with respect to the positive real axis.
+
+In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $Z$-transform is used. Unlike the bilateral $Z$-transform in (\ref{bilateral_z-transform}), summing from zero to positive infinity yields the unilateral $Z$-transform defined to be
+
+\begin{equation}\label{unilateral_z-transform}
+	X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = 0} x(n)z^{-n}
+\end{equation}
+
+The region within the complex $z$-plane where (\ref{unilateral_z-transform}) converges is known as the Region of Convergence (ROC). If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| > |z_1|$ also converge. Strictly speaking, the ROC is defined for the set of values of $z$ for which the $Z$-transform is absolutely summable
+
+\begin{equation}\label{roc}
+	\textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
+\end{equation}
+
+The ROC for causal sequences is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be \textit{stable}, it's essential that the ROC includes the unit circle, $|z| = 1$. Thus, all poles must lie within the unit circle \cite{LovelessGuido2021}.
+
+\subsection{Probability Generating Functions}
+
+\todo[inline]{May be better to move within Abate and Whitt's method}
 
 \section{Discrete Pricing Options}
 
+\subsection{Lookback and Barrier Options}
+
 \section{Optimisation Techniques}
+
+\subsection{Stochastic Gradient Descent}
+
+\subsection{Bayesian Optimisation}
 
 % ========================================
 % Experiment
