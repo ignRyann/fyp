@@ -70,7 +70,7 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % Background
 % ========================================
 \chapter{Background}
-"By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \cite{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
+``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \cite{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
 
 
 \section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
@@ -133,15 +133,21 @@ In real-world applications, we often require numerical approximation due to comp
 \todo[inline]{think about how to make a smooth transition from IZT to NIZT (and how we only discuss contour integration methods given the nature of this project)}
 
 \subsection{Abate and Whitt 1992}
-The numerical approximation formula offered by Abate and Whitt is based upon a Fourier series \cite{AbateWhitt1992a, AbateWhitt1992b} catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queueing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate (\ref{inverse_z-transform}) using a trapezoidal rule for numerical integration over a complex contour
+The numerical approximation formula offered by Abate and Whitt is based on a Fourier series \cite{AbateWhitt1992a, AbateWhitt1992b} catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate (\ref{inverse_z-transform}) using a trapezoidal rule for numerical integration over a complex contour given by
 
-\begin{equation}\label{aw_inversion}
-	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n}_{k = 1} (-1)^k \text{Re}(X(re^{\frac{ik\pi}{n}})) + (-1)^nX(-r) \biggl)
+\begin{equation}\label{aw_inversion_original}
+	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \mathrm{Re}\bigg( X(re^{\frac{ik\pi}{n}})\bigg) + (-1)^nX(-r) \biggl)
 \end{equation}
 
-The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency. Specifically exploiting the complex conjugate symmetry of $X(z)$, each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. By \textit{folding} the problem in this manner, the computational load is effectively halved.
+The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $X(z)$; each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
 
-It is also important to note that the following changes adhere to the principles set forth by the Nyquist-Shannon sampling theorem.
+Given the nature of this project, we may find it easier to use the following definition where we set $z = 1 / q$.
+
+\begin{equation}\label{aw_inversion}
+	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-r) \biggl)
+\end{equation}
+\todo[inline]{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}
+\todo[inline]{insert algo for Abate and Whitt's method}
 
 \subsection{Cavers 1978}
 
