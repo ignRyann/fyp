@@ -77,27 +77,18 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \todo[inline]{Come up with a more catchy Z-Transform title}
 
 The $z$-transform is a transformation of a real or complex continuous time function $x(t)$, often used for discrete time signals and is commonly described as the discrete time Fourier transform (DTFT). Taking the Fourier transform of a sampled function results in
-
-\begin{equation}
-\mathcal{F}\bigg[x(t) \sum^{\infty}_{n = -\infty} \delta(t - n \triangle t)\bigg] = \int^{\infty}_{-\infty} x(t)	 \sum_{n = - \infty}^{\infty} \delta (t - n\triangle t)e^{-i \omega t} dt 
-\end{equation}
-
-\noindent We can then make use of the sifting property of the delta function.
-
-\begin{equation}
-	= \sum_{n = - \infty}^{\infty} \int^{\infty}_{-\infty} x(t) \delta (t - n\triangle t)e^{-i \omega t} dt 
-\end{equation}
-
-\begin{equation}
-	= \sum^{\infty}_{n=-\infty} x(n \triangle t)e^{-i \omega nt}
-\end{equation}
-
-\noindent If we normalise the sampling interval to 1, we get
+\begin{flalign}
+&& \mathcal{F}\bigg[x(t) \sum^{\infty}_{n = -\infty} \delta(t - n \Delta t)\bigg] &= \int^{\infty}_{-\infty} x(t) \sum_{n = - \infty}^{\infty} \delta (t - n\Delta t)e^{-i \omega t} dt && \\
+&& &= \sum_{n = - \infty}^{\infty} \int^{\infty}_{-\infty} x(t) \delta (t - n\Delta t)e^{-i \omega t} dt && \\
+&& &= \sum^{\infty}_{n=-\infty} x(n \Delta t)e^{-i \omega nt} &&
+\end{flalign}
+where we make use of the sifting property of the delta function. If we normalise the sampling interval to 1, we get
 
 \begin{equation}\label{dtft}
 	\sum^{\infty}_{n = - \infty} x(n)e^{-i n \omega}
 \end{equation}
-The sequence $x(n)$ is sampled at discrete time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples. The DTFT is a periodic function of $\omega$ with period $2\pi$. The existence of the DTFT relies on the condition of absolute summability of the sequence $x(n)$; all the terms must converge to a finite value. This requirement is mathematically expressed as
+
+The sequence $x(n)$ is sampled at discrete time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples. The DTFT is a periodic function of $\omega$ with period $2\pi$ and the existence of (\ref{dtft}) relies on the condition of absolute summability of the sequence $x(n)$; all the terms must converge to a finite value. This requirement is mathematically expressed as
 
 \begin{equation}
 	\sum^{\infty}_{n = -\infty} |x(n)| < \infty
@@ -111,21 +102,21 @@ We can extend our analysis to the $Z$-transform, which generalizes the discrete 
 
 For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ (often written as $\omega$ in the context of the unit circle for the DTFT) represents the angle of $z$ with respect to the positive real axis.
 
-In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $Z$-transform is used. Unlike the bilateral $Z$-transform in (\ref{bilateral_z-transform}), summing from zero to positive infinity yields the unilateral $Z$-transform defined to be
+In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $Z$-transform is used. Unlike the bilateral $Z$-transform in (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
 
 \begin{equation}\label{unilateral_z-transform}
 	X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = 0} x(n)z^{-n}
 \end{equation}
 
-The region within the complex $z$-plane where (\ref{unilateral_z-transform}) converges is known as the Region of Convergence (ROC). If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| > |z_1|$ also converge. Strictly speaking, the ROC is defined for the set of values of $z$ for which the $Z$-transform is absolutely summable
+The region within the complex $z$-plane where (\ref{unilateral_z-transform}) converges is known as the Region of Convergence (ROC). The ROC is defined for the set of values of $z$ for which the $Z$-transform is absolutely summable
 
 \begin{equation}\label{roc}
 	\textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
 \end{equation}
 
-The ROC for causal sequences is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be \textit{stable}, it's essential that the ROC includes the unit circle, $|z| = 1$. Thus, all poles must lie within the unit circle \cite{LovelessGuido2021}.
+The ROC for causal sequences is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be \textit{stable}, it's essential that the ROC includes the unit circle, $|z| = 1$. Thus, all poles must lie within the unit circle \cite{LovelessGuido2021}.
 
-\subsection{Probability Generating Functions}
+\subsection{Probability Generating Functions}\label{pgfs}
 
 \todo[inline]{May be better to move within Abate and Whitt's method}
 
@@ -137,7 +128,18 @@ The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ g
 	x(n) = \mathcal{Z}^{-1}_{z \rightarrow n}[X(z)] = \frac{1}{2\pi i} \oint_C X(z)z^{n-1}dz
 \end{equation}
 
+In real-world applications, we often require numerical approximation due to computational challenges posed by the Cauchy integral formula. Such approximations enable the effective analysis and processing of complex signals within various technological and financial systems.
+\newline
+\todo[inline]{think about how to make a smooth transition from IZT to NIZT (and how we only discuss contour integration methods given the nature of this project)}
+
 \subsection{Abate and Whitt 1992}
+As previously discussed in Section (\ref{pgfs}), probability generating functions are an alternative form to the Z-transform by setting $q = 1 / z$. This is coherent with the definition for Abate and Whitt's approximate inversion formula based upon a Fourier series approach \cite{AbateWhitt1992a, AbateWhitt1992b}. The authors approximate (\ref{inverse_z-transform}) numerically by applying a trapezoidal rule
+
+\begin{equation}\label{aw_inversion}
+	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n}_{k = 1} (-1)^k \text{Re}(X(re^{\frac{ik\pi}{n}})) + (-1)^nX(-r) \biggl)
+\end{equation}
+
+The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$.
 
 \subsection{Cavers 1978}
 
@@ -147,11 +149,11 @@ The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ g
 
 \subsection{Lookback and Barrier Options}
 
-\section{Optimisation Techniques}
+\section{Optimization Techniques}
 
 \subsection{Stochastic Gradient Descent}
 
-\subsection{Bayesian Optimisation}
+\subsection{Bayesian Optimization}
 
 % ========================================
 % Experiment
