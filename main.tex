@@ -133,13 +133,15 @@ In real-world applications, we often require numerical approximation due to comp
 \todo[inline]{think about how to make a smooth transition from IZT to NIZT (and how we only discuss contour integration methods given the nature of this project)}
 
 \subsection{Abate and Whitt 1992}
-As previously discussed in Section (\ref{pgfs}), probability generating functions are an alternative form to the Z-transform by setting $q = 1 / z$. This is coherent with the definition for Abate and Whitt's approximate inversion formula based upon a Fourier series approach \cite{AbateWhitt1992a, AbateWhitt1992b}. The authors approximate (\ref{inverse_z-transform}) numerically by applying a trapezoidal rule
+The numerical approximation formula offered by Abate and Whitt is based upon a Fourier series \cite{AbateWhitt1992a, AbateWhitt1992b} catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queueing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate (\ref{inverse_z-transform}) using a trapezoidal rule for numerical integration over a complex contour
 
 \begin{equation}\label{aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n}_{k = 1} (-1)^k \text{Re}(X(re^{\frac{ik\pi}{n}})) + (-1)^nX(-r) \biggl)
 \end{equation}
 
-The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$.
+The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency. Specifically exploiting the complex conjugate symmetry of $X(z)$, each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. By \textit{folding} the problem in this manner, the computational load is effectively halved.
+
+It is also important to note that the following changes adhere to the principles set forth by the Nyquist-Shannon sampling theorem.
 
 \subsection{Cavers 1978}
 
