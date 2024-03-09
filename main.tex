@@ -57,6 +57,11 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \setcounter{page}{1}
 
 % ========================================
+% TODO List
+% ========================================
+\listoftodos
+
+% ========================================
 % Introduction
 % ========================================
 \chapter{Introduction}
@@ -70,7 +75,7 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % Background
 % ========================================
 \chapter{Background}
-``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \cite{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
+``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
 
 
 \section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
@@ -114,11 +119,12 @@ The region within the complex $z$-plane where (\ref{unilateral_z-transform}) con
 	\textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
 \end{equation}
 
-The ROC for causal sequences is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be \textit{stable}, it's essential that the ROC includes the unit circle, $|z| = 1$. Thus, all poles must lie within the unit circle \cite{LovelessGuido2021}.
+The ROC for causal sequences is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be \textit{stable}, it's essential that the ROC includes the unit circle, $|z| = 1$. Thus, all poles must lie within the unit circle \citep{LovelessGuido2021}.
 
 \subsection{Probability Generating Functions}\label{pgfs}
 
-\todo[inline]{May be better to move within Abate and Whitt's method}
+\todo[inline]{either keep as subsection or as a paragraph}
+\todo[inline]{may be better to discuss within Abate and Whitt's method}
 
 \section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 
@@ -133,7 +139,7 @@ In real-world applications, we often require numerical approximation due to comp
 \todo[inline]{think about how to make a smooth transition from IZT to NIZT (and how we only discuss contour integration methods given the nature of this project)}
 
 \subsection{Abate and Whitt 1992}
-The numerical approximation formula offered by Abate and Whitt is based on a Fourier series \cite{AbateWhitt1992a, AbateWhitt1992b} catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate (\ref{inverse_z-transform}) using a trapezoidal rule for numerical integration over a complex contour given by
+The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
 
 \begin{equation}\label{aw_inversion_original}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \mathrm{Re}\bigg( X(re^{\frac{ik\pi}{n}})\bigg) + (-1)^nX(-r) \biggl)
@@ -141,13 +147,12 @@ The numerical approximation formula offered by Abate and Whitt is based on a Fou
 
 The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $X(z)$; each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
 
-Given the nature of this project, we may find it easier to use the following definition where we set $z = 1 / q$.
+Given the nature of this project, we may find it easier to use the following definition, where we set $z = 1 / q$, to approximate (\ref{inverse_z-transform}).
 
 \begin{equation}\label{aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-r) \biggl)
 \end{equation}
 \todo[inline]{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}
-\todo[inline]{insert algo for Abate and Whitt's method}
 
 \subsection{Cavers 1978}
 
@@ -158,6 +163,14 @@ Given the nature of this project, we may find it easier to use the following def
 \subsection{Lookback and Barrier Options}
 
 \section{Optimization Techniques}
+In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
+
+\begin{equation}\label{optimization_problem}
+	\text{minimize } f(x) \text{ subject to } x \in \Omega
+\end{equation}
+
+where $f(x)$ is the objective function and $\Omega$ is the feasible region. The feasible region is defined by the constraints of the problem.
+
 
 \subsection{Stochastic Gradient Descent}
 
