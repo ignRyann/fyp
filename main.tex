@@ -173,14 +173,14 @@ where $f(x)$ is the objective function and $\Omega$ is the feasible region defin
 
 Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
 
-\subsection{Stochastic Gradient Descent}
-Gradient descent iteratively converges to a local minimum of a function by moving in the direction of the steepest descent, as defined by the negative gradient. This method is expressed mathematically as:
+\subsection{Gradient Descent}
+Gradient descent iteratively converges to a local minimum of a function by moving in the direction of the steepest descent, as defined by the negative gradient. This method is expressed mathematically as
 
-\begin{equation}
+\begin{equation}\label{GD}
     x_{k+1} = x_k - \alpha_k \nabla f(x_k)
 \end{equation}
 
-where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ is crucial as it determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f$ falls below a threshold, indicating arrival at a minimum. This iterative process is showcased in the pseudocode below:
+where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ is crucial as it determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f$ falls below a threshold. This iterative process is showcased in the pseudocode below:
 
 \begin{algorithm}
 \caption{Gradient Descent}
@@ -195,7 +195,15 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 \end{algorithmic}
 \end{algorithm}
 
-However, this brings forth limitations such as susceptibility to local minima, overshooting and long convergence time. 
+\subsubsection{Stochastic Gradient Descent}
+
+However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+
+\begin{equation}\label{SGD}
+x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
+\end{equation}
+where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promotes a quicker convergence time.
+
 
 
 % ========================================
