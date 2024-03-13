@@ -150,7 +150,7 @@ The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$
 Given the nature of this project, we may find it easier to use the following definition, where we set $z = 1 / q$, to approximate (\ref{inverse_z-transform}).
 
 \begin{equation}\label{aw_inversion}
-	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-r) \biggl)
+	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
 \end{equation}
 \todo[inline]{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}
 
