@@ -102,7 +102,7 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 \textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
 \end{equation}
 
-For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z|$ For a stable system, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
+For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
 
 \subsection{Relation to the Fourier Transform}
 It is useful to note the relationship between the $z$-transform and the Fourier transform. Taking the Fourier transform of a sampled function $x(t)$ results in:
