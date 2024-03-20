@@ -125,9 +125,21 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 \sum^{\infty}_{n = -\infty} |x(n)| < \infty
 \end{equation}
 
-The Z-transform generalizes the discrete-time Fourier transform to the complex plane, not just the unit circle where $r = 1$. By setting $z = e^{i\omega}$ in the Z-transform, we obtain the DTFT (\ref{dtft}).
+The Z-transform generalises the discrete-time Fourier transform to the complex plane, not just the unit circle where $r = 1$. By setting $z = e^{i\omega}$ in the Z-transform, we obtain the DTFT (\ref{dtft}).
 
-\section{Probability Discrete Functions}\label{pgfs}
+\subsection{Relation to Probability Discrete Functions}\label{pgfs}
+Probability Discrete Functions (PDFs) are vital in the field of probability theory, providing a framework for the analysis of discrete random variables. In particular, the concept of the Probability Mass Function (PMF), which is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. This brings forth the following conditions
+\begin{equation}
+	\sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
+\end{equation}
+
+Expanding upon this, we introduce the Probability Generating Function (PGF), to encapsulate the entirety of a discrete random variable's distribution into a single function. For a random variable $X$ with PMF $p(x)$, the PGF, $G_X(z)$, is given by
+\begin{equation}
+	G_X(z) = E[z^X] = \sum^{\infty}_{x = 0} p(x)z^x,
+\end{equation}
+where $E[\cdot]$ denotes the expectation operator, and $z$ is a complex number. At first glance, we take note of the similarity between the PGF and the $z$-transform in Equation (\ref{bilateral_z-transform}). We can see a direct correspondence in their structures, essentially with the $z$-transform acting as a PGF for sequences indexed by integers.
+
+As we proceed, the utility of these mathematical constructs in facilitating our understanding of complex phenomena will become more apparent, setting the groundwork for exploring the inverse $z$-transform and their applications.
 
 \section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 
@@ -172,7 +184,7 @@ In the context of computational mathematics, optimizations techniques are used t
 
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
-Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
+Gradient descent is one of the most popular algorithms for parameter optimisation with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
 
 \subsection{Gradient Descent}
 Gradient descent iteratively converges to a local minimum of a function by moving in the direction of the steepest descent, as defined by the negative gradient. This method is expressed mathematically as
