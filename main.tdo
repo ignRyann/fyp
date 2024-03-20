@@ -1,6 +1,3 @@
-\contentsline {todo}{Come up with a more catchy Z-Transform title}{4}{section*.3}%
-\contentsline {todo}{either keep as subsection or as a paragraph}{5}{section*.4}%
-\contentsline {todo}{may be better to discuss within Abate and Whitt's method}{5}{section*.5}%
-\contentsline {todo}{think about how to make a smooth transition from IZT to NIZT (and how we only discuss contour integration methods given the nature of this project)}{5}{section*.6}%
-\contentsline {todo}{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}{6}{section*.7}%
-\contentsline {todo}{Finding different parameters to use for the experiment making use of Machine Learning techniques.}{8}{section*.8}%
+\contentsline {todo}{2.1.2 Make it flow / read better}{5}{section*.3}%
+\contentsline {todo}{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}{7}{section*.4}%
+\contentsline {todo}{Finding different parameters to use for the experiment making use of Machine Learning techniques.}{9}{section*.6}%

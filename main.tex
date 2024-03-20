@@ -11,7 +11,7 @@
 \newtheorem{proposition}[theorem]{PROPOSITION}
 \newtheorem{remark}[theorem]{REMARK}
 \newtheorem{definition}[theorem]{DEFINITION}
-\newtheorem{fact}[theorem]{FACT}
+\newtheorem{example}{Example}
 
 \newcommand{\nats}{\mbox{\( \mathbb N \)}}
 \newcommand{\rat}{\mbox{\(\mathbb Q\)}}
@@ -80,6 +80,9 @@ In Chapter 2, we establish a foundational understanding of the topic in hand. Th
 
 ``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
 
+% ========================================
+% The Z-Transform
+% ========================================
 \section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 
 The $z$-transform is a transformation of a real or complex time function $x(n)$, often used for analyzing discrete-time signals and systems. It is a generalization of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The Z-transform is formally defined as:
@@ -88,7 +91,7 @@ The $z$-transform is a transformation of a real or complex time function $x(n)$,
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
 \end{equation}
 
-For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
+\noindent For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
 
 In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Equation (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
 
@@ -104,6 +107,9 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 
 For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
 
+% ========================================
+% Relation to Fourier Transform
+% ========================================
 \subsection{Relation to the Fourier Transform}
 It is useful to note the relationship between the $z$-transform and the Fourier transform. Taking the Fourier transform of a sampled function $x(t)$ results in:
 
@@ -113,7 +119,7 @@ It is useful to note the relationship between the $z$-transform and the Fourier 
 && &= \sum^{\infty}_{n=-\infty} x(n \Delta t)e^{-i \omega nt} &&
 \end{flalign}
 
-where we make use of the sifting property of the delta function. If we normalise the sampling interval to 1, we get
+where we make use of the sifting property of the delta function. If we normalize the sampling interval to 1, we get
 
 \begin{equation}\label{dtft}
 \sum^{\infty}_{n = - \infty} x(n)e^{-i n \omega}
@@ -125,22 +131,46 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 \sum^{\infty}_{n = -\infty} |x(n)| < \infty
 \end{equation}
 
-The Z-transform generalises the discrete-time Fourier transform to the complex plane, not just the unit circle where $r = 1$. By setting $z = e^{i\omega}$ in the Z-transform, we obtain the DTFT (\ref{dtft}).
+The Z-transform generalizes the discrete-time Fourier transform to the complex plane, not just the unit circle where $r = 1$. By setting $z = e^{i\omega}$ in the Z-transform, we obtain the DTFT (\ref{dtft}).
 
-\subsection{Relation to Probability Discrete Functions}\label{pgfs}
-Probability Discrete Functions (PDFs) are vital in the field of probability theory, providing a framework for the analysis of discrete random variables. In particular, the concept of the Probability Mass Function (PMF), which is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. This brings forth the following conditions
+% ========================================
+% Relation to PDFs
+% ========================================
+\subsection{Relation to Probability Discrete Functions}\label{pdfs}
+
+\todo[inline]{2.1.2 Make it flow / read better}
+
+Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Discrete Functions (PDFs), particularly the Probability Mass Function (PMF). The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
+
 \begin{equation}
-	\sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
+    \sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
 \end{equation}
 
-Expanding upon this, we introduce the Probability Generating Function (PGF), to encapsulate the entirety of a discrete random variable's distribution into a single function. For a random variable $X$ with PMF $p(x)$, the PGF, $G_X(z)$, is given by
+% Example using a fair dice
+\begin{example}
+    Consider a fair six-sided dice. The PMF for the dice roll is given by
+    
+    \begin{equation}
+        p(x) = \begin{cases}
+            \frac{1}{6} & \text{if } x = 1, 2, 3, 4, 5, 6 \\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{equation}
+    
+    where $p(x)$ is the probability of rolling a number $x$.
+\end{example}
+
+\noindent We can then expand upon this by taking the $z$-transform of the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
 \begin{equation}
-	G_X(z) = E[z^X] = \sum^{\infty}_{x = 0} p(x)z^x,
+	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
 \end{equation}
-where $E[\cdot]$ denotes the expectation operator, and $z$ is a complex number. At first glance, we take note of the similarity between the PGF and the $z$-transform in Equation (\ref{bilateral_z-transform}). We can see a direct correspondence in their structures, essentially with the $z$-transform acting as a PGF for sequences indexed by integers.
+where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number.
 
-As we proceed, the utility of these mathematical constructs in facilitating our understanding of complex phenomena will become more apparent, setting the groundwork for exploring the inverse $z$-transform and their applications.
+The concept of summarizing information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behavior of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyze discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyze the behavior of signals in the complex plane.
 
+% ========================================
+% The Inverse Z-Transform
+% ========================================
 \section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 
 The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ given the $Z$-transform $X(z)$. This is commonly defined as a Cauchy integral around a contour $C$ in the complex plane. The contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC). The inverse $Z$-transform is formally given by
@@ -151,8 +181,11 @@ The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ g
 
 In real-world applications, we often require numerical approximation due to computational challenges posed by the Cauchy integral formula. Such approximations enable the effective analysis and processing of complex signals within various technological and financial systems.
 
+% ========================================
+% Abate and Whitt 1992
+% ========================================
 \subsection{Abate and Whitt 1992}
-The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pgfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
+The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pdfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
 
 \begin{equation}\label{aw_inversion_original}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \mathrm{Re}\bigg( X(re^{\frac{ik\pi}{n}})\bigg) + (-1)^nX(-r) \biggl)
@@ -167,6 +200,9 @@ Given the nature of this project, we may find it easier to use the following def
 \end{equation}
 \todo[inline]{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}
 
+% ========================================
+% Cavers 1978
+% ========================================
 \subsection{Cavers 1978}
 
 \subsection{Series acceleration techniques}
@@ -184,8 +220,11 @@ In the context of computational mathematics, optimizations techniques are used t
 
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
-Gradient descent is one of the most popular algorithms for parameter optimisation with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
+Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
 
+% ========================================
+% Gradient Descent
+% ========================================
 \subsection{Gradient Descent}
 Gradient descent iteratively converges to a local minimum of a function by moving in the direction of the steepest descent, as defined by the negative gradient. This method is expressed mathematically as
 
@@ -208,6 +247,9 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 \end{algorithmic}
 \end{algorithm}
 
+% ========================================
+% Stochastic Gradient Descent
+% ========================================
 \subsubsection{Stochastic Gradient Descent}
 
 However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
