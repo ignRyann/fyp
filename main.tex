@@ -91,6 +91,8 @@ The $z$-transform is a transformation of a real or complex time function $x(n)$,
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
 \end{equation}
 
+\todo[inline]{Move rei theta up}
+
 \noindent For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
 
 In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Equation (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
@@ -131,16 +133,18 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 \sum^{\infty}_{n = -\infty} |x(n)| < \infty
 \end{equation}
 
-The Z-transform generalizes the discrete-time Fourier transform to the complex plane, not just the unit circle where $r = 1$. By setting $z = e^{i\omega}$ in the Z-transform, we obtain the DTFT (\ref{dtft}).
+The Z-transform generalizes Equation (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
 
 % ========================================
 % Relation to PDFs
 % ========================================
-\subsection{Relation to Probability Discrete Functions}\label{pdfs}
+\subsection{Relation to Probability Distribution Functions}\label{pdfs}
 
 \todo[inline]{2.1.2 Make it flow / read better}
 
-Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Discrete Functions (PDFs), particularly the Probability Mass Function (PMF). The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
+Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. 
+
+The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
 
 \begin{equation}
     \sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
@@ -160,15 +164,16 @@ Understanding the behavior of random events and signals is crucial in various fi
     where $p(x)$ is the probability of rolling a number $x$.
 \end{example}
 
-\noindent We can then expand upon this by taking the $z$-transform of the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
+\todo[inline]{more research needed to bridge the gap}
+
+\noindent We can then expand upon the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
+
 \begin{equation}
 	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
 \end{equation}
 where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform. 
 
-The concept of summarizing information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behavior of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyze discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyze the behavior of signals in the complex plane.
-
-\todo[inline]{How does Poisson Distribution come into play? - might need to look at Discrete Pricing Options}
+The concept of summarizing information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behaviour of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyze discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyze the behaviour of signals in the complex plane.
 
 % ========================================
 % The Inverse Z-Transform
@@ -234,7 +239,7 @@ Gradient descent iteratively converges to a local minimum of a function by movin
     x_{k+1} = x_k - \alpha_k \nabla f(x_k)
 \end{equation}
 
-where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ is crucial as it determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f$ falls below a threshold. This iterative process is showcased in the pseudocode below:
+where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ is crucial as it determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f(k)$ falls below a threshold. This iterative process is showcased in the pseudocode below:
 
 \begin{algorithm}
 \caption{Gradient Descent}
@@ -254,12 +259,14 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 % ========================================
 \subsubsection{Stochastic Gradient Descent}
 
-However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies Equation (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
 
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
 \end{equation}
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promotes a quicker convergence time.
+
+\todo[inline]{include diagram to show faster convergence time (illustration purposes)}
 
 % ========================================
 % Experiment
