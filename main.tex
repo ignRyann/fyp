@@ -78,12 +78,12 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 
 In Chapter 2, we establish a foundational understanding of the topic in hand. This section is designed to be self-contained, providing essential background for all readers, while references are included for those seeking a deeper exploration.
 
-``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. The set of complex numbers is denoted by $\mathbb{C}$.
+``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. We may find it easier to represent complex numbers in their polar form, $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis. The set of complex numbers is denoted by $\mathbb{C}$.
 
 % ========================================
 % The Z-Transform
 % ========================================
-\section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
+\section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}\label{z_transform}
 
 The $z$-transform is a transformation of a real or complex time function $x(n)$, often used for analyzing discrete-time signals and systems. It is a generalization of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The Z-transform is formally defined as:
 
@@ -91,11 +91,9 @@ The $z$-transform is a transformation of a real or complex time function $x(n)$,
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
 \end{equation}
 
-\todo[inline]{Move rei theta up}
+\noindent For a convenient description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$.
 
-\noindent For a complete description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
-
-In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Equation (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
+In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Eq. (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
 
 \begin{equation}\label{unilateral_z-transform}
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = 0} x(n)z^{-n}
@@ -112,7 +110,7 @@ For causal sequences, the ROC is typically the exterior of the outermost pole in
 % ========================================
 % Relation to Fourier Transform
 % ========================================
-\subsection{Relation to the Fourier Transform}
+\subsection{Relation to the Fourier Transform}\label{rs_fourier_transform}
 It is useful to note the relationship between the $z$-transform and the Fourier transform. Taking the Fourier transform of a sampled function $x(t)$ results in:
 
 \begin{flalign}
@@ -133,16 +131,16 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 \sum^{\infty}_{n = -\infty} |x(n)| < \infty
 \end{equation}
 
-The Z-transform generalizes Equation (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
+The Z-transform generalizes Eq. (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
+
+\todo[inline]{maybe write a bit more on why we need to generalize it?}
 
 % ========================================
 % Relation to PDFs
 % ========================================
 \subsection{Relation to Probability Distribution Functions}\label{pdfs}
 
-\todo[inline]{2.1.2 Make it flow / read better}
-
-Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. 
+Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing our attention on the PMF.
 
 The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
 
@@ -151,6 +149,7 @@ The PMF is defined for a discrete random variable $X$ taking on values $x_i$ wit
 \end{equation}
 
 % Example using a fair dice
+\newpage
 \begin{example}
     Consider a fair six-sided dice. The PMF for the dice roll is given by
     
@@ -200,7 +199,7 @@ The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhit
 
 The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $X(z)$; each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
 
-Given the nature of this project, we may find it easier to use the following definition, where we set $z = 1 / q$, to approximate (\ref{inverse_z-transform}).
+Given the nature of this project, we may find it easier to use the following definition, where we set $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
 
 \begin{equation}\label{aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
@@ -211,6 +210,11 @@ Given the nature of this project, we may find it easier to use the following def
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}
+Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse FFT to these sampled points to approximate the original time-domain signal. We can formulate this as:
+
+\begin{equation}\label{cavers}
+	f(n) = \frac{r^n}{N} \text{IFFT}[f(re^{2\pi i / N})]
+\end{equation}
 
 \subsection{Series acceleration techniques}
 
@@ -259,7 +263,7 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 % ========================================
 \subsubsection{Stochastic Gradient Descent}
 
-However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies Equation (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies Eq. (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
 
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
