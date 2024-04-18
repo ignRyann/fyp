@@ -25,7 +25,7 @@
 % Title Page
 % ========================================
 \title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
-{{\vspace{2em} \Huge Beyond the Circle: Deforming Contours in Inverse Z-Transform}}\\
+{{\vspace{2em} \Huge Numerical Approximations of the Inverse $\mathbb{Z}$-Transform}}\\
 {\large Final Year Project Report}\\
 }
 \date{Submission date: \today}
@@ -55,11 +55,6 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % ========================================
 \tableofcontents
 \setcounter{page}{1}
-
-% ========================================
-% TODO List
-% ========================================
-\listoftodos
 
 % ========================================
 % Introduction
@@ -133,14 +128,12 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 
 The Z-transform generalizes Eq. (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
 
-\todo[inline]{maybe write a bit more on why we need to generalize it?}
-
 % ========================================
 % Relation to PDFs
 % ========================================
 \subsection{Relation to Probability Distribution Functions}\label{pdfs}
 
-Understanding the behavior of random events and signals is crucial in various fields, including finance, engineering, and computer science. This understanding is deepened through the study of Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing our attention on the PMF.
+Random events and signals refer to situations where the outcome is not deterministic, but can be described by probability. Understanding these concepts involves using Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing our attention on the PMF.
 
 The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
 
@@ -148,8 +141,14 @@ The PMF is defined for a discrete random variable $X$ taking on values $x_i$ wit
     \sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
 \end{equation}
 
+We may find it useful to provide a concise representation of the entire distribution such that we expand upon the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
+
+\begin{equation}
+	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
+\end{equation}
+where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform (Eqn. \ref{z_transform})
+
 % Example using a fair dice
-\newpage
 \begin{example}
     Consider a fair six-sided dice. The PMF for the dice roll is given by
     
@@ -160,17 +159,13 @@ The PMF is defined for a discrete random variable $X$ taking on values $x_i$ wit
         \end{cases}
     \end{equation}
     
-    where $p(x)$ is the probability of rolling a number $x$.
+    where $p(x)$ is the probability of rolling a number $x$. The PGF for the dice roll is then
+
+    \begin{equation}
+        G_X(q) = \sum^{\infty}_{x = 0} p(x)q^x = \frac{1}{6} \sum^6_{x = 1} q^x = \frac{q}{6}\cdot \frac{1-q^6}{1-q},
+    \end{equation}
+    where we use the formula for the sum of a geometric series. The PGF encapsulates the entire distribution of the dice roll into a single function.
 \end{example}
-
-\todo[inline]{more research needed to bridge the gap}
-
-\noindent We can then expand upon the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
-
-\begin{equation}
-	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
-\end{equation}
-where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform. 
 
 The concept of summarizing information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behaviour of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyze discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyze the behaviour of signals in the complex plane.
 
@@ -204,7 +199,8 @@ Given the nature of this project, we may find it easier to use the following def
 \begin{equation}\label{aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
 \end{equation}
-\todo[inline]{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}
+
+The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eqn. (\ref{aw_inversion}) must be sufficient to capture the significant frequency components. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
 
 % ========================================
 % Cavers 1978
@@ -213,14 +209,52 @@ Given the nature of this project, we may find it easier to use the following def
 Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse FFT to these sampled points to approximate the original time-domain signal. We can formulate this as:
 
 \begin{equation}\label{cavers}
-	f(n) = \frac{r^n}{N} \text{IFFT}[f(re^{2\pi i / N})]
+	f(n) = r^n \text{IFFT}[f(re^{2\pi i / N})],
 \end{equation}
+
+where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ is the number of points used in the DFT. The factor $r^n$ scales the result appropriately based on the radius of the contour.
+
+\todo[inline]{Mention the $\frac{1}{N}\text{FFT}$ version as FFT is a fast way to compute DFT - Parseval's theorem? Should I mention in Experimentation when I use MatLab/Python?}
 
 \subsection{Series acceleration techniques}
 
-\section{Pricing Options}
+\section{Option Pricing}
+The concept of \textit{option pricing} involves determining the value of options, which are financial contracts that give the holder the right, but not the obligation, to buy or sell an asset at a predetermined price within a specified timeframe. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
+
+A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion with constant volatility, risk-free interest rate and no transaction costs. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
 \subsection{Discrete Monitoring}
+In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
+
+\begin{enumerate}
+    \item \textbf{Barrier Options}
+    
+    The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
+
+    \item \textbf{Lookback Options}
+    
+    The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
+\end{enumerate}
+
+% \subsubsection*{Barrier Options}
+% An exotic option where the payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the asset price is breached, while a \textit{knock-out} barrier option ceases to exist if the barrier is hit.
+
+% For example, a \textit{down-and-out} barrier option is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
+
+% \subsubsection*{Lookback Options}
+% An option where the payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
+
+\subsection{Use of Fourier Transforms}
+However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. \citet{carr1999option} was the first to propose using Fourier transforms to price European options. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral.
+
+\begin{itemize}
+    \item talk about the advancements of Fourier transforms in option pricing
+    \item mention the linear dependence of the investigated ways
+    \item lead on to Fusai et al. (2006)
+    \item look into Plancherel's theorem
+    \item talk about Phelan's extension
+    \item end off with why we're looking into the inverse Z-transform
+\end{itemize}
 
 \section{Optimization Techniques}
 In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
@@ -231,7 +265,7 @@ In the context of computational mathematics, optimizations techniques are used t
 
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
-Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}. This reinforces the potential of gradient descent algorithms in broader computational mathematics, affirming its efficacy in finding optimal solutions in complex optimization landscapes.
+Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}.
 
 % ========================================
 % Gradient Descent
@@ -243,7 +277,7 @@ Gradient descent iteratively converges to a local minimum of a function by movin
     x_{k+1} = x_k - \alpha_k \nabla f(x_k)
 \end{equation}
 
-where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ is crucial as it determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f(k)$ falls below a threshold. This iterative process is showcased in the pseudocode below:
+where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f(k)$ falls below a threshold. This iterative process is showcased in the pseudocode below:
 
 \begin{algorithm}
 \caption{Gradient Descent}
@@ -268,16 +302,22 @@ However, classic Gradient Descent faces limitations, including susceptibility to
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
 \end{equation}
-where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promotes a quicker convergence time.
+where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
 
-\todo[inline]{include diagram to show faster convergence time (illustration purposes)}
+\todo[inline]{Time isn't a big factor - but if it is, SGD with momentum can be used so talk about it here (include diagram)}
 
 % ========================================
 % Experiment
 % ========================================
 \chapter{Experiment}
 
-\todo[inline]{Finding different parameters to use for the experiment making use of Machine Learning techniques.}
+\section{Levendorskii's Sinh Deformation}
+
+\subsection{Deforming the Contour}
+
+\subsection{Parameter Grid Search}
+
+\section{Benchmarking the Approximation Methods}
 
 % ========================================
 % Results

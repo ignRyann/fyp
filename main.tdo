@@ -1,4 +1,6 @@
-\contentsline {todo}{2.1.2 Make it flow / read better}{5}{section*.3}%
-\contentsline {todo}{How does Poisson Distribution come into play? - might need to look at Discrete Pricing Options}{6}{section*.4}%
+\contentsline {todo}{maybe write a bit more on why we need to generalize it?}{5}{section*.3}%
+\contentsline {todo}{more research needed to bridge the gap}{6}{section*.4}%
 \contentsline {todo}{talk about the Nyquist-Shannon sampling theorem? - number of points must be double to avoid aliasing}{7}{section*.5}%
-\contentsline {todo}{Finding different parameters to use for the experiment making use of Machine Learning techniques.}{9}{section*.7}%
+\contentsline {todo}{Mention the $\frac {1}{N}\text {FFT}$ version as FFT is a fast way to compute DFT - Parseval's theorem? Should I mention in Experimentation when I use MatLab?}{7}{section*.6}%
+\contentsline {todo}{Time isn't a big factor - but if it is, SGD with momentum can be used so talk about it here (include diagram)}{9}{section*.8}%
+\contentsline {todo}{Finding different parameters to use for the experiment making use of Machine Learning techniques.}{10}{section*.9}%
