@@ -219,7 +219,7 @@ where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ 
 \subsection{Series acceleration techniques}
 
 \section{Option Pricing}
-The concept of \textit{option pricing} involves determining the value of options, which are financial contracts that give the holder the right, but not the obligation, to buy or sell an asset at a predetermined price within a specified timeframe. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
+The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price within a specified time-frame. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
 
 A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion with constant volatility, risk-free interest rate and no transaction costs. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
@@ -236,12 +236,12 @@ In most cases, the payoff of an option depends on the price of the underlying as
     The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
 \end{enumerate}
 
-% \subsubsection*{Barrier Options}
+% \subsubsection{Barrier Options}
 % An exotic option where the payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the asset price is breached, while a \textit{knock-out} barrier option ceases to exist if the barrier is hit.
 
 % For example, a \textit{down-and-out} barrier option is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
-% \subsubsection*{Lookback Options}
+% \subsubsection{Lookback Options}
 % An option where the payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
 
 \subsection{Use of Fourier Transforms}
