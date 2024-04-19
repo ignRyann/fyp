@@ -132,7 +132,6 @@ The Z-transform generalizes Eq. (\ref{dtft}) to the complex plane, not just the 
 % Relation to PDFs
 % ========================================
 \subsection{Relation to Probability Distribution Functions}\label{pdfs}
-
 Random events and signals refer to situations where the outcome is not deterministic, but can be described by probability. Understanding these concepts involves using Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing our attention on the PMF.
 
 The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
@@ -200,7 +199,7 @@ Given the nature of this project, we may find it easier to use the following def
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
 \end{equation}
 
-The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eqn. (\ref{aw_inversion}) must be sufficient to capture the significant frequency components. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
+The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eqn. (\ref{aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
 
 % ========================================
 % Cavers 1978
@@ -221,7 +220,7 @@ where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ 
 \section{Option Pricing}
 The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price within a specified time-frame. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
 
-A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion with constant volatility, risk-free interest rate and no transaction costs. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
+A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
 \subsection{Discrete Monitoring}
 In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
@@ -244,7 +243,8 @@ In most cases, the payoff of an option depends on the price of the underlying as
 % \subsubsection{Lookback Options}
 % An option where the payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
 
-\subsection{Use of Fourier Transforms}
+% \subsection{Use of Fourier Transforms}
+\subsection{Fourier-Based Pricing}
 However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. \citet{carr1999option} was the first to propose using Fourier transforms to price European options. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral.
 
 \begin{itemize}
