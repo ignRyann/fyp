@@ -65,6 +65,11 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \section{Aims and Objectives}
 
 \section{Overview}
+In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. 
+
+In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process We then provide the results on a list of transform pairs and discuss the implications of the findings.
+
+In Chapter 5, we summarize the findings of the project and discuss potential avenues for future work. This allows for ...
 
 % ========================================
 % Background
@@ -179,12 +184,12 @@ The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ g
 	x(n) = \mathcal{Z}^{-1}_{z \rightarrow n}[X(z)] = \frac{1}{2\pi i} \oint_C X(z)z^{n-1}dz
 \end{equation}
 
-In real-world applications, we often require numerical approximation due to computational challenges posed by the Cauchy integral formula. Such approximations enable the effective analysis and processing of complex signals within various technological and financial systems.
+In practical settings, numerical approximations are often used due to the computational challenges of evaluating the Cauchy integral. Whilst there are many ways to go about this \citep{merrikh2014linearsys,rajkovic2004method,horvath2020numerical}, most methods are done on a circular contour. Aligning with the focus of our project, we shift our attention to contour integrals.
 
 % ========================================
 % Abate and Whitt 1992
 % ========================================
-\subsection{Abate and Whitt 1992}
+\subsection{Abate and Whitt 1992}\label{abate_whitt_section}
 The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pdfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
 
 \begin{equation}\label{aw_inversion_original}
@@ -204,7 +209,7 @@ The Nyquist-Shannon sampling theorem states that a signal must be sampled at a r
 % ========================================
 % Cavers 1978
 % ========================================
-\subsection{Cavers 1978}
+\subsection{Cavers 1978}\label{cavers_section}
 Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse FFT to these sampled points to approximate the original time-domain signal. We can formulate this as:
 
 \begin{equation}\label{cavers}
@@ -212,8 +217,6 @@ Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers
 \end{equation}
 
 where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ is the number of points used in the DFT. The factor $r^n$ scales the result appropriately based on the radius of the contour.
-
-\todo[inline]{Mention the $\frac{1}{N}\text{FFT}$ version as FFT is a fast way to compute DFT - Parseval's theorem? Should I mention in Experimentation when I use MatLab/Python?}
 
 \subsection{Series acceleration techniques}
 
@@ -297,20 +300,69 @@ x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)
 \end{equation}
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
 
-\todo[inline]{Time isn't a big factor - but if it is, SGD with momentum can be used so talk about it here (include diagram)}
-
 % ========================================
 % Experiment
 % ========================================
 \chapter{Experiment}
+Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
-\section{Levendorskii's Sinh Deformation}
+This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy, computational efficiency, and robustness to parameter changes in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
+\todo[inline]{If we get series acceleration, include here asw}
+
+\section{Sinh Deformation}
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence.'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
+
+\begin{itemize}
+    \item introduce Levendorskii's sinh deformation
+    \item talk about why he does this
+\end{itemize}
 
 \subsection{Deforming the Contour}
+\begin{itemize}
+    \item explain the sinh deformation
+    \item provide plots of the effects of the parameters understanding
+    \item talk about the implications of the deformation (sufficient conditions)
+\end{itemize}
 
 \subsection{Parameter Grid Search}
+\begin{itemize}
+    \item use of grid search to find optimal parameters
+    \item different search criteria's (\textit{e.g. area, x-axis perimeter, etc})
+    \item might also be useful to try find parameters that give the results?
+    \item use of SGD and loss function
+\end{itemize}
 
-\section{Benchmarking the Approximation Methods}
+\section{Numerical Benchmarking}
+
+% \begin{table}[h]
+%     \centering
+%     \begin{tabular}{c|cc}
+%     \hline
+%     \textbf{Function} & $x(z)$ & $X(z)$ \\
+%     \hline
+%     Heaviside Step & 1 & \(\frac{z}{z-1}\) \\
+%     Polynomial & \(t\) & \(\frac{z}{(z-1)^2}\) \\
+%     Decaying Exp & $e^{-at}$ & $\frac{1}{1 - \exp(a\triangle t) z^{-1}}$ \\
+%     Sinusoidal & $\sin(\omega t)$ & $\frac{z^{-1}\sin(w\triangle t)}{1-2z^{-1}\cos(w\triangle t) + z^{-2}}$
+%     \end{tabular}
+%     \caption{List of Transform Pairs}
+%     \label{tab:z_transform_examples}
+% \end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c|cc}
+    \hline
+    \textbf{Function} & $x(z)$ & $X(z)$ \\
+    \hline
+    Heaviside Step & 1 & $z / \textbf{(}z-1\textbf{)}$ \\
+    Polynomial & \(t\) & $z / \textbf{(}z-1\textbf{)}^2 $ \\
+    Decaying Exp & $e^{-at}$ & $1 / \textbf{(}1 - \exp(a\triangle t) z^{-1}\textbf{)}$ \\
+    Sinusoidal & $\sin(\omega t)$ & $\textbf{(}z^{-1}\sin(w\triangle t)\textbf{)} / \textbf{(}1-2z^{-1}\cos(w\triangle t) + z^{-2}\textbf{)}$
+    \end{tabular}
+    \caption{List of Transform Pairs}
+    \label{tab:transform_pairs}
+\end{table}
 
 % ========================================
 % Results
