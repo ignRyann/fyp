@@ -238,7 +238,6 @@ In most cases, the payoff of an option depends on the price of the underlying as
     The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
 \end{enumerate}
 
-% \subsection{Use of Fourier Transforms}
 \subsection{Fourier-Based Pricing}
 However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. \citet{carr1999option} was the first to propose using Fourier transforms to price European options. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral.
 
@@ -250,6 +249,8 @@ However, the pricing of these options can be computationally expensive due to th
     \item talk about Phelan's extension
     \item end off with why we're looking into the inverse Z-transform
 \end{itemize}
+
+% improve error-convergence, spectral filters can be used \cite{ref, phelan}
 
 \section{Optimization Techniques}
 In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
