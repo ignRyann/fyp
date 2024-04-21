@@ -3,3 +3,5 @@ Eqn
 bayesian
 lookback
 Lookback
+exponentials
+sinh-deformation
