@@ -78,7 +78,7 @@ In Chapter 5, we summarize the findings of the project and discuss potential ave
 
 In Chapter 2, we establish a foundational understanding of the topic in hand. This section is designed to be self-contained, providing essential background for all readers, while references are included for those seeking a deeper exploration.
 
-``By definition, a complex number $z$ is an ordered pair ($x, y$) of real numbers $x$ and $y$, written $z = (x, y)$" \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. We may find it easier to represent complex numbers in their polar form, $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis. The set of complex numbers is denoted by $\mathbb{C}$.
+We conduct an analysis into the mathematical concepts used in option pricing, with a focus on Fourier-based methods. While a large body of theoretical work exists in this area, the practical implementation of these methods is often computationally expensive, especially when evaluating high-dimensional integrals involved in the pricing formulas. We study literature on numerical approximation methods and the application in the pricing of exotic options, specifically lookback and barrier options. Subsequently, we explore the use-case of machine learning techniques to optimize parameters during our experimentation in Chapter 3.
 
 % ========================================
 % The Z-Transform
@@ -90,8 +90,7 @@ The $z$-transform is a transformation of a real or complex time function $x(n)$,
 \begin{equation}\label{bilateral_z-transform}
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
 \end{equation}
-
-\noindent For a convenient description of $z$ in the complex plane, we tend to its polar form $z = re^{i\theta}$.
+``By definition, a complex number $z$ is an ordered pair $(x, y)$ of real numbers $x$ and $y$, written $z = (x, y)$'' \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. We may find it easier to represent complex numbers in their polar form, $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
 
 In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Eq. (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
 
@@ -150,7 +149,7 @@ We may find it useful to provide a concise representation of the entire distribu
 \begin{equation}
 	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
 \end{equation}
-where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform (Eqn. \ref{z_transform})
+where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform (Eqn. \ref{z_transform}).
 
 % Example using a fair dice
 \begin{example}
@@ -162,12 +161,13 @@ where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. 
             0 & \text{otherwise}
         \end{cases}
     \end{equation}
-    
+
     where $p(x)$ is the probability of rolling a number $x$. The PGF for the dice roll is then
 
     \begin{equation}
         G_X(q) = \sum^{\infty}_{x = 0} p(x)q^x = \frac{1}{6} \sum^6_{x = 1} q^x = \frac{q}{6}\cdot \frac{1-q^6}{1-q},
     \end{equation}
+    
     where we use the formula for the sum of a geometric series. The PGF encapsulates the entire distribution of the dice roll into a single function.
 \end{example}
 
@@ -219,46 +219,14 @@ Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers
 where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ is the number of points used in the DFT. The factor $r^n$ scales the result appropriately based on the radius of the contour.
 
 \subsection{Series acceleration techniques}
-
-\section{Option Pricing}
-The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price within a specified time-frame. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
-
-A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
-
-\subsection{Discrete Monitoring}
-In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
-
-\begin{enumerate}
-    \item \textbf{Barrier Options}
-    
-    The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
-
-    \item \textbf{Lookback Options}
-    
-    The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} allows the holder to sell the asset at the highest price during the option period.
-\end{enumerate}
-
-\subsection{Fourier-Based Pricing}
-However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. \citet{carr1999option} was the first to propose using Fourier transforms to price European options. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral.
-
-\begin{itemize}
-    \item talk about the advancements of Fourier transforms in option pricing
-    \item mention the linear dependence of the investigated ways
-    \item lead on to Fusai et al. (2006)
-    \item look into Plancherel's theorem
-    \item talk about Phelan's extension
-    \item end off with why we're looking into the inverse Z-transform
-\end{itemize}
-
-% improve error-convergence, spectral filters can be used \cite{ref, phelan}
+\todo{if we have time, otherwise remove this section}
 
 \section{Optimization Techniques}
 In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
 
 \begin{equation}\label{optimization_problem}
-	\text{minimize } f(x) \text{ subject to } x \in \Omega
+	\text{minimize } f(x) \text{ subject to } x \in \Omega,
 \end{equation}
-
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
 Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}.
@@ -270,9 +238,8 @@ Gradient descent is one of the most popular algorithms for parameter optimizatio
 Gradient descent iteratively converges to a local minimum of a function by moving in the direction of the steepest descent, as defined by the negative gradient. This method is expressed mathematically as
 
 \begin{equation}\label{GD}
-    x_{k+1} = x_k - \alpha_k \nabla f(x_k)
+    x_{k+1} = x_k - \alpha_k \nabla f(x_k),
 \end{equation}
-
 where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning rate, and $\nabla f(k)$ represents the gradient of the function at $x_k$. The selection of $\alpha_k$ determines the size of the step taken towards the minimum; too large can overshoot the minimum, too small can result in a long convergence time. The process repeats until a predetermined termination criterion is met, typically when the change in the value of $f(k)$ falls below a threshold. This iterative process is showcased in the pseudocode below:
 
 \begin{algorithm}
@@ -300,13 +267,80 @@ x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)
 \end{equation}
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
 
+\section{Option Pricing}\label{section:option_pricing}
+The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price within a specified time-frame. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
+
+A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
+
+\subsection{Discrete Monitoring}
+In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
+
+\subsubsection{Lookback Options}
+\begin{figure}[H]
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/call_option.png}
+      \caption{Lookback Call Option}
+      \label{fig:call_option}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/put_option.png}
+      \caption{Lookback Put Option}
+      \label{fig:put_option}
+    \end{subfigure}
+    \caption{Illustration of Lookback Options: Displaying the mechanics of (a) Call Option and (b) Put Option. The red line represents the barrier, while the red dot marks the strike price.}
+\end{figure}
+
+\noindent The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} (\autoref{fig:call_option}) gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} (\autoref{fig:put_option}) allows the holder to sell the asset at the highest price during the option period.
+
+\subsubsection{Barrier Options}
+\begin{figure}[H]
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/up_in_option.png}
+      \caption{Up-and-In Barrier Option}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/up_out_option.png}
+      \caption{Up-and-Out Barrier Option}
+    \end{subfigure}
+    
+    \medskip
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/down_in_option.png}
+      \caption{Down-and-In Barrier Option}
+      \label{fig:down_in_option}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/down_out_option.png}
+      \caption{Down-and-Out Barrier Option}
+      \label{fig:down_out_option}
+    \end{subfigure}
+    
+    \caption{Illustration of Barrier Options: Displaying the active (black) and inactive (grey) phases of each option type. (a) Up-and-In Option, (b) Up-and-Out Option (c) Down-and-In Option, and (d) Down-and-Out Option. The red line represents the barrier, where the ``active'' phase is highlighted in black, and the ``inactive'' phase is in grey.}
+\end{figure}
+
+The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
+
+\subsection{Fourier-Based Pricing}
+However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used to price a variety of options, including lookback and barrier options \citep{eberlein2010analysis}.
+
+\begin{itemize}
+    \item talk about the advancements of Fourier transforms in option pricing
+    \item mention the linear dependence of the investigated ways
+    \item lead on to Fusai et al. (2006)
+    \item look into Plancherel's theorem
+    \item talk about Phelan's extension
+    \item end off with why we're looking into the inverse Z-transform
+\end{itemize}
+
+% improve error-convergence, spectral filters can be used \cite{ref, phelan}
+
 % ========================================
 % Experiment
 % ========================================
 \chapter{Experiment}
 Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
-This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy, computational efficiency, and robustness to parameter changes in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
+This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
 \todo[inline]{If we get series acceleration, include here asw}
 
 \section{Sinh Deformation}

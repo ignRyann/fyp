@@ -5,3 +5,6 @@ lookback
 Lookback
 exponentials
 sinh-deformation
+Black-Scholes
+optimisation
+grey
