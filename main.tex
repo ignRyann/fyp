@@ -167,7 +167,7 @@ where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. 
     \begin{equation}
         G_X(q) = \sum^{\infty}_{x = 0} p(x)q^x = \frac{1}{6} \sum^6_{x = 1} q^x = \frac{q}{6}\cdot \frac{1-q^6}{1-q},
     \end{equation}
-    
+
     where we use the formula for the sum of a geometric series. The PGF encapsulates the entire distribution of the dice roll into a single function.
 \end{example}
 
@@ -272,7 +272,7 @@ The concept involves determining the value of options, which are financial contr
 
 A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
-\subsection{Discrete Monitoring}
+\subsection{Discrete Monitoring}\label{section:discrete_monitoring}
 In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
 \subsubsection{Lookback Options}
@@ -315,22 +315,21 @@ In most cases, the payoff of an option depends on the price of the underlying as
       \label{fig:down_out_option}
     \end{subfigure}
     
-    \caption{Illustration of Barrier Options: Displaying the active (black) and inactive (grey) phases of each option type. (a) Up-and-In Option, (b) Up-and-Out Option (c) Down-and-In Option, and (d) Down-and-Out Option. The red line represents the barrier, where the ``active'' phase is highlighted in black, and the ``inactive'' phase is in grey.}
+    \caption{Illustration of Barrier Options: Displaying the active (black) and inactive (grey) phases of each option type. (a) Up-and-In Option, (b) Up-and-Out Option (c) Down-and-In Option, and (d) Down-and-Out Option. The red line represents the barrier.}
 \end{figure}
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
 \subsection{Fourier-Based Pricing}
-However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used to price a variety of options, including lookback and barrier options \citep{eberlein2010analysis}.
+However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
 
-\begin{itemize}
-    \item talk about the advancements of Fourier transforms in option pricing
-    \item mention the linear dependence of the investigated ways
-    \item lead on to Fusai et al. (2006)
-    \item look into Plancherel's theorem
-    \item talk about Phelan's extension
-    \item end off with why we're looking into the inverse Z-transform
-\end{itemize}
+\citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the linear dependence of the computational time on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
+
+In an attempt to remove the linear dependence on the number of monitoring dates, \citet{fusai2006exact} looked into transforming the problem into the $z$-domain to simplify the convolution operations into multiplications. With the combined use of the Hilbert and $z$-transform, \citet{fusai2016spitzer} presented a ``fast and accurate'' method for calculating the Wiener-Hopf factors in the pricing of barrier options. The authors show that the computational cost is independent of the number of monitor dates and the error decays exponentially with the number of grid points. Extensions to the method have been made such as \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}.
+
+This leads us to the motivation behind this project, where we aim to explore the numerical approximation of the inverse $z$-transform to further analyze the computational efficiency of pricing discretely monitored options.
+
+\subsection{IZT in Option Pricing}
 
 % improve error-convergence, spectral filters can be used \cite{ref, phelan}
 
@@ -340,11 +339,11 @@ However, the pricing of these options can be computationally expensive due to th
 \chapter{Experiment}
 Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
-This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
+This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
 \todo[inline]{If we get series acceleration, include here asw}
 
 \section{Sinh Deformation}
-``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence.'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
 
 \begin{itemize}
     \item introduce Levendorskii's sinh deformation
@@ -426,9 +425,8 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 % ========================================
 \begin{appendices}
 
-\chapter{Initial Project Plan}
-
-\includepdf[pages=-]{initial_project_plan.pdf}
+% \chapter{Initial Project Plan}
+% \includepdf[pages=-]{initial_project_plan.pdf}
     
 \end{appendices}
 
