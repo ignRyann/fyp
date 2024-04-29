@@ -328,7 +328,7 @@ However, the pricing of these options can be computationally expensive due to th
 
 \citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the computational time is linearly dependent on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
 
-In an attempt to remove the linear dependence on the number of monitoring dates, \citet{fusai2006exact} looked into transforming the problem into the $z$-domain to simplify the convolution operations into multiplications. With the combined use of the Hilbert and $z$-transform, \citet{fusai2016spitzer} presented a ``fast and accurate'' method for calculating the Wiener-Hopf factors in the pricing of barrier options. The authors show that the computational cost is independent of the number of monitor dates and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
+In an attempt to remove the linear dependence on the number of monitoring dates, \citet{fusai2006exact} looked into transforming the problem into the $z$-domain to simplify the convolution operations into multiplications. With the combined use of the Hilbert and $z$-transform, \citet{fusai2016spitzer} presented a highly efficient and accurate method for calculating the \todo{define Wiener-Hopf factors} Wiener-Hopf factors in the pricing of barrier options. The authors show that the computational cost is independent of the number of monitor dates and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
 
 \subsection{NIZT in Option Pricing}
 
@@ -343,16 +343,17 @@ Having established the theoretical foundation, we now turn our attention to the 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
 \todo[inline]{If we get series acceleration, include here asw}
 
+\section{Circular Contour}
+% Abate and Whitt and Cavers
+
 \section{Sinh Deformation}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
 
 \begin{itemize}
     \item introduce Levendorskii's sinh deformation
+    \item mention sufficient conditions under which this works (next paper)
     \item talk about why he does this
 \end{itemize}
-
-\section{Circular Contour}
-% Abate and Whitt and Cavers
 
 \subsection{Deforming the Contour}
 \begin{itemize}
