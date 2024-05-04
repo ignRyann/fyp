@@ -328,11 +328,15 @@ However, the pricing of these options can be computationally expensive due to th
 
 \citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the computational time is linearly dependent on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
 
-In an attempt to remove the linear dependence on the number of monitoring dates, \citet{fusai2006exact} looked into transforming the problem into the $z$-domain to simplify the convolution operations into multiplications. With the combined use of the Hilbert and $z$-transform, \citet{fusai2016spitzer} presented a highly efficient and accurate method for calculating the \todo{define Wiener-Hopf factors} Wiener-Hopf factors in the pricing of barrier options. The authors show that the computational cost is independent of the number of monitor dates and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
+In an effort to eliminate the computational inefficiency tied to the number of monitoring dates, \citet{fusai2006exact} looked into shifting the pricing problems from the time domain into the $z$-domain, where convolution operations become straightforward multiplications. This helped set the stage for \citet{fusai2016spitzer}'s method incorporating the Hilbert and $z$-transform to calculate the \textbf{Wiener-Hopf factors}, which decompose the characteristic function of the price process into two parts; positive and negative jumps. The authors demonstrated that the computational cost is independent of the number of monitoring dates, and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as those by \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
 
 \subsection{NIZT in Option Pricing}
 
-% improve error-convergence, spectral filters can be used \cite{ref, phelan}
+\begin{itemize}
+    \item calculating characteristic function's $z$-transform - PD of asset's price
+    \item IZT to get the PD of the asset's price at different points
+    \item use of the PD to calculate the option price
+\end{itemize}
 
 % ========================================
 % Experiment
@@ -341,10 +345,38 @@ In an attempt to remove the linear dependence on the number of monitoring dates,
 Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
-\todo[inline]{If we get series acceleration, include here asw}
+\todo{If we get series acceleration, include here asw}
 
 \section{Circular Contour}
-% Abate and Whitt and Cavers
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
+
+\begin{example}
+    Consider the Z-transform function given by \todo{keep here or in background?}
+    
+    \begin{equation}
+        H(z) = \frac{(z - j)(z + j)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}j\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}j\right)\right)}
+    \end{equation}
+    
+    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}j$ and $z = \frac{1}{2} + \frac{1}{2}j$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
+
+    \begin{figure}[H]
+        \begin{subfigure}{.25\linewidth}
+          \includegraphics[width=\linewidth]{images/invalid_contour.png}
+          \caption{r = 0.5}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.25\linewidth}
+          \includegraphics[width=\linewidth]{images/valid_border_contour.png}
+          \caption{r = 0.71 (2 d.p.)}
+        \end{subfigure}\hfill
+        \begin{subfigure}{.25\linewidth}
+          \includegraphics[width=\linewidth]{images/valid_contour.png}
+          \caption{r = 0.9}
+        \end{subfigure}\hfill
+        
+        \caption{Illustration of Circular Contours: Displaying the effect of the radius $r$ on the contour ($n = 100$). The red dots represent the poles of $H(z)$.}
+    \end{figure}
+
+\end{example}
 
 \section{Sinh Deformation}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
@@ -371,21 +403,6 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 \end{itemize}
 
 \section{Numerical Benchmarking}
-
-% \begin{table}[h]
-%     \centering
-%     \begin{tabular}{c|cc}
-%     \hline
-%     \textbf{Function} & $x(z)$ & $X(z)$ \\
-%     \hline
-%     Heaviside Step & 1 & \(\frac{z}{z-1}\) \\
-%     Polynomial & \(t\) & \(\frac{z}{(z-1)^2}\) \\
-%     Decaying Exp & $e^{-at}$ & $\frac{1}{1 - \exp(a\triangle t) z^{-1}}$ \\
-%     Sinusoidal & $\sin(\omega t)$ & $\frac{z^{-1}\sin(w\triangle t)}{1-2z^{-1}\cos(w\triangle t) + z^{-2}}$
-%     \end{tabular}
-%     \caption{List of Transform Pairs}
-%     \label{tab:z_transform_examples}
-% \end{table}
 
 \begin{table}[h]
     \centering
