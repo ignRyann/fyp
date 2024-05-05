@@ -323,6 +323,8 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
+\subsection{Modelling Asset Prices}
+
 \subsection{Fourier-Based Pricing}
 However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
 
@@ -351,13 +353,13 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
 
 \begin{example}
-    Consider the Z-transform function given by \todo{keep here or in background?}
+    Consider the function given by \todo{keep here or in background?}
     
     \begin{equation}
-        H(z) = \frac{(z - j)(z + j)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}j\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}j\right)\right)}
+        H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
     \end{equation}
     
-    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}j$ and $z = \frac{1}{2} + \frac{1}{2}j$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
+    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}i$ and $z = \frac{1}{2} + \frac{1}{2}i$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
 
     \begin{figure}[H]
         \begin{subfigure}{.25\linewidth}
@@ -378,16 +380,37 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 
 \end{example}
 
+\subsection{Abate and Whitt 1992}
+
+\subsection{Cavers 1978}
+
 \section{Sinh Deformation}
-``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Equation \ref{inverse_z-transform} by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through a conformal mapping:
+\begin{equation}\label{equation:conformal_mapping}
+    \xi(y) = \sigma + ib\sinh(i\theta + y),
+\end{equation}
+where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. Applying a change of variables to Equation \ref{inverse_z-transform} yields
+
+\begin{equation}
+    x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
+\end{equation}
+
+By denoting the integrand as $f_n(y)$ and approximating the application of the infinite trapezoidal, we have 
+
+\begin{equation}
+    x(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} f_n(j \epsilon)(1 - \delta_{j0}/2) \right)
+\end{equation}
+
+\todo[inline]{need to look more into it}
 
 \begin{itemize}
-    \item introduce Levendorskii's sinh deformation
     \item mention sufficient conditions under which this works (next paper)
     \item talk about why he does this
 \end{itemize}
 
 \subsection{Deforming the Contour}
+
+
 \begin{itemize}
     \item explain the sinh deformation
     \item provide plots of the effects of the parameters understanding
@@ -431,6 +454,9 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 \section{Summary}
 
 \section{Future Work}
+
+\subsection{Parameter Selection}
+During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\ref{equation:conformal_mapping}).
 
 \section{Acknowledgements}
 
