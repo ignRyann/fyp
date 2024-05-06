@@ -107,6 +107,17 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 
 For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
 
+\begin{example}\label{example:roc_poles}
+    Consider the function given by \todo{keep here or in background?}
+    
+    \begin{equation}
+        H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
+    \end{equation}
+    
+    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}i$ and $z = \frac{1}{2} + \frac{1}{2}i$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
+
+\end{example}
+
 % ========================================
 % Relation to Fourier Transform
 % ========================================
@@ -352,40 +363,46 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 \section{Circular Contour}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
 
-\begin{example}
-    Consider the function given by \todo{keep here or in background?}
+\begin{figure}[H]
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/invalid_contour.png}
+      \caption{r = 0.5}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/valid_border_contour.png}
+      \caption{r = 0.72 (2 d.p.)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/unstable_contour.png}
+      \caption{r = 1.5}
+    \end{subfigure}\hfill
     
-    \begin{equation}
-        H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
-    \end{equation}
-    
-    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}i$ and $z = \frac{1}{2} + \frac{1}{2}i$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
-
-    \begin{figure}[H]
-        \begin{subfigure}{.25\linewidth}
-          \includegraphics[width=\linewidth]{images/invalid_contour.png}
-          \caption{r = 0.5}
-        \end{subfigure}\hfill
-        \begin{subfigure}{.25\linewidth}
-          \includegraphics[width=\linewidth]{images/valid_border_contour.png}
-          \caption{r = 0.71 (2 d.p.)}
-        \end{subfigure}\hfill
-        \begin{subfigure}{.25\linewidth}
-          \includegraphics[width=\linewidth]{images/valid_contour.png}
-          \caption{r = 0.9}
-        \end{subfigure}\hfill
-        
-        \caption{Illustration of Circular Contours: Displaying the effect of the radius $r$ on the contour ($n = 100$). The red dots represent the poles of $H(z)$.}
-    \end{figure}
-
-\end{example}
+    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
+\end{figure}
 
 \subsection{Abate and Whitt 1992}
+
+\begin{algorithm}[H]
+    \caption{Implementation of Equation \ref{aw_inversion}}
+    \begin{algorithmic}[1]
+    \Procedure{AbateWhitt}{$\tilde{f}, n$}
+        \State $\lambda \gets x_\in \mathbb{Z}^+$
+        \State $\rho \gets 10^{-\lambda / (2 \cdot n)}$
+        \State $\text{summation} \gets 0$
+        \For{$k \gets 1$ \textbf{to} $n-1$}
+            \State $z \gets \frac{1}{\rho \cdot \exp(\text{i} \cdot k \cdot \pi / n)}$
+            \State $\text{sum} \gets \text{sum} + (-1)^k \cdot \text{Re}(\tilde{f}(z))$
+        \EndFor
+        \State $\text{sum} \gets \tilde{f}(\frac{1}{\rho}) + 2 \cdot \text{sum} + (-1)^n \cdot \tilde{f}(\frac{1}{-\rho})$
+        \State \Return $\frac{\text{sum}}{2 \cdot n \cdot \rho^n}$
+    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
 
 \subsection{Cavers 1978}
 
 \section{Sinh Deformation}
-A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Equation \ref{inverse_z-transform} by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through a conformal mapping:
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Equation \ref{inverse_z-transform} by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
@@ -396,7 +413,6 @@ where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\th
 \end{equation}
 
 By denoting the integrand as $f_n(y)$ and approximating the application of the infinite trapezoidal, we have 
-
 \begin{equation}
     x(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} f_n(j \epsilon)(1 - \delta_{j0}/2) \right)
 \end{equation}
@@ -409,13 +425,65 @@ By denoting the integrand as $f_n(y)$ and approximating the application of the i
 \end{itemize}
 
 \subsection{Deforming the Contour}
+In an attempt to recreate the unit circle from the conformal mapping (\ref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour. We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
 
+\begin{figure}[ht]
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/base.png}
+      \caption{$\sigma = 0, b = 0.5, y = 1.0$}
+      \label{fig:base_deform}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/positive_sigma.png}
+      \caption{$\sigma + 0.2$}
+      \label{fig:positive_sigma}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/negative_sigma.png}
+      \caption{$\sigma - 0.2$}
+        \label{fig:negative_sigma}
+    \end{subfigure}
 
-\begin{itemize}
-    \item explain the sinh deformation
-    \item provide plots of the effects of the parameters understanding
-    \item talk about the implications of the deformation (sufficient conditions)
-\end{itemize}
+    \medskip
+
+    \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/higher_b.png}
+        \caption{$b + 0.2$}
+        \label{fig:higher_b}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/lower_b.png}
+        \caption{$b - 0.2$}
+        \label{fig:lower_b}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/higher_y.png}
+        \caption{$y + 0.2$}
+        \label{fig:higher_y}
+      \end{subfigure}
+
+      \medskip
+
+    \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/lower_y.png}
+        \caption{$y - 0.2$}
+        \label{fig:lower_y}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/mixing_b_y.png}
+        \caption{$b - 0.1, y + 0.2$}
+        \label{fig:mixing_b_y}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/mixing_b_y_v2.png}
+        \caption{$b + 0.1, y - 0.2$}
+        \label{fig:mixing_b_y_v2}
+      \end{subfigure}
+    
+    \caption{Displaying the effect of the parameters on the contour for the conformal mapping (\ref{equation:conformal_mapping}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
+\end{figure}
+
+In relation to the base contour (\autoref{fig:base_deform}), we observe that increasing $\sigma$ shifts the contour to the right (\autoref{fig:positive_sigma}), while decreasing $\sigma$ shifts the contour to the left (\autoref{fig:negative_sigma}). The parameter $b$ acts as a scale factor on the sinh deformation as shown in \autoref{fig:higher_b} and \ref{fig:lower_b}. Similarly, $y$ acts as a scale factor but with a more pronounced vertical effect as seen in \autoref{fig:higher_y} and \ref{fig:lower_y}. Mixing the parameters $b$ and $y$ results in a more complex deformation where the counter-opposing effects changes the contour in a non-linear manner (\autoref{fig:mixing_b_y} and \ref{fig:mixing_b_y_v2}).
 
 \subsection{Parameter Grid Search}
 \begin{itemize}
