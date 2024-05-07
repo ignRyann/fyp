@@ -344,13 +344,11 @@ However, the pricing of these options can be computationally expensive due to th
 In an effort to eliminate the computational inefficiency tied to the number of monitoring dates, \citet{fusai2006exact} looked into shifting the pricing problems from the time domain into the $z$-domain, where convolution operations become straightforward multiplications. This helped set the stage for \citet{fusai2016spitzer}'s method incorporating the Hilbert and $z$-transform to calculate the \textbf{Wiener-Hopf factors}, which decompose the characteristic function of the price process into two parts; positive and negative jumps. The authors demonstrated that the computational cost is independent of the number of monitoring dates, and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as those by \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
 
 \subsection{NIZT in Option Pricing}
-
 \begin{itemize}
     \item calculating characteristic function's $z$-transform - PD of asset's price
     \item IZT to get the PD of the asset's price at different points
     \item use of the PD to calculate the option price
 \end{itemize}
-
 % ========================================
 % Experiment
 % ========================================
