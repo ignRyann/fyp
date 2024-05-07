@@ -25,7 +25,7 @@
 % Title Page
 % ========================================
 \title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
-{{\vspace{2em} \Huge Numerical Approximations of the Inverse $\mathbb{Z}$-Transform}}\\
+{{\vspace{2em} \Huge Review of the Inverse $\mathbb{Z}$-Transform in Discrete Option Pricing}}\\
 {\large Final Year Project Report}\\
 }
 \date{Submission date: \today}
@@ -61,16 +61,32 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % ========================================
 \chapter{Introduction}
 \section{Motivation}
-% History + Motivation
+We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
+
+The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, which standardized option contracts and provided a platform for trading. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.7\linewidth]{images/options_volume.png}
+    \caption{Visualization of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
+    \label{fig:volume_of_options}
+\end{figure}
+
+However, the assumptions of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}. The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
+
+A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison. Between the existing methods, the accuracy and efficiency differs with each method requiring a unique setup and selection of parameters.
 
 \section{Aims and Objectives}
+Given the importance of the numerical inverse $z$-transform (NIZT), this project focuses on \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and best setup to achieve this. The measurable objectives (O1-O3) associated with this aim are as follows:
+
+\begin{itemize}
+	\item (O1) Analyze the existing NIZT methods in literature and the effects on parameter changes
+	\item (O2) Find the optimal parameter setup for each method
+	\item (O3) Test the implementations against well-defined transform pairs
+\end{itemize}
 
 \section{Overview}
-In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. 
-
-In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process We then provide the results on a list of transform pairs and discuss the implications of the findings.
-
-In Chapter 5, we summarize the findings of the project and discuss potential avenues for future work. This allows for ...
+The upcoming chapters of this report aims to provide a detailed description of the different stages taken through this project. In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process We then provide the results on a list of transform pairs and discuss the implications of the findings. Finally, Chapter 5 summarises the steps taken and the findings of this project with suggested work for further continuation. 
 
 % ========================================
 % Background
@@ -512,6 +528,12 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 % Results
 % ========================================
 \chapter{Results}
+
+\section{Sinh Deformation}
+
+\subsection{Deforming the Contour}
+
+\subsection{Parameter Search}
 
 % ========================================
 % Conclusion
