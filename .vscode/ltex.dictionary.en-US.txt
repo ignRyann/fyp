@@ -12,3 +12,6 @@ defaultable
 lévy
 Stochastics
 Wiener-Hopf
+Levendorskii
+sinh
+integrand

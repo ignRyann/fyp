@@ -107,6 +107,17 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 
 For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
 
+\begin{example}\label{example:roc_poles}
+    Consider the function given by \todo{keep here or in background?}
+    
+    \begin{equation}
+        H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
+    \end{equation}
+    
+    The ROC of $H(z)$ must exclude the poles at $z = -\frac{1}{4} - \frac{1}{2}i$ and $z = \frac{1}{2} + \frac{1}{2}i$, thus the ROC is $|z| > \frac{1}{2}$. The system is stable as the ROC includes the unit circle.
+
+\end{example}
+
 % ========================================
 % Relation to Fourier Transform
 % ========================================
@@ -323,15 +334,21 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
+\subsection{Modelling Asset Prices}
+
 \subsection{Fourier-Based Pricing}
 However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
 
 \citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the computational time is linearly dependent on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
 
-In an attempt to remove the linear dependence on the number of monitoring dates, \citet{fusai2006exact} looked into transforming the problem into the $z$-domain to simplify the convolution operations into multiplications. With the combined use of the Hilbert and $z$-transform, \citet{fusai2016spitzer} presented a highly efficient and accurate method for calculating the \todo{define Wiener-Hopf factors} Wiener-Hopf factors in the pricing of barrier options. The authors show that the computational cost is independent of the number of monitor dates and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
+In an effort to eliminate the computational inefficiency tied to the number of monitoring dates, \citet{fusai2006exact} looked into shifting the pricing problems from the time domain into the $z$-domain, where convolution operations become straightforward multiplications. This helped set the stage for \citet{fusai2016spitzer}'s method incorporating the Hilbert and $z$-transform to calculate the \textbf{Wiener-Hopf factors}, which decompose the characteristic function of the price process into two parts; positive and negative jumps. The authors demonstrated that the computational cost is independent of the number of monitoring dates, and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as those by \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
 
 \subsection{NIZT in Option Pricing}
-
+\begin{itemize}
+    \item calculating characteristic function's $z$-transform - PD of asset's price
+    \item IZT to get the PD of the asset's price at different points
+    \item use of the PD to calculate the option price
+\end{itemize}
 % ========================================
 % Experiment
 % ========================================
@@ -339,26 +356,132 @@ In an attempt to remove the linear dependence on the number of monitoring dates,
 Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
-\todo[inline]{If we get series acceleration, include here asw}
+\todo{If we get series acceleration, include here asw}
 
 \section{Circular Contour}
-% Abate and Whitt and Cavers
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
+
+\begin{figure}[H]
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/invalid_contour.png}
+      \caption{r = 0.5}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/valid_border_contour.png}
+      \caption{r = 0.72 (2 d.p.)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.25\linewidth}
+      \includegraphics[width=\linewidth]{images/unstable_contour.png}
+      \caption{r = 1.5}
+    \end{subfigure}\hfill
+    
+    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
+\end{figure}
+
+\subsection{Abate and Whitt 1992}
+
+\begin{algorithm}[H]
+    \caption{Implementation of Equation \ref{aw_inversion}}
+    \begin{algorithmic}[1]
+    \Procedure{AbateWhitt}{$\tilde{f}, n$}
+        \State $\lambda \gets x_\in \mathbb{Z}^+$
+        \State $\rho \gets 10^{-\lambda / (2 \cdot n)}$
+        \State $\text{summation} \gets 0$
+        \For{$k \gets 1$ \textbf{to} $n-1$}
+            \State $z \gets \frac{1}{\rho \cdot \exp(\text{i} \cdot k \cdot \pi / n)}$
+            \State $\text{sum} \gets \text{sum} + (-1)^k \cdot \text{Re}(\tilde{f}(z))$
+        \EndFor
+        \State $\text{sum} \gets \tilde{f}(\frac{1}{\rho}) + 2 \cdot \text{sum} + (-1)^n \cdot \tilde{f}(\frac{1}{-\rho})$
+        \State \Return $\frac{\text{sum}}{2 \cdot n \cdot \rho^n}$
+    \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Cavers 1978}
 
 \section{Sinh Deformation}
-``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. 
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Equation \ref{inverse_z-transform} by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
+\begin{equation}\label{equation:conformal_mapping}
+    \xi(y) = \sigma + ib\sinh(i\theta + y),
+\end{equation}
+where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. Applying a change of variables to Equation \ref{inverse_z-transform} yields
+
+\begin{equation}
+    x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
+\end{equation}
+
+By denoting the integrand as $f_n(y)$ and approximating the application of the infinite trapezoidal, we have 
+\begin{equation}
+    x(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} f_n(j \epsilon)(1 - \delta_{j0}/2) \right)
+\end{equation}
+
+\todo[inline]{need to look more into it}
 
 \begin{itemize}
-    \item introduce Levendorskii's sinh deformation
     \item mention sufficient conditions under which this works (next paper)
     \item talk about why he does this
 \end{itemize}
 
 \subsection{Deforming the Contour}
-\begin{itemize}
-    \item explain the sinh deformation
-    \item provide plots of the effects of the parameters understanding
-    \item talk about the implications of the deformation (sufficient conditions)
-\end{itemize}
+In an attempt to recreate the unit circle from the conformal mapping (\ref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour. We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
+
+\begin{figure}[ht]
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/base.png}
+      \caption{$\sigma = 0, b = 0.5, y = 1.0$}
+      \label{fig:base_deform}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/positive_sigma.png}
+      \caption{$\sigma + 0.2$}
+      \label{fig:positive_sigma}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/deformations/negative_sigma.png}
+      \caption{$\sigma - 0.2$}
+        \label{fig:negative_sigma}
+    \end{subfigure}
+
+    \medskip
+
+    \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/higher_b.png}
+        \caption{$b + 0.2$}
+        \label{fig:higher_b}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/lower_b.png}
+        \caption{$b - 0.2$}
+        \label{fig:lower_b}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/higher_y.png}
+        \caption{$y + 0.2$}
+        \label{fig:higher_y}
+      \end{subfigure}
+
+      \medskip
+
+    \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/lower_y.png}
+        \caption{$y - 0.2$}
+        \label{fig:lower_y}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/mixing_b_y.png}
+        \caption{$b - 0.1, y + 0.2$}
+        \label{fig:mixing_b_y}
+      \end{subfigure}\hfill
+      \begin{subfigure}{.3\linewidth}
+        \includegraphics[width=\linewidth]{images/deformations/mixing_b_y_v2.png}
+        \caption{$b + 0.1, y - 0.2$}
+        \label{fig:mixing_b_y_v2}
+      \end{subfigure}
+    
+    \caption{Displaying the effect of the parameters on the contour for the conformal mapping (\ref{equation:conformal_mapping}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
+\end{figure}
+
+In relation to the base contour (\autoref{fig:base_deform}), we observe that increasing $\sigma$ shifts the contour to the right (\autoref{fig:positive_sigma}), while decreasing $\sigma$ shifts the contour to the left (\autoref{fig:negative_sigma}). The parameter $b$ acts as a scale factor on the sinh deformation as shown in \autoref{fig:higher_b} and \ref{fig:lower_b}. Similarly, $y$ acts as a scale factor but with a more pronounced vertical effect as seen in \autoref{fig:higher_y} and \ref{fig:lower_y}. Mixing the parameters $b$ and $y$ results in a more complex deformation where the counter-opposing effects changes the contour in a non-linear manner (\autoref{fig:mixing_b_y} and \ref{fig:mixing_b_y_v2}).
 
 \subsection{Parameter Grid Search}
 \begin{itemize}
@@ -369,21 +492,6 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 \end{itemize}
 
 \section{Numerical Benchmarking}
-
-% \begin{table}[h]
-%     \centering
-%     \begin{tabular}{c|cc}
-%     \hline
-%     \textbf{Function} & $x(z)$ & $X(z)$ \\
-%     \hline
-%     Heaviside Step & 1 & \(\frac{z}{z-1}\) \\
-%     Polynomial & \(t\) & \(\frac{z}{(z-1)^2}\) \\
-%     Decaying Exp & $e^{-at}$ & $\frac{1}{1 - \exp(a\triangle t) z^{-1}}$ \\
-%     Sinusoidal & $\sin(\omega t)$ & $\frac{z^{-1}\sin(w\triangle t)}{1-2z^{-1}\cos(w\triangle t) + z^{-2}}$
-%     \end{tabular}
-%     \caption{List of Transform Pairs}
-%     \label{tab:z_transform_examples}
-% \end{table}
 
 \begin{table}[h]
     \centering
@@ -412,6 +520,9 @@ This chapter outlines the experimental setup, implementation and evaluation of t
 \section{Summary}
 
 \section{Future Work}
+
+\subsection{Parameter Selection}
+During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\ref{equation:conformal_mapping}).
 
 \section{Acknowledgements}
 
