@@ -68,6 +68,7 @@ The formal study of pricing options began much later with \citet{bachelier1900th
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{images/options_volume.png}
+	\captionsetup{justification=centering}
     \caption{Visualization of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
@@ -121,7 +122,7 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 \textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
 \end{equation}
 
-For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{LovelessGuido2021}.
+For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{loveless2021guido}.
 
 \begin{example}\label{example:roc_poles}
     Consider the function given by \todo{keep here or in Section 3.1?}
@@ -228,7 +229,7 @@ The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhit
 
 The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $X(z)$; each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
 
-Given the nature of this project, we may find it easier to use the following definition, where we set $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
+Given the nature of this project, we may find it easier to use the following definition, where we set the input of $X(z)$ to that of $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
 
 \begin{equation}\label{aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
@@ -240,17 +241,30 @@ The Nyquist-Shannon sampling theorem states that a signal must be sampled at a r
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}\label{cavers_section}
-Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse FFT to these sampled points to approximate the original time-domain signal. We can formulate this as:
+Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse fast fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast fourier transform (FFT). We can formulate this as:
 
 \begin{equation}\label{cavers}
-	f(n) = r^n \text{IFFT}[f(re^{2\pi i / N})],
+	f(n) = r^n \text{IFFT}[f(re^{2\pi ik / N})],
+\end{equation}
+which can be rewritten into the following:
+\begin{equation}
+		f(n) = \frac{r^n}{N} \text{FFT}[f(re^{2\pi ik / N})],
 \end{equation}
 
-where $r$ is the radius of the circular contour, $n$ is the time index, and $N$ is the number of points used in the DFT. The factor $r^n$ scales the result appropriately based on the radius of the contour.
+where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the secondary grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. \citet{loveless2021guido} show that an advantage of being able to increase $N$ points results in an error tolerance of E-16, \textit{i.e. machine zero}, with double precision.
 
+\todo[inline]{mention r = 10 ** (gamma / N) and that N has to be bigger than n}
+
+% ========================================
+% Series Acceleration
+% ========================================
 \subsection{Series acceleration techniques}
-\todo{if we have time, otherwise remove this section}
+\todo[inline]{if we have time, otherwise remove this section}
 
+
+% ========================================
+% Optimization Techniques
+% ========================================
 \section{Optimization Techniques}
 In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
 
@@ -302,6 +316,9 @@ The concept involves determining the value of options, which are financial contr
 
 A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
+% ========================================
+% Discrete Monitoring
+% ========================================
 \subsection{Discrete Monitoring}\label{section:discrete_monitoring}
 In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
@@ -350,8 +367,14 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
+% ========================================
+% Modelling Asset Prices
+% ========================================
 \subsection{Modelling Asset Prices}
 
+% ========================================
+% Fourier Based Pricing
+% ========================================
 \subsection{Fourier-Based Pricing}
 However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
 
@@ -365,6 +388,7 @@ In an effort to eliminate the computational inefficiency tied to the number of m
     \item IZT to get the PD of the asset's price at different points
     \item use of the PD to calculate the option price
 \end{itemize}
+
 % ========================================
 % Experiment
 % ========================================
@@ -374,6 +398,9 @@ Having established the theoretical foundation, we now turn our attention to the 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
 \todo{If we get series acceleration, include here asw}
 
+% ========================================
+% Circular Contour
+% ========================================
 \section{Circular Contour}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
 
@@ -394,6 +421,9 @@ This chapter outlines the experimental setup, implementation and evaluation of t
     \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
 \end{figure}
 
+% ========================================
+% Abate and Whitt 1992
+% ========================================
 \subsection{Abate and Whitt 1992}
 
 \begin{algorithm}[H]
@@ -413,6 +443,9 @@ This chapter outlines the experimental setup, implementation and evaluation of t
     \end{algorithmic}
 \end{algorithm}
 
+% ========================================
+% Cavers 1978
+% ========================================
 \subsection{Cavers 1978}
 
 \section{Sinh Deformation}
@@ -420,7 +453,7 @@ A circular contour integral is commonly used for approximating the inverse $z$-t
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
-where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. Applying a change of variables to Equation \ref{inverse_z-transform} yields
+where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Equation \ref{inverse_z-transform} yields
 
 \begin{equation}
     x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
@@ -438,6 +471,9 @@ By denoting the integrand as $f_n(y)$ and approximating the application of the i
     \item talk about why he does this
 \end{itemize}
 
+% ========================================
+% Deforming the Contour
+% ========================================
 \subsection{Deforming the Contour}
 In an attempt to recreate the unit circle from the conformal mapping (\ref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour. We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
 
@@ -499,6 +535,11 @@ In an attempt to recreate the unit circle from the conformal mapping (\ref{equat
 
 In relation to the base contour (\autoref{fig:base_deform}), we observe that increasing $\sigma$ shifts the contour to the right (\autoref{fig:positive_sigma}), while decreasing $\sigma$ shifts the contour to the left (\autoref{fig:negative_sigma}). The parameter $b$ acts as a scale factor on the sinh deformation as shown in \autoref{fig:higher_b} and \ref{fig:lower_b}. Similarly, $y$ acts as a scale factor but with a more pronounced vertical effect as seen in \autoref{fig:higher_y} and \ref{fig:lower_y}. Mixing the parameters $b$ and $y$ results in a more complex deformation where the counter-opposing effects changes the contour in a non-linear manner (\autoref{fig:mixing_b_y} and \ref{fig:mixing_b_y_v2}).
 
+\todo[inline]{include difference of b and y parameters}
+
+% ========================================
+% Parameter Grid Search
+% ========================================
 \subsection{Parameter Grid Search}
 \begin{itemize}
     \item use of grid search to find optimal parameters
@@ -507,6 +548,9 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
     \item use of SGD and loss function
 \end{itemize}
 
+% ========================================
+% Numerical Benchmarking
+% ========================================
 \section{Numerical Benchmarking}
 
 \begin{table}[h]
@@ -529,11 +573,9 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 % ========================================
 \chapter{Results}
 
-\section{Sinh Deformation}
+\section{Parameter Analysis and Setup}
 
-\subsection{Deforming the Contour}
-
-\subsection{Parameter Search}
+\section{Numerical Benchmarking}
 
 % ========================================
 % Conclusion
@@ -542,6 +584,14 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 \section{Summary}
 
 \section{Future Work}
+
+\subsection{DFT vs FFT vs QFT}
+\begin{itemize}
+	\item Discrete Fourier Transform: O($N^2$)
+	\item Fast Fourier Transform: O($N\log N$)
+	\item Quantum Fourier Transform: O($\log(N)^2$)	
+\end{itemize}
+
 
 \subsection{Parameter Selection}
 During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\ref{equation:conformal_mapping}).
