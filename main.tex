@@ -63,17 +63,18 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \section{Motivation}
 We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
 
-The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, which standardized option contracts and provided a platform for trading. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
+The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, which standardised option contracts and provided a platform for trading. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=0.7\linewidth]{images/options_volume.png}
 	\captionsetup{justification=centering}
-    \caption{Visualization of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
+    \caption{Visualisation of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
+However, the assumptions of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. Standard (vanilla) options are the most basic and commonly traded type of options which give the holder the opportunity to buy or sell the asset at a later point in time. Exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}. 
 
-However, the assumptions of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}. The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
+The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
 
 A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup and choice of parameters.
 
@@ -81,7 +82,8 @@ A common problem faced by those in the literature is the linear dependency on th
 Given the importance of the numerical inverse $z$-transform (NIZT), this project focuses on \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O3) associated with this aim are as follows:
 
 \begin{itemize}
-	\item (O1) Analyze the existing NIZT methods in literature and the effects on parameter changes
+	\item (O1) Analyse the existing NIZT methods in literature
+	\item (O2) Research Boyarchenko and Levendorskii's NIZT method
 	\item (O2) Find the optimal parameter setup for each method
 	\item (O3) Test the implementations against well-defined transform pairs
 \end{itemize}
@@ -96,14 +98,14 @@ The upcoming chapters of this report aims to provide a detailed description of t
 
 In Chapter 2, we establish a foundational understanding of the topic in hand. This section is designed to be self-contained, providing essential background for all readers, while references are included for those seeking a deeper exploration.
 
-We conduct an analysis into the mathematical concepts used in option pricing, with a focus on Fourier-based methods. While a large body of theoretical work exists in this area, the practical implementation of these methods is often computationally expensive, especially when evaluating high-dimensional integrals involved in the pricing formulas. We study literature on numerical approximation methods and the application in the pricing of exotic options, specifically lookback and barrier options. Subsequently, we explore the use-case of machine learning techniques to optimize parameters during our experimentation in Chapter 3.
+We conduct an analysis into the mathematical concepts used in option pricing, with a focus on Fourier-based methods. While a large body of theoretical work exists in this area, the practical implementation of these methods is often computationally expensive, especially when evaluating high-dimensional integrals involved in the pricing formulas. We study literature on numerical approximation methods and the application in the pricing of exotic options, specifically lookback and barrier options. Subsequently, we explore the use-case of machine learning techniques to optimise parameters during our experimentation in Chapter 3.
 
 % ========================================
 % The Z-Transform
 % ========================================
 \section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}\label{z_transform}
 
-The $z$-transform is a transformation of a real or complex time function $x(n)$, often used for analyzing discrete-time signals and systems. It is a generalization of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The Z-transform is formally defined as:
+The $z$-transform is a transformation of a real or complex time function $x(n)$, often used for analysing discrete-time signals and systems. It is a generalisation of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The bilateral Z-transform is formally defined as:
 
 \begin{equation}\label{bilateral_z-transform}
 X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
@@ -125,7 +127,7 @@ The region within the complex $z$-plane where the $z$-transform converges is kno
 For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{loveless2021guido}.
 
 \begin{example}\label{example:roc_poles}
-    Consider the function given by \todo{keep here or in Section 3.1?}
+    Consider the function given by
     
     \begin{equation}
         H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
@@ -147,7 +149,7 @@ It is useful to note the relationship between the $z$-transform and the Fourier 
 && &= \sum^{\infty}_{n=-\infty} x(n \Delta t)e^{-i \omega nt} &&
 \end{flalign}
 
-where we make use of the sifting property of the delta function. If we normalize the sampling interval to 1, we get
+where we make use of the sifting property of the delta function. If we normalise the sampling interval to 1, we get
 
 \begin{equation}\label{dtft}
 \sum^{\infty}_{n = - \infty} x(n)e^{-i n \omega}
@@ -159,7 +161,7 @@ This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The s
 \sum^{\infty}_{n = -\infty} |x(n)| < \infty
 \end{equation}
 
-The Z-transform generalizes Eq. (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
+The Z-transform generalises Eq. (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
 
 % ========================================
 % Relation to PDFs
@@ -200,20 +202,20 @@ where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. 
     where we use the formula for the sum of a geometric series. The PGF encapsulates the entire distribution of the dice roll into a single function.
 \end{example}
 
-The concept of summarizing information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behaviour of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyze discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyze the behaviour of signals in the complex plane.
+The concept of summarising information is not unique to probability theory. In the analysis of signals, we aim to encapsulate the behaviour of a sequence into a single function. This is akin to the PGF, where the $z$-transform is used to analyse discrete-time signals and systems. Drawing on the principles outlined by \citet{ross2014introduction}, we can bridge the gap between probability theory and signal processing, leveraging the $z$-transform to analyse the behaviour of signals in the complex plane.
 
 % ========================================
 % The Inverse Z-Transform
 % ========================================
 \section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
 
-The inverse $Z$-transform aims to find the $n$-th value of the sequence $x(n)$ given the $Z$-transform $X(z)$. This is commonly defined as a Cauchy integral around a contour $C$ in the complex plane. The contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC). The inverse $Z$-transform is formally given by
+The inverse $Z$-transform aims to retrieve the sequence $x(n)$ from its $Z$-transform $X(z)$. While this transform is typically defined for finding individual values of $n$, it can also be extended to calculate the entire sequence. This is commonly defined by the Cauchy integral around a contour $C$ in the complex plane. The chosen contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC) of $X(z)$. Formally, the inverse $Z$-transform is given by
 
 \begin{equation}\label{inverse_z-transform}
 	x(n) = \mathcal{Z}^{-1}_{z \rightarrow n}[X(z)] = \frac{1}{2\pi i} \oint_C X(z)z^{n-1}dz
 \end{equation}
 
-In practical settings, numerical approximations are often used due to the computational challenges of evaluating the Cauchy integral. Whilst there are many ways to go about this \citep{merrikh2014linearsys,rajkovic2004method,horvath2020numerical}, most methods are done on a circular contour. Aligning with the focus of our project, we shift our attention to contour integrals.
+The integral approach enables the extraction of the complete sequence $x(n)$ for all integer values $n$, provided the ROC and the properties of $X(z)$ allow. In practical settings, numerical approximations are often used due to the computational challenges of evaluating the Cauchy integral. Whilst there are many ways to go about this \citep{merrikh2014linearsys, rajkovic2004method, horvath2020numerical}, most methods are done on a circular contour. Aligning with the focus of our project, we shift our attention to contour integrals.
 
 % MAYBE: include other methods if we have time
 
@@ -251,7 +253,7 @@ which can be rewritten into the following:
 		f(n) = \frac{r^n}{N} \text{FFT}[f(re^{2\pi ik / N})],
 \end{equation}
 
-where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the secondary grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. \citet{loveless2021guido} show that an advantage of being able to increase $N$ points results in an error tolerance of E-16, \textit{i.e. machine zero}, with double precision.
+where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the secondary grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. \citet{loveless2021guido} show that an advantage of being able to increase $N$ points results in an error tolerance of E-16, \textit{i.e. machine zero}, with double precision; note that this requires some optimisation of the 
 
 \todo[inline]{mention r = 10 ** (gamma / N) and that N has to be bigger than n}
 
@@ -263,17 +265,17 @@ where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is t
 
 
 % ========================================
-% Optimization Techniques
+% Optimisation Techniques
 % ========================================
-\section{Optimization Techniques}
-In the context of computational mathematics, optimizations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimize or maximize a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimization problem can be formulated as
+\section{Optimisation Techniques}
+In the context of computational mathematics, optimisations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimise or maximise a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimisation problem can be formulated as
 
-\begin{equation}\label{optimization_problem}
-	\text{minimize } f(x) \text{ subject to } x \in \Omega,
+\begin{equation}\label{optimisation_problem}
+	\text{minimise } f(x) \text{ subject to } x \in \Omega,
 \end{equation}
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
-Gradient descent is one of the most popular algorithms for parameter optimization with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimize parameters of a mathematical function \citep{GradientBasedOpt2022}.
+Gradient descent is one of the most popular algorithms for parameter optimistion with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimise parameters of a mathematical function \citep{GradientBasedOpt2022}.
 
 % ========================================
 % Gradient Descent
@@ -289,7 +291,7 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 \begin{algorithm}
 \caption{Gradient Descent}
 \begin{algorithmic}[1]
-\State Initialize \( x_0 \), set \( k = 0 \)
+\State Initialise \( x_0 \), set \( k = 0 \)
 \While{termination conditions not met}
     \State Compute gradient \( \nabla f(x_k) \)
     \State Choose a suitable step size \( \alpha_k \)
@@ -304,23 +306,38 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 % ========================================
 \subsubsection{Stochastic Gradient Descent}
 
-However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimization process. It modifies Eq. (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimisation process. It modifies Eq. (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
 
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
 \end{equation}
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
 
+% ========================================
+% Option Pricing
+% ========================================
 \section{Option Pricing}\label{section:option_pricing}
-The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price within a specified time-frame. The value of an option is derived from the underlying asset, which can be a stock, bond, or commodity. 
+The concept involves determining the value of options, which are financial contracts that give the holder the right, \textit{but not the obligation}, to buy or sell an asset at a set price, $K$ (strike price), within a specified time-frame, $T$ (expiration date). The value of an option, $V$, is derived from the underlying asset, denoted as $S$, which can be a stock, bond, or commodity. This relationship can be mathematically expressed as:
+\begin{equation}
+	V = f(S, K, T, \sigma, r),
+\end{equation}
+where $\sigma$ represents the volatility of the underlying asset\footnotemark[1] and $r$ is the risk-free interest rate\footnotemark[2].
+
+\footnotetext[1]{A measure of how much the price of the asset is expected to fluctuate over a certain period of time.}
+\footnotetext[2]{The interest rate at which an invest can lend money with virtually no risk of loss.}
 
 A pivotal point in option pricing was the introduction of \citet{black1973pricing}'s model in estimating the price of European-style options, which can only be exercised at the expiration date. The Black-Scholes model is based on the assumption that the price of the underlying asset follows a geometric Brownian motion in idealistic conditions. However, many options traded in real markets are American-style, allowing the holder to exercise the option at any time before the expiration date. This complicates the pricing process as it involves solving an \textit{optimum stopping problem}. \citet{merton1973theory} extends the Black-Scholes model to American options by expressing the price as the solution to a free boundary problem. While Merton's work provided a theoretical foundation, solving the free boundary problem analytically is challenging. Instead, numerical methods such as binomial trees \citep{cox1979option} and simulation-based methods \citep{longstaff2001simulation} have been developed to price American options.
 
 % ========================================
-% Discrete Monitoring
+% Path-Dependent Options
 % ========================================
-\subsection{Discrete Monitoring}\label{section:discrete_monitoring}
-In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as discrete monitoring. Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
+\subsection{Path-Dependent Options}\label{section:discrete_monitoring}
+We regard American and European options as standard (\textit{vanilla}) options. In contrast, exotic options offer more complex features and conditions that can be tailored to meet specific needs and/or requirements. Such differences are the reason as to why exotic options are traded over-the-counter (OTC)\footnotemark[1], whereas standard options are typically traded on organised exchanges\footnotemark[2]. 
+
+\footnotetext[1]{Over-The-Counter refers to the process of trading of financial instruments directly between two parties without the oversight of a formal exchange.}
+\footnotetext[2]{Organised exchanges refer to formal marketplaces that facilitate the buying and selling of financial instruments.}
+
+In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as \textbf{discrete monitoring.} Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
 \subsubsection{Lookback Options}
 \begin{figure}[H]
@@ -344,10 +361,12 @@ In most cases, the payoff of an option depends on the price of the underlying as
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/up_in_option.png}
       \caption{Up-and-In Barrier Option}
+      \label{fig:up_in_option}
     \end{subfigure}\hfill
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/up_out_option.png}
       \caption{Up-and-Out Barrier Option}
+      \label{fig:up_out_option}
     \end{subfigure}
     
     \medskip
@@ -367,16 +386,45 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
+\subsubsection{Double Barrier Options}
+Double barrier option involve two price levels: an upper and lower barrier that define the boundaries for the option's activity. These options can either be \textit{knock-in} or \textit{knock-out}. A double knock-in option becomes active only if the asset price hits either barrier, similar to a combination of \autoref{fig:up_in_option} and \autoref{fig:down_in_option}. Conversely, a double knock-out option ceases to exist if the asset price touches either barrier combining the characteristics of \autoref{fig:up_out_option} and \autoref{fig:down_out_option}.
+
 % ========================================
 % Modelling Asset Prices
 % ========================================
 \subsection{Modelling Asset Prices}
+Accurate models allow traders, investors and risk managers to assess the fair value of financial products and make informed decisions. The Black-Scholes model assumes that the price of the underlying asset follows a geometric Brownian motion (GBM). Under this assumption, the asset price $S(t)$ evolves according to the stochastic differential equation:
+
+\begin{equation}\label{black_scholes_equation}
+dS(t) = \mu S(t) dt + \sigma S(t) dW(t),	
+\end{equation}
+where $\mu$ represents the expected return, and $W(t)$ is a standard Wiener process. The solution to this equation gives the asset price at time t as:
+
+\begin{equation}
+S(t) = S(0)e^{(\mu - 0.5 \sigma^2) + \sigma W(t)}	
+\end{equation}
+
+
+The model assumes that the volatility is constant, which is rarely the case as market volatility tends to fluctuate over time due to economics conditions or market sentiment. Additionally, the model doesn't account for jumps or sudden large movements in asset prices, usually seen at times of significant news. These limitations have led to the development of more sophisticated models; given the scope and background of this project, we primarily focus on exponential L\'evy processes.
+
+\subsubsection{Exponential L\'evy Processes}
+We extend the Black-Scholes model by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
+\begin{equation}
+dX(t) = \mu dt + \sigma dW(t) + dJ(t),
+\end{equation}
+where $J(t)$ represents a jump process (typically a Poisson process) to account for sudden, significant changes. An exponential L\'evy process describes the asset price process as:
+
+\begin{equation}
+S(t) = S(0)e^{X(t)}	
+\end{equation}
+
+As the characteristic function of exponential L\'evy models are often available in closed form, which facilitates the application of Fourier-based methods, they have been widely used in the pricing of path-dependent options as shown by the works of \citet{fusai2016spitzer, kwok2011efficient, feng2008pricing, phelan2019hilbert}.
 
 % ========================================
 % Fourier Based Pricing
 % ========================================
 \subsection{Fourier-Based Pricing}
-However, the pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
+The pricing of these options can be computationally expensive due to the high-dimensional integrals involved in the pricing formulas. Whilst \citet{heston1993closed} explored the idea of modelling asset prices in the Fourier domain, \citet{carr1999option} were the first to price European options expressing both the characteristic function and the payoff in the Fourier domain. It involved transforming the pricing problem from the time domain to the frequency domain, where the pricing formula simplifies to a one-dimensional integral. The Fourier-based methods have been widely used for the pricing of options discussed in Section \ref{section:discrete_monitoring} \citep{eberlein2010analysis}.
 
 \citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the computational time is linearly dependent on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
 
