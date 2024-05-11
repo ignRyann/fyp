@@ -1,25 +1,9 @@
 \documentclass[a4paper]{report}
-\usepackage{setspace}
 
 \pagestyle{plain}
 \input{Packages}
 \usepackage[a4paper, margin = 3cm, bottom = 2.5cm]{geometry}
 
-\newtheorem{theorem}{THEOREM}
-\newtheorem{lemma}[theorem]{LEMMA}
-\newtheorem{corollary}[theorem]{COROLLARY}
-\newtheorem{proposition}[theorem]{PROPOSITION}
-\newtheorem{remark}[theorem]{REMARK}
-\newtheorem{definition}[theorem]{DEFINITION}
-\newtheorem{example}{Example}
-
-\newcommand{\nats}{\mbox{\( \mathbb N \)}}
-\newcommand{\rat}{\mbox{\(\mathbb Q\)}}
-\newcommand{\rats}{\mbox{\(\mathbb Q\)}}
-\newcommand{\reals}{\mbox{\(\mathbb R\)}}
-\newcommand{\ints}{\mbox{\(\mathbb Z\)}}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % ========================================
 % Title Page
@@ -83,13 +67,13 @@ Given the importance of the numerical inverse $z$-transform (NIZT), this project
 
 \begin{itemize}
 	\item (O1) Analyse the existing NIZT methods in literature
-	\item (O2) Research Boyarchenko and Levendorskii's NIZT method
+	\item (O2) Research Boyarchenko and Levendorskii's new NIZT method
 	\item (O2) Find the optimal parameter setup for each method
 	\item (O3) Test the implementations against well-defined transform pairs
 \end{itemize}
 
 \section{Overview}
-The upcoming chapters of this report aims to provide a detailed description of the different stages taken through this project. In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process We then provide the results on a list of transform pairs and discuss the implications of the findings. Finally, Chapter 5 summarises the steps taken and the findings of this project with suggested work for further continuation. 
+The upcoming chapters of this report aims to provide a detailed description of the different stages taken through this project. In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process. We then provide the results on a list of transform pairs and discuss the implications of the findings. Finally, Chapter 5 summarises the steps taken and the findings of this project with suggested work for further continuation. 
 
 % ========================================
 % Background
@@ -207,8 +191,7 @@ The concept of summarising information is not unique to probability theory. In t
 % ========================================
 % The Inverse Z-Transform
 % ========================================
-\section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}
-
+\section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}\label{section:inverse_z}
 The inverse $Z$-transform aims to retrieve the sequence $x(n)$ from its $Z$-transform $X(z)$. While this transform is typically defined for finding individual values of $n$, it can also be extended to calculate the entire sequence. This is commonly defined by the Cauchy integral around a contour $C$ in the complex plane. The chosen contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC) of $X(z)$. Formally, the inverse $Z$-transform is given by
 
 \begin{equation}\label{inverse_z-transform}
@@ -339,7 +322,7 @@ We regard American and European options as standard (\textit{vanilla}) options. 
 
 In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as \textbf{discrete monitoring.} Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
-\subsubsection{Lookback Options}
+\subsubsection{Lookback Options}\label{lookback}
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/call_option.png}
@@ -356,7 +339,7 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 \noindent The payoff depends on the maximum and minimum asset price over the life of the option. A \textit{lookback call option} (\autoref{fig:call_option}) gives the holder the right to buy the asset at the lowest price during the option period, while a \textit{lookback put option} (\autoref{fig:put_option}) allows the holder to sell the asset at the highest price during the option period.
 
-\subsubsection{Barrier Options}
+\subsubsection{Barrier Options}\label{barrier}
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/up_in_option.png}
@@ -386,7 +369,7 @@ In most cases, the payoff of an option depends on the price of the underlying as
 
 The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
-\subsubsection{Double Barrier Options}
+\subsubsection{Double Barrier Options}\label{double_barrier}
 Double barrier option involve two price levels: an upper and lower barrier that define the boundaries for the option's activity. These options can either be \textit{knock-in} or \textit{knock-out}. A double knock-in option becomes active only if the asset price hits either barrier, similar to a combination of \autoref{fig:up_in_option} and \autoref{fig:down_in_option}. Conversely, a double knock-out option ceases to exist if the asset price touches either barrier combining the characteristics of \autoref{fig:up_out_option} and \autoref{fig:down_out_option}.
 
 % ========================================
@@ -404,11 +387,10 @@ where $\mu$ represents the expected return, and $W(t)$ is a standard Wiener proc
 S(t) = S(0)e^{(\mu - 0.5 \sigma^2) + \sigma W(t)}	
 \end{equation}
 
-
 The model assumes that the volatility is constant, which is rarely the case as market volatility tends to fluctuate over time due to economics conditions or market sentiment. Additionally, the model doesn't account for jumps or sudden large movements in asset prices, usually seen at times of significant news. These limitations have led to the development of more sophisticated models; given the scope and background of this project, we primarily focus on exponential L\'evy processes.
 
 \subsubsection{Exponential L\'evy Processes}
-We extend the Black-Scholes model by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
+We extend \autoref{black_scholes_equation} by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
 \begin{equation}
 dX(t) = \mu dt + \sigma dW(t) + dJ(t),
 \end{equation}
@@ -428,14 +410,41 @@ The pricing of these options can be computationally expensive due to the high-di
 
 \citet{fang2009novel} introduced a pricing technique based on the Fourier-cosine expansion approximating the characteristic function of the underlying asset price, which was then expanded to a broader class of exotic options \citep{fang2009pricing, fang2011fourier} and general l\'evy processes \citep{lord2008fast}. Whilst the method shows high levels of accuracy with exponential error convergence on the number of terms, this is only the case when the governing probability density function is sufficiently smooth. When modelling the asset price by the variance gamma process \citep{madan1998variance}, we achieve only algebraic error convergence due to the discontinuities in the process. \citet{ruijter2015application} showed that this can be remedied using spectral filters however the issue remains in that the computational time is linearly dependent on the number of monitoring dates for discretely monitored options. This seems to also be the case for \citet{feng2008pricing}'s employment of the Hilbert transform using backward induction to price barrier options. 
 
-In an effort to eliminate the computational inefficiency tied to the number of monitoring dates, \citet{fusai2006exact} looked into shifting the pricing problems from the time domain into the $z$-domain, where convolution operations become straightforward multiplications. This helped set the stage for \citet{fusai2016spitzer}'s method incorporating the Hilbert and $z$-transform to calculate the \textbf{Wiener-Hopf factors}, which decompose the characteristic function of the price process into two parts; positive and negative jumps. The authors demonstrated that the computational cost is independent of the number of monitoring dates, and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as those by \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
+In an effort to eliminate the computational inefficiency tied to the number of monitoring dates, \citet{fusai2006exact} looked into shifting the pricing problems from the time domain into the $z$-domain, where convolution operations become straightforward multiplications. This helped set the stage for \citet{fusai2016spitzer}'s method incorporating the Hilbert and $z$-transform to calculate the Wiener-Hopf factors, which decompose the characteristic function of the price process into two parts; positive and negative jumps. The authors demonstrated that the computational cost is independent of the number of monitoring dates, and the error decays exponentially with the number of grid points. Whilst extensions to the method have been made such as those by \citet{phelan2018fourier}'s new scheme using spectral filters to improve convergence \citep{phelan2019hilbert}, we shift our focus to the use-case of the inverse $z$-transform in the pricing of options.
 
+% ========================================
+% NIZT in Option Pricing
+% ========================================
 \subsection{NIZT in Option Pricing}
-\begin{itemize}
-    \item calculating characteristic function's $z$-transform - PD of asset's price
-    \item IZT to get the PD of the asset's price at different points
-    \item use of the PD to calculate the option price
-\end{itemize}
+We consider the case that of a double barrier option (\ref{double_barrier}), which are characterised by their dependency on the asset's price staying within a specified range between an upper boundary $u$ and a lower boundary $l$. The probability of the asset's price being at $x$ at the $n$th monitoring without hitting these barriers is represented by $f(x, n)$. This forms the basis of our recursive relationship for these options:
+
+\begin{equation}
+\int^u_l f(x', n-1)p(x - x', \triangle t)\ dx',	
+\end{equation}
+where $p(x - x', \triangle t)$ is the transition density between the states from $x'$ to $x$ over a small time increment $\triangle t$. The integral expression represents the transition probabilities convolved with the state probabilities from the previous time step, under the condition that the asset remains within the barriers $u$ and $l$. We expand this relationship across all monitoring periods as follows:
+
+\begin{equation}
+\sum^{\infty}_{n = 1} q^n f(x, n) = \sum^{\infty}_{n = 1} q^n \int^u_l f(x', n-1)p(x - x', \triangle t)\ dx'	
+\end{equation}
+We notice the similarity to that of \autoref{unilateral_z-transform}, however we set $z^{-1} = q$ to remain consistent with that in literature. By shifting the index $m = n-1$, the expression simplifies to
+\begin{equation}
+= q \int^u_l \sum^{\infty}_{m = 0} q^m f(x', m) p(x - x', \triangle t)\ dx'	
+\end{equation}
+This manipulation restructures the series into a form amenable to the use of transitioning to the $z$-domain. We define the $z$-transform of $f(x', n)$ as
+
+\begin{equation}
+\tilde{f}(x', q) = \mathcal{Z}_{n \rightarrow q}[f(x', n)] = \sum^{\infty}_{n = 0} q^nf(x', n)
+\end{equation}
+This encapsulation into $\tilde{f}(x', q)$ allows us to write the relationship as
+\begin{equation}
+\sum^{\infty}_{n = 0} q^n f(x, n) -q^0f(x, 0) = q\int^u_l \sum^{\infty}_{m = 0}q^m f(x', m) p(x-x', \triangle t)\ dx'	
+\end{equation}
+to which we can see how the $z$-transform helps in handling the summation over all $n$ by turning it into a product of transforms in the $z$-domain
+\begin{equation}
+\tilde{f}(x', q) = q\int^u_l \tilde{f}(x', q)p(x - x', \triangle t)\ dx' + f(x, 0)
+\end{equation}
+
+Such a form enables the use of fourier-based methods; \citet{fusai2016spitzer} demonstrated that the iteration over all monitoring dates can be bypassed using the Spitzer identities, originally detailed by \citet{spitzer1957wiener} and expanded upon by \citet{kemperman1963wiener}. The identities require the Wiener-Hopf factorisations and decompositions, which were computed with the Plemelj-Sokhotsky relations and the Hilbert transform. Whilst \citet{fusai2016spitzer} provide a comprehensive list of references, we ought to also mention the continuations of \citet{phelan2018fluctuation, phelan2019hilbert, loveless2023phelanguido}. After such calculations, the inverse $z$-transform (Section \ref{section:inverse_z}) of $\tilde{f}(x, q)$ is needed to translate the representation back to the time-domain probabilities. Thus, the focus of this work on the inverse $z$-transform not only underscores its mathematical importance but also highlights its role in bridging theoretical constructs with real-world financial applications. 
 
 % ========================================
 % Experiment
