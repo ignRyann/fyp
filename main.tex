@@ -63,13 +63,13 @@ The pricing of discrete path-dependent options has been a longstanding area of r
 A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup and choice of parameters.
 
 \section{Aims and Objectives}
-Given the importance of the numerical inverse $z$-transform (NIZT), this project focuses on \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O3) associated with this aim are as follows:
+Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O4) associated with this aim are as follows:
 
 \begin{itemize}
 	\item (O1) Analyse the existing NIZT methods in literature
 	\item (O2) Research Boyarchenko and Levendorskii's new NIZT method
-	\item (O2) Find the optimal parameter setup for each method
-	\item (O3) Test the implementations against well-defined transform pairs
+	\item (O3) Find the optimal parameter setup for each method
+	\item (O4) Test the implementations against well-defined transform pairs
 \end{itemize}
 
 \section{Overview}
@@ -205,7 +205,7 @@ The integral approach enables the extraction of the complete sequence $x(n)$ for
 % ========================================
 % Abate and Whitt 1992
 % ========================================
-\subsection{Abate and Whitt 1992}\label{abate_whitt_section}
+\subsection{Abate and Whitt 1992}\label{section:abate_whitt}
 The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pdfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
 
 \begin{equation}\label{aw_inversion_original}
@@ -220,7 +220,7 @@ Given the nature of this project, we may find it easier to use the following def
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
 \end{equation}
 
-The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eqn. (\ref{aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
+The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eq. (\ref{aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
 
 % ========================================
 % Cavers 1978
@@ -320,7 +320,7 @@ We regard American and European options as standard (\textit{vanilla}) options. 
 \footnotetext[1]{Over-The-Counter refers to the process of trading of financial instruments directly between two parties without the oversight of a formal exchange.}
 \footnotetext[2]{Organised exchanges refer to formal marketplaces that facilitate the buying and selling of financial instruments.}
 
-In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as \textbf{discrete monitoring.} Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{exotic options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
+In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as \textbf{discrete monitoring.} Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{path-dependent options} where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
 \subsubsection{Lookback Options}\label{lookback}
 \begin{figure}[H]
@@ -390,7 +390,7 @@ S(t) = S(0)e^{(\mu - 0.5 \sigma^2) + \sigma W(t)}
 The model assumes that the volatility is constant, which is rarely the case as market volatility tends to fluctuate over time due to economics conditions or market sentiment. Additionally, the model doesn't account for jumps or sudden large movements in asset prices, usually seen at times of significant news. These limitations have led to the development of more sophisticated models; given the scope and background of this project, we primarily focus on exponential L\'evy processes.
 
 \subsubsection{Exponential L\'evy Processes}
-We extend \autoref{black_scholes_equation} by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
+We extend Eq. (\ref{black_scholes_equation}) by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
 \begin{equation}
 dX(t) = \mu dt + \sigma dW(t) + dJ(t),
 \end{equation}
@@ -416,7 +416,7 @@ In an effort to eliminate the computational inefficiency tied to the number of m
 % NIZT in Option Pricing
 % ========================================
 \subsection{NIZT in Option Pricing}
-We consider the case that of a double barrier option (\ref{double_barrier}), which are characterised by their dependency on the asset's price staying within a specified range between an upper boundary $u$ and a lower boundary $l$. The probability of the asset's price being at $x$ at the $n$th monitoring without hitting these barriers is represented by $f(x, n)$. This forms the basis of our recursive relationship for these options:
+We consider the case that of a double barrier option (Section \ref{double_barrier}), which are characterised by their dependency on the asset's price staying within a specified range between an upper boundary $u$ and a lower boundary $l$. The probability of the asset's price being at $x$ at the $n$th monitoring without hitting these barriers is represented by $f(x, n)$. This forms the basis of our recursive relationship for these options:
 
 \begin{equation}
 \int^u_l f(x', n-1)p(x - x', \triangle t)\ dx',	
@@ -426,7 +426,7 @@ where $p(x - x', \triangle t)$ is the transition density between the states from
 \begin{equation}
 \sum^{\infty}_{n = 1} q^n f(x, n) = \sum^{\infty}_{n = 1} q^n \int^u_l f(x', n-1)p(x - x', \triangle t)\ dx'	
 \end{equation}
-We notice the similarity to that of \autoref{unilateral_z-transform}, however we set $z^{-1} = q$ to remain consistent with that in literature. By shifting the index $m = n-1$, the expression simplifies to
+We notice the similarity to that of Eq. (\ref{unilateral_z-transform}), however we set $z^{-1} = q$ to remain consistent with that in literature. By shifting the index $m = n-1$, the expression simplifies to
 \begin{equation}
 = q \int^u_l \sum^{\infty}_{m = 0} q^m f(x', m) p(x - x', \triangle t)\ dx'	
 \end{equation}
@@ -452,14 +452,30 @@ Such a form enables the use of fourier-based methods; \citet{fusai2016spitzer} d
 \chapter{Experiment}
 Having established the theoretical foundation, we now turn our attention to the practical implementation of methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}. Whilst the former is based on a circular contour, we also explore the idea laid out by \citet{levendorskii2022sinh} in sampling the $z$-transform on a sinh-deformation.
 
-This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
-\todo{If we get series acceleration, include here asw}
+This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs (Table \ref{table:transform_pairs}) in an attempt to provide a thorough comparison of the methods to determine the most effective approach.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|cc}
+    \hline
+    \textbf{Function} & $x(t)$ & $X(z)$ \\
+    \hline
+    Heaviside Step & 1 & $z / \textbf{(}z-1\textbf{)}$ \\
+    Polynomial & \(t\) & $z / \textbf{(}z-1\textbf{)}^2 $ \\
+    Decaying Exp & $e^{-at}$ & $1 / \textbf{(}1 - \frac{\exp(-a\triangle t)}{z} \textbf{)}$ \\
+    Sinusoidal & $\sin(\omega t)$ & $\textbf{(}\frac{\sin(w\triangle t)}{z}\textbf{)} / \textbf{(}1-\frac{2\cos(w\triangle t)}{z} + \frac{1}{z^2}\textbf{)}$
+    \end{tabular}
+    \caption{List of Transform Pairs}
+    \label{table:transform_pairs}
+\end{table}
 
 % ========================================
 % Circular Contour
 % ========================================
 \section{Circular Contour}
-``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Equation \ref{inverse_z-transform}, defined as $z = re^{i\theta}$, such that $r$ encloses the poles of the $z$-transform. 
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Eq. (\ref{inverse_z-transform}), defined as $z = re^{i\theta}$, however the setting of $r$ is important as shown for Example (\ref{example:roc_poles}) in Figure (\ref{fig:effect_r}).
+
+We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section (\ref{section:abate_whitt}) and Section (\ref{cavers_section}). For each of the methods, we outline a series of experiments and validation tests to carry out.
 
 \begin{figure}[H]
     \begin{subfigure}{.25\linewidth}
@@ -469,6 +485,7 @@ This chapter outlines the experimental setup, implementation and evaluation of t
     \begin{subfigure}{.25\linewidth}
       \includegraphics[width=\linewidth]{images/valid_border_contour.png}
       \caption{r = 0.72 (2 d.p.)}
+      \label{fig:valid_r}
     \end{subfigure}\hfill
     \begin{subfigure}{.25\linewidth}
       \includegraphics[width=\linewidth]{images/unstable_contour.png}
@@ -476,18 +493,20 @@ This chapter outlines the experimental setup, implementation and evaluation of t
     \end{subfigure}\hfill
     
     \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
+    \label{fig:effect_r}
 \end{figure}
 
 % ========================================
 % Abate and Whitt 1992
 % ========================================
 \subsection{Abate and Whitt 1992}
+Given the correct setup, we will require, as input,  just the function to be inverted, $\tilde{f}: \mathbb{R}\rightarrow \mathbb{R}$, and the point $n_\in \mathbb{R}$. The implementation of such a function follows very easily from Eq. (\ref{aw_inversion}) as shown in the pseudocode below:
 
 \begin{algorithm}[H]
     \caption{Implementation of Equation \ref{aw_inversion}}
     \begin{algorithmic}[1]
     \Procedure{AbateWhitt}{$\tilde{f}, n$}
-        \State $\lambda \gets x_\in \mathbb{Z}^+$
+        \State $\lambda \gets x_\in \mathbb{R}^+$
         \State $\rho \gets 10^{-\lambda / (2 \cdot n)}$
         \State $\text{summation} \gets 0$
         \For{$k \gets 1$ \textbf{to} $n-1$}
@@ -500,17 +519,31 @@ This chapter outlines the experimental setup, implementation and evaluation of t
     \end{algorithmic}
 \end{algorithm}
 
+\subsubsection{Computational Accuracy}
+\citet{AbateWhitt1992a, AbateWhitt1992b} showed that the absolute error, $|\epsilon |$, of their implementation is bounded by
+\begin{equation}
+	| \epsilon | = \frac{1}{r^N - 1} \approx \frac{1}{r^N},
+\end{equation}
+where the approximation holds for large $r^N$. As discussed in Section (\ref{section:abate_whitt}), setting $r=10^{-\lambda / 2n}$  yields an accuracy of $10^{-\lambda}$, \textit{i.e.}, $\lambda$ significant digits. However, we have that if the machine accuracy is $\epsilon_m = 10^{-\lambda_m}$, the bound falls apart around $\lambda > \frac{2}{3} \lambda_m$ \citep[Remark 5.8]{AbateWhitt1992a}. \citet{loveless2023phelanguido} states that ``with IEEE 754 double precision representation of floating point numbers, $\epsilon_m = 2^{-52} \approx 10^{-15.65}$, and thus it makes little sense to set $\lambda > 10.5$, which yields the IZT up to about 10 or 11 significant digits".
+
+Thus, we investigate the effect of different values of $\lambda$ on the accuracy of the Abate-Whitt method when applied to the heaviside step and polynomial transform pairs (Table \ref{table:transform_pairs}). We expect to observe an increase in accuracy as $\lambda$ increases, up to a certain point where the limitations of machine precision and rounding errors become dominant.
+
+\subsubsection{Validity of Parameter Space}
+
+
+\subsubsection{Computational Speed}
+
 % ========================================
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}
 
 \section{Sinh Deformation}
-A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{abate_whitt_section} and \ref{cavers_section}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Equation \ref{inverse_z-transform} by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section (\ref{section:abate_whitt}) and (\ref{cavers_section}). However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
-where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Equation \ref{inverse_z-transform} yields
+where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
 
 \begin{equation}
     x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
@@ -606,33 +639,34 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 \end{itemize}
 
 % ========================================
-% Numerical Benchmarking
-% ========================================
-\section{Numerical Benchmarking}
-
-\begin{table}[h]
-    \centering
-    \begin{tabular}{c|cc}
-    \hline
-    \textbf{Function} & $x(z)$ & $X(z)$ \\
-    \hline
-    Heaviside Step & 1 & $z / \textbf{(}z-1\textbf{)}$ \\
-    Polynomial & \(t\) & $z / \textbf{(}z-1\textbf{)}^2 $ \\
-    Decaying Exp & $e^{-at}$ & $1 / \textbf{(}1 - \exp(a\triangle t) z^{-1}\textbf{)}$ \\
-    Sinusoidal & $\sin(\omega t)$ & $\textbf{(}z^{-1}\sin(w\triangle t)\textbf{)} / \textbf{(}1-2z^{-1}\cos(w\triangle t) + z^{-2}\textbf{)}$
-    \end{tabular}
-    \caption{List of Transform Pairs}
-    \label{tab:transform_pairs}
-\end{table}
-
-% ========================================
 % Results
 % ========================================
 \chapter{Results}
 
-\section{Parameter Analysis and Setup}
-
-\section{Numerical Benchmarking}
+\begin{figure}[H]
+    \begin{subfigure}{.475\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/heaviside.png}
+      \caption{Heaviside Step ($1 \leq \lambda \leq 17$)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.475\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_zoomed.png}
+      \caption{Heaviside Step ($8 \leq \lambda \leq 17$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/polynomial.png}
+      \caption{Polynomial ($1 \leq \lambda \leq 17)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/polynomial_zoomed.png}
+      \caption{Polynomial ($8 \leq \lambda \leq 17$)}
+    \end{subfigure}
+    
+    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the (a, b) Heaviside Step and (c, d) Polynomial transform pairs. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.01$. The different lines represent the MAE for subsets of $n$ values: N = 32, 64, 128, 256, 512. \textbf{EXPERIMENT ABATE-WHITT COMPUTATIONAL ACCURACY}}
+    \label{fig:MAE_Abate_Whitt}
+\end{figure}
 
 % ========================================
 % Conclusion
