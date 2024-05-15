@@ -9,11 +9,11 @@
 % Title Page
 % ========================================
 \title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
-{{\vspace{2em} \Huge Review of the Inverse $\mathbb{Z}$-Transform in Discrete Option Pricing}}\\
+{{\vspace{2em} \Huge Review of the Inverse $\mathcal{Z}$-Transform in Discrete Option Pricing}}\\
 {\large Final Year Project Report}\\
 }
 \date{Submission date: \today}
-\author{Roman Ryan Karim\thanks{
+\author{Candidate Number: KCPD9\thanks{
 {\bf Disclaimer:}
 This report is submitted as part requirement for the MEng degree in Mathematical Computation at UCL. It is substantially the result of my own work except where explicitly indicated in the text. The report may be freely copied and distributed provided the source is explicitly acknowledged.}
 \\ \\ Dr Carolyn Phelan
@@ -21,7 +21,6 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \\ University College London
 \\ \\
 }
-
 
 % ========================================
 % Report
@@ -45,7 +44,7 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 % ========================================
 \chapter{Introduction}
 \section{Motivation}
-We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
+Standard (vanilla) options are the most basic and commonly traded type of options which give the holder the opportunity to buy or sell the asset at a later point in time. We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
 
 The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, which standardised option contracts and provided a platform for trading. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
 
@@ -56,7 +55,7 @@ The formal study of pricing options began much later with \citet{bachelier1900th
     \caption{Visualisation of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
-However, the continuous monitoring assumption of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. Standard (vanilla) options are the most basic and commonly traded type of options which give the holder the opportunity to buy or sell the asset at a later point in time. Exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
+However, the continuous monitoring assumption of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. Exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
 
 
 The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
@@ -67,10 +66,10 @@ A common problem faced by those in the literature is the linear dependency on th
 Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O4) associated with this aim are as follows:
 
 \begin{itemize}
-	\item (O1) Analyse the existing NIZT methods in literature
-	\item (O2) Research Boyarchenko and Levendorskii's new NIZT method
-	\item (O3) Find the optimal parameter setup for each method
-	\item (O4) Test the implementations against well-defined transform pairs
+	\item (O1) Analyse and implement the existing NIZT methods in literature
+	\item (O2) Research Boyarchenko and Levendorskii's new NIZT method (Sinh-Deformation)
+	\item (O3) Test the implementations against well-defined transform pairs
+	\item (O4) Compute metrics on parameter setups for each method
 \end{itemize}
 
 \section{Overview}
@@ -226,8 +225,8 @@ The Nyquist-Shannon sampling theorem states that a signal must be sampled at a r
 % ========================================
 % Cavers 1978
 % ========================================
-\subsection{Cavers 1978}\label{cavers_section}
-Extending upon our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes to sample the $z$-transform of a function on a circular contour at equally spaced points and then apply the inverse fast fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast fourier transform (FFT). We can formulate this as:
+\subsection{Cavers 1978}\label{section:cavers}
+Building on our analysis in Section (\ref{rs_fourier_transform}), \citet{Cavers1978FFT} proposes sampling the $z$-transform of a function on a circular contour at equally spaced points and then applying the inverse fast Fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast Fourier transform (FFT), with a time complexity of O(NlogN). We can formulate this as:
 
 \begin{equation}\label{cavers}
 	x(n) = r^n \text{IFFT}[X(re^{2\pi ik / N})],
@@ -237,16 +236,15 @@ which can be rewritten into the following:
 		x(n) = \frac{r^n}{N} \text{FFT}[X(re^{2\pi ik / N})],
 \end{equation}
 
-where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the secondary grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. \citet{loveless2021guido} show that an advantage of being able to increase $N$ points results in an error tolerance of E-16, \textit{i.e. machine zero}, with double precision; note that this requires some optimisation of the 
+where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the integration grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. Recent studies, such as those by \citet{loveless2021guido}, show that increasing \(N\) results in an error tolerance approaching E-16, \textit{i.e. machine zero}, with double precision; note that this requires some optimisation of the chosen parameters. 
 
-\todo[inline]{mention r = 10 ** (gamma / N) and that N has to be bigger than n}
+\citet{loveless2023phelanguido} explores replacing the IFFT of Eq. (\ref{cavers}) with a numerical summation over the grind points on half of the unit circle, similar to that of \citet{AbateWhitt1992a, AbateWhitt1992b}'s implementation. This is given as
 
-% ========================================
-% Series Acceleration
-% ========================================
-\subsection{Series acceleration techniques}
-\todo[inline]{if we have time, otherwise remove this section}
+\begin{equation}\label{equation:cavers_sum}
+	x(n) = r^n \sum^{N}_{k = 1} X(re^{-\pi ik/N})
+\end{equation}
 
+The authors conclude that both implementations achieve machine-level accuracy of E-16 with some slight deviations and requiring an optimal hyperparameter setup.
 
 % ========================================
 % Optimisation Techniques
@@ -296,6 +294,9 @@ However, classic Gradient Descent faces limitations, including susceptibility to
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
 \end{equation}
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
+
+\subsection{Bayesian Optimisation}
+\todo[inline]{Try quick Bayesian optimisation - if it works include}
 
 % ========================================
 % Option Pricing
@@ -388,7 +389,7 @@ where $\mu$ represents the expected return, and $W(t)$ is a standard Wiener proc
 S(t) = S(0)e^{(\mu - 0.5 \sigma^2) + \sigma W(t)}	
 \end{equation}
 
-The model assumes that the volatility is constant, which is rarely the case as market volatility tends to fluctuate over time due to economics conditions or market sentiment. Additionally, the model doesn't account for jumps or sudden large movements in asset prices, usually seen at times of significant news. These limitations have led to the development of more sophisticated models; given the scope and background of this project, we primarily focus on exponential L\'evy processes.
+The model assumes that the volatility is constant, which is rarely the case as market volatility tends to fluctuate over time due to economics conditions or market sentiment. Additionally, the model doesn't account for jumps or sudden large movements in asset prices, usually seen at times of significant news. These limitations have led to the development of more sophisticated representations; given the scope and background of this project, we primarily focus on exponential L\'evy processes.
 
 \subsubsection{Exponential L\'evy Processes}
 We extend Eq. (\ref{black_scholes_equation}) by incorporating jump processes to account for sudden changes in asset prices. A stochastic process $X(t)$ is termed a L\'evy process if \textbf{(i)} the changes in the process are independent of each other, \textbf{(ii)} the distribution of the changes in the process depends only on the length of the time interval, not on the starting point, and \textbf{(iii)} it starts at zero, \textit{i.e.}, $X(0) = 0$. The dynamics of a L\'evy process can be described by the following stochastic differential equation:
@@ -417,6 +418,7 @@ In an effort to eliminate the computational inefficiency tied to the number of m
 % NIZT in Option Pricing
 % ========================================
 \subsection{NIZT in Option Pricing}
+\todo[inline]{Need to solidify understanding}
 We consider the case that of a double barrier option (Section \ref{double_barrier}), which are characterised by their dependency on the asset's price staying within a specified range between an upper boundary $u$ and a lower boundary $l$. The probability of the asset's price being at $x$ at the $n$th monitoring without hitting these barriers is represented by $f(x, n)$. This forms the basis of our recursive relationship for these options:
 
 \begin{equation}
@@ -438,9 +440,9 @@ This manipulation restructures the series into a form amenable to the use of tra
 \end{equation}
 This encapsulation into $\tilde{f}(x', q)$ allows us to write the relationship as
 \begin{equation}
-\sum^{\infty}_{n = 0} q^n f(x, n) -q^0f(x, 0) = q\int^u_l \sum^{\infty}_{m = 0}q^m f(x', m) p(x-x', \triangle t)\ dx'	
+\sum^{\infty}_{n = 1} q^n f(x, n) -q^0f(x, 0) = q\int^u_l \sum^{\infty}_{m = 0}q^m f(x', m) p(x-x', \triangle t)\ dx'	
 \end{equation}
-to which we can see how the $z$-transform helps in handling the summation over all $n$ by turning it into a product of transforms in the $z$-domain
+to which we can see how the $z$-transform helps in handling the summation over all $n$:
 \begin{equation}
 \tilde{f}(x', q) = q\int^u_l \tilde{f}(x', q)p(x - x', \triangle t)\ dx' + f(x, 0)
 \end{equation}
@@ -455,39 +457,28 @@ Having established the theoretical foundation, we now turn our attention to the 
 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs (Table \ref{table:transform_pairs}) in an attempt to provide a thorough comparison of the methods.
 
+\todo[inline]{include experimental environment: Python (NumPy, SciPy, Pandas, Seaborn, Scikit-learn and MatPlotLib)}
+
 % ========================================
 % Transform Pairs
 % ========================================
 \section{Transform Pairs}
-To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus those listed in \autoref{table:transform_pairs} as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $x(t)$, we derive the corresponding transform pair in the subsequent sections.
+To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus on those listed in Table (\ref{table:transform_pairs}) as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $x(t)$, we derive the corresponding transform pair in the subsequent sections.
 
 \begin{table}[H]
     \centering
+    \renewcommand{\arraystretch}{1.2} % row height
     \begin{tabular}{c|cc}
-    \hline
-    \textbf{Function} & $x(t)$ & $X(z)$ \\
-    \hline
-    Heaviside Step & 1 & $z / \textbf{(}z-1\textbf{)}$ \\
-    Polynomial & \(t\) & $z / \textbf{(}z-1\textbf{)}^2 $ \\
-    Decaying Exp & $e^{-at}$ & $z / \textbf{(} z - e^{-a \triangle t} \textbf{)}$ \\
-    Sinusoidal & $\sin(\omega t)$ & $\textbf{(} z^{-1}\sin(\omega \triangle t) \textbf{)} / \textbf{(} 1 - 2\cos(\omega\triangle t)z^{-1} + z^{-2} \textbf{)}$
-    \end{tabular}
-    \caption{List of Transform Pairs}
-    \label{table:transform_pairs}
-\end{table}
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{c|cc}
-    \hline
     \textbf{Function} & $x(t)$ & $X(z)$ \\
     \hline
     Heaviside Step & 1 & $\frac{z}{z-1}$ \\
-    Polynomial & \(t\) & $\frac{z}{(z-1)^2}$ \\
+    Polynomial & $t$ & $\frac{z}{(z-1)^2}$ \\
     Decaying Exp & $e^{-at}$ & $\frac{z}{z - e^{-a \triangle t}}$ \\
-    Sinusoidal & $\sin(\omega t)$ & $\frac{z^{-1}\sin(\omega \triangle t)}{1 - 2\cos(\omega\triangle t)z^{-1} + z^{-2}}$
+    Sinusoidal & $\sin(\omega t)$ & $\frac{z^{-1}\sin(\omega \triangle t)}{1 - 2\cos(\omega\triangle t)z^{-1} + z^{-2}}$ \\
     \end{tabular}
+    
     \caption{List of Transform Pairs}
+    \label{table:transform_pairs}
 \end{table}
 
 % ========================================
@@ -545,7 +536,6 @@ X(z) = -z \frac{d}{dz} \left( \frac{z}{z-1} \right) = -z \left( \frac{z - 1 - z}
 % ========================================
 \subsection{Decaying Exponential}
 The decaying exponential function, commonly expressed as $x(t) = e^{-at}$ for $t \geq 0$ and $a > 0$, is very useful in the analysis of systems with exponential decay or growth characteristics. However, such a signal is sampled at discrete time intervals; if $\triangle t$ is the sampling interval and $n$ represents the discrete time index, then the continuous function $x(t)$ becomes $x[n] = e^{-an\triangle t}$ when sampled at intervals of $\triangle t$. The unilateral $z$-transform of $x[n]$ is given by
-
 \begin{equation}
 	X(z) = 	\mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n=0} e^{-an\triangle t}z^{-n}
 \end{equation}
@@ -584,7 +574,7 @@ X(z) = \frac{1}{2i} \cdot \frac{ -z^{-1}(e^{i\omega \triangle t} - e^{i\omega \t
 \section{Circular Contour}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Eq. (\ref{inverse_z-transform}), defined as $z = re^{i\theta}$, however the setting of $r$ is important as shown for Example (\ref{example:roc_poles}) in Figure (\ref{fig:effect_r}).
 
-We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section (\ref{section:abate_whitt}) and Section (\ref{cavers_section}). For each of the methods, we outline a series of experiments and validation tests to carry out.
+We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section (\ref{section:abate_whitt}) and Section (\ref{section:cavers}). For each of the methods, we outline a series of experiments and validation tests to carry out.
 
 \begin{figure}[H]
     \begin{subfigure}{.25\linewidth}
@@ -636,17 +626,18 @@ Given a sufficient hyperparameter setup, we will require, as input,  just the fu
 \end{equation}
 where the approximation holds for large $r^N$. As discussed in Section (\ref{section:abate_whitt}), setting $r=10^{-\lambda / 2n}$  yields an accuracy of $10^{-\lambda}$, \textit{i.e.}, $\lambda$ significant digits. However, we have that if the machine accuracy is $\epsilon_m = 10^{-\lambda_m}$, the bound falls apart around $\lambda > \frac{2}{3} \lambda_m$ \citep[Remark 5.8]{AbateWhitt1992a}. \citet{loveless2023phelanguido} states that ``with IEEE 754 double precision representation of floating point numbers, $\epsilon_m = 2^{-52} \approx 10^{-15.65}$, and thus it makes little sense to set $\lambda > 10.5$, which yields the IZT up to about 10 or 11 significant digits".
 
-Thus, we investigate the effect of different values of $\lambda$ on the accuracy of the Abate-Whitt method when applied to the heaviside step and polynomial transform pairs (Table \ref{table:transform_pairs}). We expect to observe an increase in accuracy as $\lambda$ increases, up to a certain point where the limitations of machine precision and rounding errors become dominant.
+Thus, we investigate the effect of different values of $\lambda$ on the accuracy of the Abate-Whitt method when applied to the Heaviside step and polynomial transform pairs (Table \ref{table:transform_pairs}). We expect to observe an increase in accuracy as $\lambda$ increases, up to a certain point where the limitations of machine precision and rounding errors become dominant.
 
-\subsubsection{Computational Speed}
-In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop.
+\subsubsection{Computational Speed}\label{section:aw_speed}
+In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop. With each iteration, the dominant operations is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
 
-With each iteration, the dominant operations is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some consatnt, the overall time complex remains O($n$). We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice.
+We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice. Practically, it is not feasible to eliminate any interference from external background processes. However, we make efforts to minimise such effects by executing multiple runs of each test and take the average.
 
 % ========================================
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}
+As discussed in Section (\ref{section:cavers}), \citet{Cavers1978FFT} introduces a secondary grid defined by the parameter $N_\in \mathbb{R}^+$ and it follows on that our algorithm will require this as input. We also remind ourselves that the methods differs in regard to the type of $n$; the data type is a list of integers compared to the previously mentioned where we passed an integer. The implementation is presented as:
 
 \begin{algorithm}[H]
     \caption{Implementation of \autoref{cavers}}
@@ -654,12 +645,12 @@ With each iteration, the dominant operations is the evaluation of the input func
     \begin{algorithmic}[1]
         \Procedure{Cavers}{$\tilde{f}, n, N$}
         	\State $\gamma \gets \mathbb{R}^+$
-            \State $r \gets 10^{(\gamma / N)}$
+            \State $r \gets 10^{\gamma / N}$
             \State $z \gets \text{Array}[N]$
-            \State $F \gets \text{Array}[N]$
             \For{$k \gets 0$ \textbf{to} $N-1$}
-                \State $z[k] \gets r \cdot \exp(\text{i} \cdot 2 \cdot \pi \cdot k / N)$
+                \State $z[k] \gets r \cdot \exp(\text{i} * 2 \pi * k / N)$
             \EndFor
+            \State $F \gets \text{Array}[N]$
             \State $F \gets \text{IFFT}(\tilde{f}(z))$
             \State $f \gets r^n \cdot F[n]$
             \State \Return $f$ 
@@ -667,11 +658,44 @@ With each iteration, the dominant operations is the evaluation of the input func
     \end{algorithmic}
 \end{algorithm}
 
+Whilst the latter makes use of the IFFT, we look into analysing the comparative metrics with the definition including that of the numerical approximation given by Eq (\ref{equation:cavers_sum}). We denote the the number of points in the secondary grid as $J$ and let $N$ be the last value / length of $n$.
+
+\begin{algorithm}[H]
+\caption{Implementation of \autoref{equation:cavers_sum}}
+\label{algo:cavers_sum}
+\begin{algorithmic}[1]
+\Procedure{Cavers\_sum}{$\tilde{f}, n, J$}
+	\State $\gamma \gets \mathbb{R}^+$
+	\State $N = n[-1]$
+    \State $r \gets 10^{\gamma / J}$ 
+    \State $z \gets \text{Array}[J]$
+    \For{$j \gets 0$ \textbf{to} $J$}
+                \State $z[j] \gets r \cdot \exp{(i * 2\pi * j / N)}$
+            \EndFor
+    \State $f \gets \text{Array}[N+1]$
+    \For{$i \gets 0$ \textbf{to} $N+1$}
+        \State $f[i] \gets \frac{1}{J} \cdot \sum (z^{n[i]} \cdot \tilde{f}(z))$ 
+    \EndFor
+    \State \textbf{return} $f$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\subsubsection{Computational Accuracy}
+As discussed in Section (\ref{section:cavers}), achieving machine-level accuracy is possible but requires some optimisation of the hyper-parameters. We aim to view the accuracy in regard to changes of the hyper-parameter $n$, $N$ and the setting of $\gamma$. In an attempt to ``exploit as much as possible the available digits of precision", \citet{loveless2023phelanguido} look into setting $\gamma = J\log_{10}(2)$. Thus, we aim to investigate the changes of the hyper-parameters on the accuracy as well as finding the implementation that achieves the best result for each transform pair in Table (\ref{table:transform_pairs}).
+
+\subsubsection{Computational Speed}
+For consistency, we plot the results against different N values, similar to our experiment for Section (\ref{section:aw_speed}), where we set J = 2N, for the different implementations. Given that IFFT has a time complexity of O(NLogN), we expect this to be the dominating factor in Algorithm (\ref{algo:cavers}). The numerical summation method, outlined in Algorithm (\ref{algo:cavers_sum}), requires computing the summation over J terms for each of the N terms. Thus, we expect a linear relationship with respect to NJ.
+
+Similar to the approach in Section (\ref{section:aw_speed}), we take the average over multiple runs to minimise the interference of external processes.
+
+\subsection{Comparative Analysis}
+
 % ========================================
 % Sinh Deformation
 % ========================================
 \section{Sinh Deformation}
-A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section (\ref{section:abate_whitt}) and (\ref{cavers_section}). However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section (\ref{section:abate_whitt}) and (\ref{section:cavers}). However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
@@ -697,9 +721,24 @@ By denoting the integrand as $f_n(y)$ and approximating the application of the i
 % Deforming the Contour
 % ========================================
 \subsection{Deforming the Contour}
-In an attempt to recreate the unit circle from the conformal mapping (\ref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour. We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
+In an attempt to recreate the unit circle from the conformal mapping (\autoref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour.  We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
 
-\begin{figure}[ht]
+\begin{algorithm}[H]
+\caption{Implementation of \autoref{equation:conformal_mapping}}
+\label{algo:hyperbolic_sine}
+\begin{algorithmic}[1]
+\Procedure{Hyperbolic\_sine\_area}{$\sigma, b, y, N$}
+    \State $z \gets \text{Array}[N]$ \Comment{$z_{\in} \mathbb{C}^N$}
+    \For{$k \gets -\frac{N}{2}$ \textbf{to} $\frac{N}{2} - 1$}
+        \State $\omega \gets \frac{i\pi  k}{N}$
+        \State $z[k + \frac{n}{2}] \gets \sigma + i * b * \sinh(\omega + y)$
+    \EndFor
+    \State \textbf{return} $z$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{figure}[H]
     \begin{subfigure}{.3\linewidth}
       \includegraphics[width=\linewidth]{images/deformations/base.png}
       \caption{$\sigma = 0, b = 0.5, y = 1.0$}
@@ -752,23 +791,77 @@ In an attempt to recreate the unit circle from the conformal mapping (\ref{equat
         \label{fig:mixing_b_y_v2}
       \end{subfigure}
     
-    \caption{Displaying the effect of the parameters on the contour for the conformal mapping (\ref{equation:conformal_mapping}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
+    \caption{Displaying the effect of the parameters on the contour for Algorithm (\ref{algo:hyperbolic_sine}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
 \end{figure}
 
 In relation to the base contour (\autoref{fig:base_deform}), we observe that increasing $\sigma$ shifts the contour to the right (\autoref{fig:positive_sigma}), while decreasing $\sigma$ shifts the contour to the left (\autoref{fig:negative_sigma}). The parameter $b$ acts as a scale factor on the sinh deformation as shown in \autoref{fig:higher_b} and \ref{fig:lower_b}. Similarly, $y$ acts as a scale factor but with a more pronounced vertical effect as seen in \autoref{fig:higher_y} and \ref{fig:lower_y}. Mixing the parameters $b$ and $y$ results in a more complex deformation where the counter-opposing effects changes the contour in a non-linear manner (\autoref{fig:mixing_b_y} and \ref{fig:mixing_b_y_v2}).
 
-\todo[inline]{include difference of b and y parameters}
+\begin{figure}[H]
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/sinh_param_analysis/sinh_0_88.png}
+      \caption{$\text{max(Re}(z)) = 0.88$ (2 d.p.)}
+      \label{fig:extent_default}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/sinh_param_analysis/sinh_1_b.png}
+      \caption{$\text{max(Re}(z)) = 1.0$}
+      \label{fig:extent_b}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/sinh_param_analysis/sinh_1_y.png}
+      \caption{$\text{max(Re}(z)) = 1.0$}
+      \label{fig:extent_y}
+    \end{subfigure}
+    
+    \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaling results are constructed with \textbf{(b)} $\sigma = 0.0, b = 0.7967054596179172, y = 0.7$ and \textbf{(c)} $\sigma = 0.0, b = 0.7, y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
+\end{figure}
+
+To achieve an extent on the real axis of 1.0, we scale our original deformation (\autoref{fig:extent_default}) by the individual parameters. We see the differences in transformation in Figure (\ref{fig:extent_b}) and Figure (\ref{fig:extent_y}) for parameters $b$ and $y$, respectively.
 
 % ========================================
 % Parameter Grid Search
 % ========================================
-\subsection{Parameter Grid Search}
+\subsection{Parameter Selection for the Sinh Deformation}
 \begin{itemize}
     \item use of grid search to find optimal parameters
-    \item different search criteria's (\textit{e.g. area, x-axis perimeter, etc})
     \item might also be useful to try find parameters that give the results?
-    \item use of SGD and loss function
 \end{itemize}
+
+
+The loss function $L_1$ for the input \( z = [z_1, z_2, \ldots, z_N] \in \mathbb{C} \), representing the points of our contour constructed with $N$ points,  is given by:
+\begin{equation}
+L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
+\end{equation}
+
+\begin{itemize}
+	\item compute distance from origin(0,0) to $z_i$	 for $z_i \in \mathbb{C}^N$ (sinh-contour)
+	\item subtract 1 (unit circle r = 1) to get the loss and square it (to account for negative diff)
+	\item sum up to achieve Squared Loss
+\end{itemize}
+
+
+\begin{algorithm}[H]
+\caption{GD for Minimising \( L_1 \)}
+\label{algo:gd_l1}
+\begin{algorithmic}[1]
+\Procedure{GD}{$\alpha, \epsilon, \text{max\_iter}$}
+    \State Initialize $b$ and $y$ randomly
+    \State $\sigma \gets 0.0$
+    \State $n \gets 100$
+    \For{each iteration until convergence}
+        \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$
+        \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
+        \If{$L_1 < \epsilon$}
+            \State \textbf{break}
+        \EndIf
+        \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$
+        \State $b \gets b - \alpha \frac{\partial L_1}{\partial b}$
+        \State $y \gets y - \alpha \frac{\partial L_1}{\partial y}$
+    \EndFor
+    \State \textbf{return} $b, y$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 % ========================================
 % Results
@@ -778,6 +871,10 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 \section{Parameter Search for the Sinh Deformation}
 
 \section{Numerical Benchmarking}
+
+\todo[inline]{Add Machine Specs}
+
+\subsection{Abate and Whitt 1992}
 
 \begin{figure}[H]
     \begin{subfigure}{.475\linewidth}
@@ -826,9 +923,18 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
     \end{subfigure}
     
     \todo[inline]{Compute on PC averaging times over 20 runs + results for Sinusoidal}
-    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the (a) Heaviside Step, (b) Polynomial, and (c) Decaying Exponential transform pairs. The different lines represent the the chosen $\lambda$ for each run.}
+    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the (a) Heaviside Step, (b) Polynomial, and (c) Decaying Exponential transform pairs. The different lines represent the chosen $\lambda$ for each run.}
     \label{fig:MAE_Abate_Whitt}
 \end{figure}
+
+\subsection{Cavers 1972}
+
+\subsection{Comparative Analysis}
+\begin{itemize}
+	\item Select few N's and hyper-parameter choices
+	\item Abate Whitt vs Cavers: Transform Pair, Method, Hyper-Parameters, Actual, Estimated, Accuracy, Time	
+\end{itemize}
+
 
 % ========================================
 % Conclusion
@@ -845,6 +951,8 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 % ========================================
 \section{Future Work}
 
+\subsection{Series Acceleration}
+
 \subsection{DFT vs FFT vs QFT}
 \begin{itemize}
 	\item Discrete Fourier Transform: O($N^2$)
@@ -857,8 +965,6 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
 % ========================================
 \subsection{Parameter Selection}
 During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\ref{equation:conformal_mapping}).
-
-
 
 % ========================================
 % References 
