@@ -9,7 +9,7 @@
 % Title Page
 % ========================================
 \title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
-{{\vspace{2em} \Huge Review of the Inverse $\mathcal{Z}$-Transform in Discrete Option Pricing}}\\
+{{\vspace{2em} \Huge Review of the Inverse $\mathcal{Z}$-Transform in the Pricing of Discrete Path-Dependent Options}}\\
 {\large Final Year Project Report}\\
 }
 \date{Submission date: \today}
@@ -55,7 +55,7 @@ The formal study of pricing options began much later with \citet{bachelier1900th
     \caption{Visualisation of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
-However, the continuous monitoring assumption of the Black-Scholes model does not lend itself to an accurate representation of real-world asset price data. Exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
+However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
 
 
 The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
@@ -288,7 +288,7 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 % ========================================
 \subsubsection{Stochastic Gradient Descent}
 
-However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimisation process. It modifies Eq. (\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimisation process. It modifies Eq.~(\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
 
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
@@ -396,7 +396,7 @@ We extend Eq. (\ref{black_scholes_equation}) by incorporating jump processes to 
 \begin{equation}
 dX(t) = \mu dt + \sigma dW(t) + dJ(t),
 \end{equation}
-where $J(t)$ represents a jump process (typically a Poisson process) to account for sudden, significant changes. An exponential L\'evy process describes the asset price process as:
+where $J(t)$ represents a jump process (typically a compound Poisson process) to account for sudden, significant changes. An exponential L\'evy process describes the asset price process as:
 
 \begin{equation}
 S(t) = S(0)e^{X(t)}	
@@ -440,7 +440,7 @@ This manipulation restructures the series into a form amenable to the use of tra
 \end{equation}
 This encapsulation into $\tilde{f}(x', q)$ allows us to write the relationship as
 \begin{equation}
-\sum^{\infty}_{n = 1} q^n f(x, n) -q^0f(x, 0) = q\int^u_l \sum^{\infty}_{m = 0}q^m f(x', m) p(x-x', \triangle t)\ dx'	
+\sum^{\infty}_{n = 0} q^n f(x, n) -q^0f(x, 0) = q\int^u_l \sum^{\infty}_{m = 0}q^m f(x', m) p(x-x', \triangle t)\ dx'	
 \end{equation}
 to which we can see how the $z$-transform helps in handling the summation over all $n$:
 \begin{equation}
@@ -494,7 +494,7 @@ The Heaviside step function, $x(t)$, is an important piecewise function in signa
     \end{cases}
 \end{equation}
 
-The unilateral $z$-transform of the Heaviside step function can be calculated using Eq. \ref{unilateral_z-transform}:
+The unilateral $z$-transform of the Heaviside step function can be calculated using Eq. (\ref{unilateral_z-transform}):
 
 \begin{equation}
 X(z) = 	\mathcal{Z}_{t \rightarrow z}[x(t)] = \sum^{\infty}_{t = 0}x(t)z^{-t} = \sum^{\infty}_{t=0} z^{-t}
@@ -540,7 +540,7 @@ The decaying exponential function, commonly expressed as $x(t) = e^{-at}$ for $t
 	X(z) = 	\mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n=0} e^{-an\triangle t}z^{-n}
 \end{equation}
 
-This is a geometric series where each term is $(e^{-a\triangle t}z^{-1})^n$. Using Eq. \ref{equation:geometric_series}, we can express $X(z)$ as:
+This is a geometric series where each term is $(e^{-a\triangle t}z^{-1})^n$. Using Eq. (\ref{equation:geometric_series}), we can express $X(z)$ as:
 \begin{equation}
 X(z) = \frac{1}{1 - (e^{-a\triangle t}z^{-1})}= \frac{z}{(z-e^{-a\triangle t})}
 \end{equation}
@@ -631,7 +631,7 @@ Thus, we investigate the effect of different values of $\lambda$ on the accuracy
 \subsubsection{Computational Speed}\label{section:aw_speed}
 In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop. With each iteration, the dominant operations is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
 
-We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice. Practically, it is not feasible to eliminate any interference from external background processes. However, we make efforts to minimise such effects by executing multiple runs of each test and take the average.
+We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice. Practically, it is not feasible to eliminate any interference from external background processes. However, we make efforts to minimise such effects by executing multiple runs of each test and taking the average.
 
 % ========================================
 % Cavers 1978
@@ -699,7 +699,7 @@ A circular contour integral is commonly used for approximating the inverse $z$-t
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
-where parameters are chosen such that $\sigma_\in \mathbb{R}$, $b > 0$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
+where parameters are chosen such that $\sigma,y_\in \mathbb{R}$, $b_\in \mathbb{R}^+$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
 
 \begin{equation}
     x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
@@ -715,6 +715,7 @@ By denoting the integrand as $f_n(y)$ and approximating the application of the i
 \begin{itemize}
     \item mention sufficient conditions under which this works (next paper)
     \item talk about why he does this
+    \item our experiment in trying to recreate the unit circle and why
 \end{itemize}
 
 % ========================================
@@ -813,7 +814,7 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
       \label{fig:extent_y}
     \end{subfigure}
     
-    \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaling results are constructed with \textbf{(b)} $\sigma = 0.0, b = 0.7967054596179172, y = 0.7$ and \textbf{(c)} $\sigma = 0.0, b = 0.7, y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
+    \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaled results are constructed with \textbf{(b)} $\sigma = 0.0, b = 0.7967054596179172, y = 0.7$ and \textbf{(c)} $\sigma = 0.0, b = 0.7, y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
 \end{figure}
 
 To achieve an extent on the real axis of 1.0, we scale our original deformation (\autoref{fig:extent_default}) by the individual parameters. We see the differences in transformation in Figure (\ref{fig:extent_b}) and Figure (\ref{fig:extent_y}) for parameters $b$ and $y$, respectively.
@@ -828,13 +829,13 @@ To achieve an extent on the real axis of 1.0, we scale our original deformation 
 \end{itemize}
 
 
-The loss function $L_1$ for the input \( z = [z_1, z_2, \ldots, z_N] \in \mathbb{C} \), representing the points of our contour constructed with $N$ points,  is given by:
+The loss function $L_1$ for the input \( z = [z_1, z_2, \ldots, z_n] \in \mathbb{C} \), representing the points of our contour constructed with $n$ points,  is given by:
 \begin{equation}
 L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
 \end{equation}
 
 \begin{itemize}
-	\item compute distance from origin(0,0) to $z_i$	 for $z_i \in \mathbb{C}^N$ (sinh-contour)
+	\item compute distance from origin(0,0) to $z_i$	 for $z_i \in \mathbb{C}^n$ (sinh-contour)
 	\item subtract 1 (unit circle r = 1) to get the loss and square it (to account for negative diff)
 	\item sum up to achieve Squared Loss
 \end{itemize}
@@ -848,7 +849,8 @@ L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
     \State Initialize $b$ and $y$ randomly
     \State $\sigma \gets 0.0$
     \State $n \gets 100$
-    \For{each iteration until convergence}
+    \State $L_1 \gets \infty$
+    \For{each iteration until max\_iter or $L_1 \leq \epsilon$}
         \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$
         \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
         \If{$L_1 < \epsilon$}
@@ -924,7 +926,7 @@ L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
     
     \todo[inline]{Compute on PC averaging times over 20 runs + results for Sinusoidal}
     \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the (a) Heaviside Step, (b) Polynomial, and (c) Decaying Exponential transform pairs. The different lines represent the chosen $\lambda$ for each run.}
-    \label{fig:MAE_Abate_Whitt}
+    \label{fig:timings_abate_whitt}
 \end{figure}
 
 \subsection{Cavers 1972}
