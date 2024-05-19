@@ -275,7 +275,7 @@ In the context of computational mathematics, optimisations techniques are used t
 \end{equation}
 where $f(x)$ is the objective function and $\Omega$ is the feasible region defined by the constraints of the problem.
 
-Gradient descent is one of the most popular algorithms for parameter optimistion with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimise parameters of a mathematical function \citep{GradientBasedOpt2022}.
+Gradient descent is one of the most popular algorithms for parameter optimisation with success in Deep Learning and Neural Networks employing variants of the algorithm \citep{lu2017improved, zhang2019gradient, zeebaree2019trainable}. The adaptability to diverse problem domains \citep{YingjieYugiHaibin2023SGD} parallels our use case, where gradient descent is applied outside traditional deep learning to optimise parameters of a mathematical function \citep{GradientBasedOpt2022}.
 
 % ========================================
 % Gradient Descent
@@ -322,7 +322,7 @@ ADAM (Adaptive Moment Estimation) is a popular optimisation algorithm introduced
 \begin{equation}
 x_{k+1} = x_{k} - \alpha \frac{\hat{m}_{k}}{\sqrt{\hat{v}_{k}} + \epsilon},
 \end{equation}
-where first moment estimate $m_k$​ and the second moment estimate $v_k$​ are computed as exponential moving averages of the gradient and the squared gradient, respectively. The hyperparameters $\beta_1$​ and $\beta_2$​ control the decay rates of these moving averages. To correct for initialisation bias, the estimates of the first and second moments ($\hat{m}_k$and $\hat{v}_k$) are bias-corrected. The parameter update is performed using the adapted learning rate $\alpha$ and the bias-corrected estimates of the moments. We add $\epsilon$ to the denominator to prevent division be zero; typically set to $10^{-8}$. This process is shown in the pseudocode below:
+where first moment estimate $m_k$ and the second moment estimate $v_k$ are computed as exponential moving averages of the gradient and the squared gradient, respectively. The hyperparameters $\beta_1$ and $\beta_2$ control the decay rates of these moving averages. To correct for initialisation bias, the estimates of the first and second moments ($\hat{m}_k$and $\hat{v}_k$) are bias-corrected. The parameter update is performed using the adapted learning rate $\alpha$ and the bias-corrected estimates of the moments. We add $\epsilon$ to the denominator to prevent division be zero; typically set to $10^{-8}$. This process is shown in the pseudocode below:
 
 \begin{algorithm}[H]
 \caption{ADAM Optimizer}
@@ -993,7 +993,7 @@ Our first experiment is to find parameters $b$ and $y$ that result in a contour 
     \end{subfigure}
     
     \caption{Plots of the $L_1$ loss against each of the (a) 1,000,000 and (b) 5,000,000 iterations. Each contour consists of $n = 100$ points. The initial parameters used are (a) $b = 0.7$ and $y = 0.895588$ (b) $b = 0.3227341040398728$ and $y = 1.8244690757568378$. Figure (a)'s lowest score was $L_1 \approx$ 3E-2 with the initial parameters of (b). Figure (b)'s lowest score was $L_1 \approx$ 1E-3 with parameters $b = 0.14124692711511863$ and $y = 2.6503746377415633$.}
-    \label{fig:MAE_Abate_Whitt}
+    \label{fig:GD_loss_plots}
 \end{figure}
 
 From our first attempt at the gradient descent (GD) algorithm (\autoref{fig:gd_1e-3}), we see that the $L_1$ loss converges to a higher value than the best loss of $L_1 = 0.03390312294797621 \approx$ 3E-2 with parameters $b = 0.3227341040398728$ and $y = 1.8244690757568378$. This indicates that the GD algorithm did not effectively reduce the loss suggesting that the learning rate $\alpha$ might be too high, causing the algorithm  to overshoot the optimal parameter values.
