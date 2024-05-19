@@ -9,9 +9,10 @@
 % Transform Pairs
 % ========================================
 \section{Transform Pairs}
+These transform pairs serve as benchmarks for testing the accuracy and efficiency of numerical inversion methods. Each pair consists of a time-domain function and its corresponding Z-transform, providing a practical basis for analysing and validating the implemented algorithms. The code is given in Python.
 
 \subsection{Heaviside Step}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the Heaviside Step function and its $\mathcal{Z}$-transform (Section \ref{section:heaviside_step})]
 def f(t):
     return 1
     
@@ -20,7 +21,7 @@ def ftilde(z):
 \end{lstlisting}
 
 \subsection{Polynomial}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the Polynomial function and its $\mathcal{Z}$-transform (Section \ref{section:polynomial})]
 def f(t):
     return t
     
@@ -29,15 +30,28 @@ def ftilde(z):
 \end{lstlisting}
 
 \subsection{Decaying Exponential}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the Decaying Exp function and its $\mathcal{Z}$-transform (Section \ref{section:decaying_exp})]
 def f(a, t):
     return np.exp(-a * t)
     
 def ftilde(z, a, t, N):
-    return 1 / (1 - np.exp(-a * t / N) / z)
+    delta_t = t / N
+    denominator = 1 - np.exp(-a * delta_t) / z
+    return 1 / denominator
 \end{lstlisting}
 
+\newpage
 \subsection{Sinusiodal}
+\begin{lstlisting}[language=Python, caption= Implementation of the Sinusoidal function and its $\mathcal{Z}$-transform (Section \ref{section:sinusoidal})]
+def f(omega, t):
+    return np.sin(omega * t)
+    
+def ftilde(z, omega, t, N):
+    delta_t = t / N
+    numerator = z**(-1) * np.sin(omega * delta_t)
+    denominator = 1 - 2 * np.cos(omega * delta_t) * z**(-1) + z**(-2)
+    return numerator / denominator
+\end{lstlisting}
 
 \newpage
 \section{Contours}
@@ -125,7 +139,7 @@ def cavers_dft(ftilde, n, J, gamma):
     N = n[-1]
     r = 10 ** (gamma / J)
     
-    j = np.arange(J) 
+    j = np.arange(J) # secondary grid points
     z = r * np.exp(1j * 2 * np.pi * j / J)
     
     f = np.zeros(N + 1, dtype=complex)

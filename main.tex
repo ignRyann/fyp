@@ -75,9 +75,9 @@ The formal study of pricing options began much later with \citet{bachelier1900th
 \end{figure}
 However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff, and underlying asset to meet specific investor needs or market conditions. For instance, path-dependent options have payoffs determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
 
-The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
+The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including around geometric Brownian motions \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
 
-A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup and choice of parameters.
+A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup, choice of parameters and desired trade-off.
 
 \section{Aims and Objectives}
 Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O5) associated with this aim are as follows:
@@ -558,7 +558,7 @@ X(z) = \frac{1}{1 - z^{-1}} = \frac{z}{z - 1}
 % ========================================
 % Polynomial
 % ========================================
-\subsection{Polynomial}
+\subsection{Polynomial}\label{section:polynomial}
 The polynomial function, often referred to as the linear ramp function, is defined as $x(t) = t$ for $t \geq 0	$. Following a similar approach to that of the previous section, we have
 
 \begin{equation}
@@ -578,7 +578,7 @@ X(z) = -z \frac{d}{dz} \left( \frac{z}{z-1} \right) = -z \left( \frac{z - 1 - z}
 % ========================================
 % Decaying Exponential
 % ========================================
-\subsection{Decaying Exponential}
+\subsection{Decaying Exponential}\label{section:decaying_exp}
 The decaying exponential function, commonly expressed as $x(t) = e^{-at}$ for $t \geq 0$ and $a > 0$, is very useful in the analysis of systems with exponential decay or growth characteristics. However, such a signal is sampled at discrete time intervals; if $\triangle t$ is the sampling interval and $n$ represents the discrete time index, then the continuous function $x(t)$ becomes $x[n] = e^{-an\triangle t}$ when sampled at intervals of $\triangle t$. The unilateral $z$-transform of $x[n]$ is given by
 \begin{equation}
 	X(z) = 	\mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n=0} e^{-an\triangle t}z^{-n}
@@ -592,7 +592,7 @@ X(z) = \frac{1}{1 - (e^{-a\triangle t}z^{-1})}= \frac{z}{(z-e^{-a\triangle t})}
 % ========================================
 % Sinusoidal
 % ========================================
-\subsection{Sinusoidal}
+\subsection{Sinusoidal}\label{section:sinusoidal}
 The sinusoidal function $x(t) = \sin(\omega t)$ is a key waveform given its periodic nature. Similar to that of the decaying exponential transform pair, we discretely sample the function at intervals $\triangle t$, which results in the discrete time function $x[n] = \sin(\omega n \triangle t)$. Thus, the unilateral $z$-transform is computed as
 \begin{equation}
 X(z) = \mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n = 0} \sin(\omega n \triangle t)z^{-n}
@@ -732,8 +732,6 @@ As discussed in Section (\ref{section:cavers}), achieving machine-level accuracy
 For consistency, we plot the results against different N values, similar to our experiment for Section (\ref{section:aw_speed}), where we set J = 2N, for the different implementations. Given that IFFT has a time complexity of O(NLogN), we expect this to be the dominating factor in Algorithm (\ref{algo:cavers}). The numerical summation method, outlined in Algorithm (\ref{algo:cavers_sum}), requires computing the summation over J terms for each of the N terms. Thus, we expect a linear relationship with respect to NJ.
 
 Similar to the approach in Section (\ref{section:aw_speed}), we take the average over multiple runs to minimise the interference of external processes.
-
-\subsection{Comparative Analysis}
 
 % ========================================
 % Sinh Deformation
@@ -1066,7 +1064,7 @@ b & y & $L_1$ Loss \\
 \caption{Best $L_1$ loss, with corresponding parameters $b$ and $y$,  achieved during several stages of the runs using ADAM optimiser with varying initial learning rates of 1E-3 $\leq \alpha \leq$ 1E-7.}
 \end{table}
 
-After multiple runs and tinkering of the hyper-parameters, we achieve a loss of $L_1 \approx$ 1.5E-19 with parameters $b = 1.48835270677098$E-05 and $y = 11.808402703087143$. Whilst we were unable to find better parameters given the time constraints of this project, we deem this sufficient enough given the similarity to that of the unit circle, with a loss of $L_1 \approx$ 7E-31. This is visually shown in the following figure:
+After multiple runs and tinkering of the hyper-parameters, we achieve a loss of $L_1 \approx$ 1.5E-19 with parameters $b = 1.48835270677098$E-05 and $y = 11.808402703087143$. Whilst we were unable to find better parameters given the time constraints of this project, we deem this sufficient enough given the similarity to that of the unit circle (up to 18 decimal places). This is visually shown in the following figure:
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/gd/unit_circle.png}
@@ -1082,7 +1080,7 @@ After multiple runs and tinkering of the hyper-parameters, we achieve a loss of 
     \caption{Visual representation for $n = 100$ points of the (a) circle contour with $r = 1$ and $0 \leq \theta < \pi$, and (b) sinh deformation with $\sigma = 0.0$, $b = 1.48835270677098$E-05, $y = 11.808402703087143$ and $-\frac{\pi}{2} \leq \omega < \frac{\pi}{2}$.}
 \end{figure}
 
-As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394.
+As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394. The numerical implementations of the contours are accurate up to 5 significant figures. However, the similarity of both contours to each other goes up to 17 significant figures. With both this affirmation and that of the $L_1$ loss, we can say the parameters provide a good level of success in regards to constructing the circular contour with the conformal mapping.
 
 % ========================================
 % Numerical Benchmarking
@@ -1126,33 +1124,42 @@ As discussed in Section (\ref{section:point_distance}), we check to see the aver
       \caption{Decaying Exponential ($8 \leq \lambda \leq 17$)}
     \end{subfigure}
     
-    \todo[inline]{Add Decay Exp \& Sinusoidal}
-    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial and (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
+    \medskip
+    
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/sinusoidal.png}
+      \caption{Sinusoidal ($1 \leq \lambda \leq 17)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/sinusoidal_zoomed.png}
+      \caption{Sinusoidal ($8 \leq \lambda \leq 17$)}
+    \end{subfigure}
+    
+    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial and (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$ and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
     \label{fig:MAE_Abate_Whitt}
 \end{figure}
 
 \begin{figure}[H]
     \begin{subfigure}{1\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_speed.png}
-      \caption{Heaviside Step}
+      \caption{Heaviside Step ($1 \leq N \leq 512$)}
     \end{subfigure}
     
     \medskip
     
     \begin{subfigure}{1\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/polynomial_speed.png}
-      \caption{Polynomial}
+      \caption{Polynomial ($1 \leq N \leq 512$)}
     \end{subfigure}
     
     \medskip
     
     \begin{subfigure}{1\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/decay_exp_speed.png}
-      \caption{Decaying Exponential}
+      \caption{Decaying Exponential ($1 \leq N \leq 512$)}
     \end{subfigure}
     
-    \todo[inline]{Compute on PC averaging times over 20 runs + results for Sinusoidal}
-    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the (a) Heaviside Step, (b) Polynomial, and (c) Decaying Exponential transform pairs. The different lines represent the chosen $\lambda$ for each run.}
+    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the transform pairs: (a) Heaviside Step, (b) Polynomial, (c) Decaying Exponential and (d) Sinusoidal. The different lines represent the chosen $\lambda$ for each run.}
     \label{fig:timings_abate_whitt}
 \end{figure}
 
