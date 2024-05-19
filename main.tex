@@ -22,14 +22,32 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 \\ \\
 }
 
+
+
 % ========================================
 % Report
 % ========================================
 \begin{document}
- 
+
 \onehalfspacing
 \maketitle
+
+\renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
+need to write something.
+\end{abstract}
+
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+\begin{itemize}
+\item define notation for the entire project: $f(t) : \tilde{f}(z), f(t) : F(z), x(t) : X(z)$
+\item Add more examples for completeness
+\item follow Figure (XX) or (Figure XX)	
+\item follow Section (XX) or (Section XX)
+\item follow Eq. (XX) or (Equation XX)
+\item follow Table (XX) or (Table XX)
+\item follow Appendix (X) or (Appendix A)
+\end{itemize}
 
 \end{abstract}
 
@@ -55,21 +73,21 @@ The formal study of pricing options began much later with \citet{bachelier1900th
     \caption{Visualisation of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
-However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff and underlying asset to meet specific investor needs or market conditions. Such an example are path-dependent options in which the payoff is determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
-
+However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff, and underlying asset to meet specific investor needs or market conditions. For instance, path-dependent options have payoffs determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
 
 The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including that around the Black-Scholes model assumption \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
 
 A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup and choice of parameters.
 
 \section{Aims and Objectives}
-Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O4) associated with this aim are as follows:
+Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O5) associated with this aim are as follows:
 
 \begin{itemize}
-	\item (O1) Analyse and implement the existing NIZT methods in literature
+	\item (O1) Research into the pricing of options
 	\item (O2) Research Boyarchenko and Levendorskii's new NIZT method (Sinh-Deformation)
-	\item (O3) Test the implementations against well-defined transform pairs
-	\item (O4) Compute metrics on parameter setups for each method
+	\item (O3) Analyse and implement the existing NIZT methods in literature
+	\item (O4) Test the implementations against well-defined transform pairs
+	\item (O5) Compute metrics on parameter setups for each method
 \end{itemize}
 
 \section{Overview}
@@ -216,11 +234,11 @@ The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$
 
 Given the nature of this project, we may find it easier to use the following definition, where we set the input of $X(z)$ to that of $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
 
-\begin{equation}\label{aw_inversion}
+\begin{equation}\label{eq:aw_inversion}
 	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
 \end{equation}
 
-The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eq. (\ref{aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
+The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eq. (\ref{eq:aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
 
 % ========================================
 % Cavers 1978
@@ -249,7 +267,7 @@ The authors conclude that both implementations achieve machine-level accuracy of
 % ========================================
 % Optimisation Techniques
 % ========================================
-\section{Optimisation Techniques}
+\section{Optimisation Techniques}\label{section:optimisation_techniques}
 In the context of computational mathematics, optimisations techniques are used to identify the optimal or a sufficiently effective solution to a problem within a given set of constraints. The goal is to minimise or maximise a specific objective function by systematically choosing the values of the variables. The objective function is often referred to as the \textit{cost function} or \textit{loss function} and the variables are referred to as \textit{parameters}. The optimisation problem can be formulated as
 
 \begin{equation}\label{optimisation_problem}
@@ -272,12 +290,13 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 
 \begin{algorithm}
 \caption{Gradient Descent}
+\label{algo:gradient_descent}
 \begin{algorithmic}[1]
 \State Initialise \( x_0 \), set \( k = 0 \)
 \While{termination conditions not met}
-    \State Compute gradient \( \nabla f(x_k) \)
-    \State Choose a suitable step size \( \alpha_k \)
-    \State Update \( x_{k+1} = x_k - \alpha_k \nabla f(x_k) \)
+    \State $g_k$ = \( \nabla f(x_k) \) \Comment Compute Gradient
+    \State $\alpha_k \rightarrow \mathbb{R}^+$
+    \State $x_{k+1} = x_k - \alpha_k g_k$
     \State \( k = k + 1 \)
 \EndWhile
 \end{algorithmic}
@@ -287,16 +306,41 @@ where $x_k$ is the parameter vector at iteration $k$, $\alpha_k$ is the learning
 % Stochastic Gradient Descent
 % ========================================
 \subsubsection{Stochastic Gradient Descent}
-
-However, classic Gradient Descent faces limitations, including susceptibility to local minima and potential for overshooting or long convergence times. Stochastic Gradient Descent (SGD) addresses these issues by introducing variability in the optimisation process. It modifies Eq.~(\ref{GD}) to use a randomly selected subset of data to compute the gradient, to allow for dynamic adjustment of the learning rate and leveraging noise to escape local minima. We define the update rule to 
+However, classic Gradient Descent faces limitations, including susceptibility to local minima. Stochastic Gradient Descent (SGD) addresses this by introducing variability in the optimisation process. It modifies Eq.~(\ref{GD}) to use a randomly selected subset of data to compute the gradient, leveraging noise to escape local minima. We define the update rule to 
 
 \begin{equation}\label{SGD}
 x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)	
 \end{equation}
-where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$. We thus avoid the pitfalls associated with a static learning rate and promote a quicker convergence time.
+where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$.
 
-\subsection{Bayesian Optimisation}
-\todo[inline]{Try quick Bayesian optimisation - if it works include}
+% ========================================
+% Adam Optimizer
+% ========================================
+\subsubsection{ADAM Optimizer}\label{section:ADAM}
+ADAM (Adaptive Moment Estimation) is a popular optimisation algorithm introduced by \citet{kingma2014adam} that combines the advantages of two extensions to the stochastic gradient descent method: AdaGrad \citep{duchi2011adaptive} and RMSProp \citep{tieleman2012rmsprop}. ADAM computes adaptive learning rates for each parameter by estimating the first and second moments of the gradients. This makes the method particularly well-suited for large-scale and complex optimisation problems, such as those countered in deep learning and computational optimisation. It's ability to adjust learning rates based on gradient information allows ADAM to efficiently navigate the parameter space and converge to extremely precise solutions \citep{reddi2019convergence}. The update rule is given by:
+
+\begin{equation}
+x_{k+1} = x_{k} - \alpha \frac{\hat{m}_{k}}{\sqrt{\hat{v}_{k}} + \epsilon},
+\end{equation}
+where first moment estimate $m_k$​ and the second moment estimate $v_k$​ are computed as exponential moving averages of the gradient and the squared gradient, respectively. The hyperparameters $\beta_1$​ and $\beta_2$​ control the decay rates of these moving averages. To correct for initialisation bias, the estimates of the first and second moments ($\hat{m}_k$and $\hat{v}_k$) are bias-corrected. The parameter update is performed using the adapted learning rate $\alpha$ and the bias-corrected estimates of the moments. We add $\epsilon$ to the denominator to prevent division be zero; typically set to $10^{-8}$. This process is shown in the pseudocode below:
+
+\begin{algorithm}[H]
+\caption{ADAM Optimizer}
+\label{algo:ADAM}
+\begin{algorithmic}[1]
+\State Initialise \( x_0 \), \( m_0 = 0 \), \( v_0 = 0 \), set \( k = 0 \)
+\State Hyperparameters: \( \alpha \), \( \beta_1 \), \( \beta_2 \), \( \epsilon \)
+\While{termination conditions not met}
+    \State \( k = k + 1 \)
+    \State \( g_k = \nabla f(x_k) \) \Comment Compute Gradient
+    \State \( m_k = \beta_1 m_{k-1} + (1 - \beta_1) g_k \)
+    \State \( v_k = \beta_2 v_{k-1} + (1 - \beta_2) g_k^2 \)
+    \State \( \hat{m}_k = \frac{m_k}{1 - \beta_1^k} \) \Comment Bias-Corrected First Moment
+    \State  \( \hat{v}_k = \frac{v_k}{1 - \beta_2^k} \) \Comment Bias-Corrected Second Moment
+    \State \( x_{k+1} = x_k - \alpha \frac{\hat{m}_k}{\sqrt{\hat{v}_k} + \epsilon} \)
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
 
 % ========================================
 % Option Pricing
@@ -317,10 +361,10 @@ A pivotal point in option pricing was the introduction of \citet{black1973pricin
 % Path-Dependent Options
 % ========================================
 \subsection{Path-Dependent Options}\label{section:discrete_monitoring}
-We regard American and European options as standard (\textit{vanilla}) options. In contrast, exotic options offer more complex features and conditions that can be tailored to meet specific needs and/or requirements. Such differences are the reason as to why exotic options are traded over-the-counter (OTC)\footnotemark[1], whereas standard options are typically traded on organised exchanges\footnotemark[2]. 
+We regard American and European options as standard (\textit{vanilla}) options. In contrast, exotic options offer more complex features and conditions that can be tailored to meet specific needs and/or requirements. Such differences are the reason as to why exotic options are traded over-the-counter (OTC)\footnotemark[3], whereas standard options are typically traded on organised exchanges\footnotemark[4]. 
 
-\footnotetext[1]{Over-The-Counter refers to the process of trading of financial instruments directly between two parties without the oversight of a formal exchange.}
-\footnotetext[2]{Organised exchanges refer to formal marketplaces that facilitate the buying and selling of financial instruments.}
+\footnotetext[3]{Over-The-Counter refers to the process of trading of financial instruments directly between two parties without the oversight of a formal exchange.}
+\footnotetext[4]{Organised exchanges refer to formal marketplaces that facilitate the buying and selling of financial instruments.}
 
 In most cases, the payoff of an option depends on the price of the underlying asset at discrete points in time rather than continuously. This is known as \textbf{discrete monitoring.} Two widely traded types of discretely monitored options are lookback and barrier options \citep{dadachanji2015fx}. These options are classified as \textit{path-dependent options}, within the category of exotic options, where the payoff is based on the path of the underlying asset price rather than just the price at expiration.
 
@@ -369,7 +413,7 @@ In most cases, the payoff of an option depends on the price of the underlying as
     \caption{Illustration of Barrier Options: Displaying the active (black) and inactive (grey) phases of each option type. (a) Up-and-In Option, (b) Up-and-Out Option (c) Down-and-In Option, and (d) Down-and-Out Option. The red line represents the barrier.}
 \end{figure}
 
-The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only come into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
+The payoff depends on whether the price of the underlying asset reaches a certain level (the barrier) during the life of the option. A \textit{knock-in} barrier option only comes into existence if the barrier has been touched, while a \textit{knock-out} barrier option ceases to exist instead. For example, a \textit{down-and-out} barrier option (\autoref{fig:down_out_option}) is a type of knock-out option that becomes worthless if the price of the underlying asset falls below the barrier level. On the other hand, a \textit{down-and-in} barrier option (\autoref{fig:down_in_option}) is a type of knock-in option that only becomes active if the asset price falls below the barrier level.
 
 \subsubsection{Double Barrier Options}\label{double_barrier}
 Double barrier option involve two price levels: an upper and lower barrier that define the boundaries for the option's activity. These options can either be \textit{knock-in} or \textit{knock-out}. A double knock-in option becomes active only if the asset price hits either barrier, similar to a combination of \autoref{fig:up_in_option} and \autoref{fig:down_in_option}. Conversely, a double knock-out option ceases to exist if the asset price touches either barrier combining the characteristics of \autoref{fig:up_out_option} and \autoref{fig:down_out_option}.
@@ -457,7 +501,7 @@ Having established the theoretical foundation, we now turn our attention to the 
 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs (Table \ref{table:transform_pairs}) in an attempt to provide a thorough comparison of the methods.
 
-\todo[inline]{include experimental environment: Python (NumPy, SciPy, Pandas, Seaborn, Scikit-learn and MatPlotLib)}
+All experiments were designed to be used on Visual Studio Code 1.89.1 using Python 3.11.7, NumPy 1.26.3 and MatPlotLib 3.8.0; we use such an environment given its robustness and extensive support for scientific computing and optimisation tasks. Whilst we outline all experiments/methods as pseudocode to allow for easy adaptations to other computing environments, the python implementation of the key functions are provided in Appendix (\ref{chapter:code_listings}).
 
 % ========================================
 % Transform Pairs
@@ -571,7 +615,7 @@ X(z) = \frac{1}{2i} \cdot \frac{ -z^{-1}(e^{i\omega \triangle t} - e^{i\omega \t
 % ========================================
 % Circular Contour
 % ========================================
-\section{Circular Contour}
+\section{Circular Contour}\label{section:circular_contour}
 ``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Eq. (\ref{inverse_z-transform}), defined as $z = re^{i\theta}$, however the setting of $r$ is important as shown for Example (\ref{example:roc_poles}) in Figure (\ref{fig:effect_r}).
 
 We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section (\ref{section:abate_whitt}) and Section (\ref{section:cavers}). For each of the methods, we outline a series of experiments and validation tests to carry out.
@@ -591,7 +635,7 @@ We thus formulate an algorithmic approach to the implementations of the NIZT out
       \caption{r = 1.5}
     \end{subfigure}\hfill
     
-    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
+    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example (\ref{example:roc_poles}) with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
     \label{fig:effect_r}
 \end{figure}
 
@@ -599,17 +643,17 @@ We thus formulate an algorithmic approach to the implementations of the NIZT out
 % Abate and Whitt 1992
 % ========================================
 \subsection{Abate and Whitt 1992}
-Given a sufficient hyperparameter setup, we will require, as input,  just the function to be inverted, $\tilde{f}: \mathbb{C}\rightarrow \mathbb{C}$, and the point $n_\in \mathbb{R}$. The implementation of such a function follows very easily from Eq. (\ref{aw_inversion}) as shown in the pseudocode below:
+Given a sufficient hyperparameter setup, we will require, as input,  just the function to be inverted, $\tilde{f}: \mathbb{C}\rightarrow \mathbb{C}$, and the point $n_\in \mathbb{R}$. The implementation of such a function follows very easily from Eq. (\ref{eq:aw_inversion}) as shown in the pseudocode below:
 
 \begin{algorithm}[H]
-    \caption{Implementation of Equation \ref{aw_inversion}}
+    \caption{Implementation of Equation \ref{eq:aw_inversion}}
     \label{algo:abate_whitt}
     \begin{algorithmic}[1]
     \Procedure{AbateWhitt}{$\tilde{f}, n$}
         \State $\lambda \gets \mathbb{R}^+$
         \State $r \gets 10^{-\lambda / (2 \cdot n)}$
         \State $\text{summation} \gets 0$
-        \For{$k \gets 1$ \textbf{to} $n-1$}
+        \For{$k \gets 1$ \textbf{to} $n$}
             \State $z \gets \frac{1}{r \cdot \exp(\text{i} \cdot k \cdot \pi / n)}$
             \State $\text{sum} \gets \text{sum} + (-1)^k \cdot \text{Re}(\tilde{f}(z))$
         \EndFor
@@ -672,8 +716,8 @@ Whilst the latter makes use of the IFFT, we look into analysing the comparative 
     \For{$j \gets 0$ \textbf{to} $J$}
                 \State $z[j] \gets r \cdot \exp{(i * 2\pi * j / N)}$
             \EndFor
-    \State $f \gets \text{Array}[N+1]$
-    \For{$i \gets 0$ \textbf{to} $N+1$}
+    \State $f \gets \text{Array}[N]$
+    \For{$i \gets 0$ \textbf{to} $N$}
         \State $f[i] \gets \frac{1}{J} \cdot \sum (z^{n[i]} \cdot \tilde{f}(z))$ 
     \EndFor
     \State \textbf{return} $f$
@@ -694,7 +738,7 @@ Similar to the approach in Section (\ref{section:aw_speed}), we take the average
 % ========================================
 % Sinh Deformation
 % ========================================
-\section{Sinh Deformation}
+\section{Sinh Deformation}\label{section:sinh_deformation}
 A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section (\ref{section:abate_whitt}) and (\ref{section:cavers}). However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < +\pi\}$ through the conformal mapping:
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
@@ -721,16 +765,16 @@ By denoting the integrand as $f_n(y)$ and approximating the application of the i
 % ========================================
 % Deforming the Contour
 % ========================================
-\subsection{Deforming the Contour}
+\subsection{Deforming the Contour}\label{section:deforming_contour}
 In an attempt to recreate the unit circle from the conformal mapping (\autoref{equation:conformal_mapping}), we first try to understand the effects of the parameters on the contour.  We plot the contour for different values of $\sigma, b$ and $y$ to observe the deformation.
 
 \begin{algorithm}[H]
 \caption{Implementation of \autoref{equation:conformal_mapping}}
 \label{algo:hyperbolic_sine}
 \begin{algorithmic}[1]
-\Procedure{Hyperbolic\_sine\_area}{$\sigma, b, y, N$}
+\Procedure{Hyperbolic\_sine}{$\sigma, b, y, N$}
     \State $z \gets \text{Array}[N]$ \Comment{$z_{\in} \mathbb{C}^N$}
-    \For{$k \gets -\frac{N}{2}$ \textbf{to} $\frac{N}{2} - 1$}
+    \For{$k \gets -\frac{N}{2}$ \textbf{to} $\frac{N}{2}$}
         \State $\omega \gets \frac{i\pi  k}{N}$
         \State $z[k + \frac{n}{2}] \gets \sigma + i * b * \sinh(\omega + y)$
     \EndFor
@@ -793,6 +837,7 @@ In an attempt to recreate the unit circle from the conformal mapping (\autoref{e
       \end{subfigure}
     
     \caption{Displaying the effect of the parameters on the contour for Algorithm (\ref{algo:hyperbolic_sine}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
+    \label{fig:deforming_all}
 \end{figure}
 
 In relation to the base contour (\autoref{fig:base_deform}), we observe that increasing $\sigma$ shifts the contour to the right (\autoref{fig:positive_sigma}), while decreasing $\sigma$ shifts the contour to the left (\autoref{fig:negative_sigma}). The parameter $b$ acts as a scale factor on the sinh deformation as shown in \autoref{fig:higher_b} and \ref{fig:lower_b}. Similarly, $y$ acts as a scale factor but with a more pronounced vertical effect as seen in \autoref{fig:higher_y} and \ref{fig:lower_y}. Mixing the parameters $b$ and $y$ results in a more complex deformation where the counter-opposing effects changes the contour in a non-linear manner (\autoref{fig:mixing_b_y} and \ref{fig:mixing_b_y_v2}).
@@ -805,7 +850,7 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
     \end{subfigure}\hfill
     \begin{subfigure}{.3\linewidth}
       \includegraphics[width=\linewidth]{images/sinh_param_analysis/sinh_1_b.png}
-      \caption{$\text{max(Re}(z)) = 1.0$}
+      \caption{$\text{max(Re}(z)) = 1.0$ }
       \label{fig:extent_b}
     \end{subfigure}\hfill
     \begin{subfigure}{.3\linewidth}
@@ -814,76 +859,247 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
       \label{fig:extent_y}
     \end{subfigure}
     
-    \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaled results are constructed with \textbf{(b)} $\sigma = 0.0, b = 0.7967054596179172, y = 0.7$ and \textbf{(c)} $\sigma = 0.0, b = 0.7, y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
+    \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaled results are constructed with \textbf{(b)} setting only $b = 0.7967054596179172$ and \textbf{(c)} setting only $y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
 \end{figure}
 
 To achieve an extent on the real axis of 1.0, we scale our original deformation (\autoref{fig:extent_default}) by the individual parameters. We see the differences in transformation in Figure (\ref{fig:extent_b}) and Figure (\ref{fig:extent_y}) for parameters $b$ and $y$, respectively.
 
 % ========================================
-% Parameter Grid Search
+% Parameter Selection for the Sinh Deformation
 % ========================================
-\subsection{Parameter Selection for the Sinh Deformation}
-\begin{itemize}
-    \item use of grid search to find optimal parameters
-    \item might also be useful to try find parameters that give the results?
-\end{itemize}
-
-
-The loss function $L_1$ for the input \( z = [z_1, z_2, \ldots, z_n] \in \mathbb{C} \), representing the points of our contour constructed with $n$ points,  is given by:
+\subsection{Parameter Selection for the Sinh Deformation}\label{section:parameter_selection}
+Given the complex changes resulting from the parameters $b$ and $y$, we utilise optimisation techniques (Section \ref{section:optimisation_techniques}) to find values that yield a contour resembling the unit circle. To achieve this, we first formulate a loss function, $L_1$, to set out our criteria. We let 
+\begin{equation*}
+	z = [z_0, z_1, .., z_{n-1}]
+\end{equation*}
+be the representation of a contour consisting of $|z| = n$ points, where $z_k = x + iy$ for $0 \leq k < n$. If we consider the unit circle, each point $z_k$ has a distance of $1$ from the origin (0,0). Thus, to compare the similarity for a given contour, we can define the loss function $L_1: \mathbb{C}^n \rightarrow \mathbb{R}$ as:
 \begin{equation}
-L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
+L_1 = \sum_{i=0}^{n-1} \left( |z_i| - 1 \right)^2,
+\end{equation}
+where we square the deviation of each point $z_i$ from that of the unit radius to account for both positive and negative differences. The summation of all the squared deviations gives us our total loss. As a comparative measure, we compute the loss for the upper half of the unit circle for $n = 100$ points and $\theta_\in [0, \pi]$: $L_1\approx$ 7E-31.
+
+To minimise $L_1$ for a given contour, we initially use the gradient descent algorithm outlined in Algorithm (\ref{algo:gradient_descent}). We numerically estimate the partial derivative of $L_1$, with respect to $x$, using finite difference approximation with $\epsilon = 10^{-8}$; consult \citep{burden1997numerical}:
+\begin{equation}\label{eq:finite_diff}
+\frac{\partial L_1}{\partial x} \approx \frac{L_1(x + \epsilon) - L_1(x)}{\epsilon}
 \end{equation}
 
-\begin{itemize}
-	\item compute distance from origin(0,0) to $z_i$	 for $z_i \in \mathbb{C}^n$ (sinh-contour)
-	\item subtract 1 (unit circle r = 1) to get the loss and square it (to account for negative diff)
-	\item sum up to achieve Squared Loss
-\end{itemize}
-
+From our understanding of the parameter $\sigma$, seen in Section (\ref{section:deforming_contour}), we set it to 0 and try to learn the parameters $b$ and $y$. The general steps is given by:
 
 \begin{algorithm}[H]
 \caption{GD for Minimising \( L_1 \)}
 \label{algo:gd_l1}
 \begin{algorithmic}[1]
-\Procedure{GD}{$\alpha, \epsilon, \text{max\_iter}$}
-    \State Initialize $b$ and $y$ randomly
+\Procedure{GD}{$\alpha, \ell$}
+    \State Initialise $b$ and $y$ \Comment with given constraints (Section \ref{section:sinh_deformation})
     \State $\sigma \gets 0.0$
     \State $n \gets 100$
     \State $L_1 \gets \infty$
-    \For{each iteration until max\_iter or $L_1 \leq \epsilon$}
-        \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$
+    \While {$L_1 < \ell$} \Comment until loss within acceptable tolerance 
+        \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
         \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
-        \If{$L_1 < \epsilon$}
-            \State \textbf{break}
-        \EndIf
         \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$
         \State $b \gets b - \alpha \frac{\partial L_1}{\partial b}$
         \State $y \gets y - \alpha \frac{\partial L_1}{\partial y}$
-    \EndFor
+    \EndWhile
     \State \textbf{return} $b, y$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+For the learning of these parameters, we stick to $n = 100$ points. Within our first attempts of the gradient descent algorithm, we opt to use initial parameter values of $b = 0.7$ and $y = 0.895588$ with a learning rate of $\alpha$ = 1E-3. Our choice of the initial parameters stem from the closest resemblance to that of the unit circle seen in \autoref{fig:extent_y}, which has a $L_1$ loss of $2.89$ (2 d.p.).
+ 
+ However, achieving such a high-level degree of accuracy may become challenging if the learning rate in gradient descent requires constant adjustments and proves to be ineffective. In such cases, we can switch to using the ADAM optimiser (Section \ref{section:optimisation_techniques}) to handle the situation more effectively. We structure our approach in the following pseudocode:
+ 
+\begin{algorithm}[H]
+\caption{ADAM for Minimising $L_1$}
+\label{algo:adam_l1}
+\begin{algorithmic}[1]
+\Procedure{ADAM}{$n, \alpha, \beta_1, \beta_2, \epsilon, \ell$}
+\State Initialise $b$ and $y$
+\State $m_b, v_b, m_y, v_y \gets 0, 0, 0, 0$
+\State $t \gets 0$
+\State $L_1 \gets \infty$
+\While {$L_1 > \ell$} \Comment $\ell$ denotes the acceptable tolerance
+\State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
+        \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
+\State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$ \Comment using Eq.~(\ref{eq:finite_diff})
+\State $m_b \gets \beta_1 m_b + (1 - \beta_1) \frac{\partial L_1}{\partial b}$
+\State $m_y \gets \beta_1 m_y + (1 - \beta_1) \frac{\partial L_1}{\partial y}$
+\State $v_b \gets \beta_2 v_b + (1 - \beta_2) (\frac{\partial L_1}{\partial b})^2$
+\State $v_y \gets \beta_2 v_y + (1 - \beta_2) (\frac{\partial L_1}{\partial y})^2$
+\State $\hat{m}_b \gets \frac{m_b}{1 - \beta_1^t}$
+\State $\hat{m}_y \gets \frac{m_y}{1 - \beta_1^t}$
+\State $\hat{v}_b \gets \frac{v_b}{1 - \beta_2^t}$
+\State $\hat{v}_y \gets \frac{v_y}{1 - \beta_2^t}$
+\State $b \gets b - \alpha \frac{\hat{m}_b}{\sqrt{\hat{v}_b} + \epsilon}$
+\State $y \gets y - \alpha \frac{\hat{m}_y}{\sqrt{\hat{v}_y} + \epsilon}$
+\EndWhile
+\State \textbf{return} $b, y$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+To achieve a sufficient set of parameters, we aim to exploit as much similarity with the unit circle as possible with our values of $b$ and $y$; we let $\ell = $ 1E-30. We set our initial parameter values based on the results of our gradient descent algorithm, with a learning rate of $\alpha =$ 1E-5. Following the recommendations of \citet{kingma2014adam} and \citet{goodfellow2016deep}, we set $\beta_1 = 0.9$ and $\beta_2 = 0.999$, based on their extensive experiments and theoretical considerations.
+ 
+\subsubsection{Distance between each points}\label{section:point_distance}
+In Section (\ref{section:circular_contour}), we see that the methods construct the circular contour with $n$ points spaced out evenly between $0 \leq \theta \leq \pi$. However, it is clearly shown that this is not always the case when constructing a contour using the conformal mapping, defined in Eq. (\ref{equation:conformal_mapping}), and illustrated in Figure (\ref{fig:deforming_all}).
+
+\begin{example}\label{example:point_diff}
+Consider the upper-half of a circular contour $z_\in \mathbb{C}^n$ numerically constructed with $n = 100$ points of the form $z_k = re^{i(k(\pi + \frac{\pi}{n}) / n)}$, where $0 \leq k < n$ and $0 \leq \frac{k(\pi + \frac{\pi}{n})}{n} \leq \pi$. This enables the first point to be situated at $e^{i0}$ and the last point at to be situated at $e^{i\pi}$.
+
+To determine the distance between each consecutive point, we note that the angle between each point is $\Delta \theta = \frac{\pi}{n-1}$. For $n = 100$, this simplifies to $\Delta \theta = \frac{\pi}{99}$. The distance $d$ between two consecutive points on the unit circle can be calculated using the formula $d = 2 \sin\left(\frac{\Delta \theta}{2}\right)$. Substituting $\Delta \theta = \frac{\pi}{99}$ gives:
+\begin{equation*}
+d = 2 \sin\left(\frac{\pi}{198}\right) \approx 2 \cdot \frac{\pi}{198} = \frac{\pi}{99}
+\end{equation*}
+
+Numerically, this distance is approximately $0.0317$. Therefore, for a circular contour with $n$ points, the distance between each consecutive point can be approximated as $\frac{\pi}{n-1}$ given the correct start and end points.
+\end{example}
+
+Thus, if we consider our sinh deformation, we can formulate a mini-experiment into finding the average distance between each point, constructed with the parameters found in the previous section, and see how this differs to the unit circle.
+
+% ========================================
+% Inverting the Z-Transform using Sinh Deformation
+% ========================================
+\subsection{Inverting The $\mathcal{Z}$-transform Using The Sinh Deformation}
+We propose a ``\textit{plug-and-play}" method in regard to using the sinh deformation to invert the $z$-transform. Similar to the structure of Eq. (\ref{eq:aw_inversion}) and (\ref{equation:cavers_sum}), we experiment with replacing the commonly used circular contour with that of the sinh deformation, constructed with the parameters achieved in Section (\ref{section:parameter_selection}). 
+
+We initially test this against the Heaviside step and Polynomial transform pairs (\autoref{table:transform_pairs}). If we achieve results to a certain degree of accuracy, we can then extend this to the rest of the transform pairs. We also find it interesting to see if there is some correlation between the $L_1$ loss of the contour and the accuracy of the results.  
+ 
 % ========================================
 % Results
 % ========================================
 \chapter{Results}
+We delve into the experimental results of our study outlined in the previous chapter. The primary focus is on evaluating the efficiency and accuracy of various NIZT techniques when applied to well-defined transform pairs. Having conducted an analysis of the sinh deformation laid out by \citet{levendorskii2022sinh}, we present our results in resembling the deformed contour to that of a circular contour. We then provide a comparative analysis of the successful methods against well-defined transform pairs.
 
-\section{Parameter Search for the Sinh Deformation}
+The use of optimisation techniques were conducted on a windows 11 system with an i9-13900k, 32GB 6000MHz RAM and a GeForce Nvidia RTX 4090. The numerical benchmarking of the NIZT methods were tested on a Sonoma 14.4.1 macOS (2020 MacBook Pro) system with a 1.4GHz Intel Core i5 and 8GB 2133MHz RAM.
 
+\section{Parameter Selection for the Sinh Deformation}
+Our first experiment is to find parameters $b$ and $y$ that result in a contour resembling the upper-half of the unit circle. We employ an adaptation of the gradient descent method, outlined in Algorithm (\ref{algo:gd_l1}), and then try to improve on this using the ADAM optimiser, outlined in Algorithm (\ref{algo:adam_l1}). Each implementation returns parameters achieving the best loss during its execution.
+
+% ========================================
+% Gradient Descent
+% ========================================
+\subsection{Gradient Descent}
+\begin{figure}[H]
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/GD_loss_plot.png}
+      \caption{$\alpha =$ 1E-3}
+      \label{fig:gd_1e-3}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/GD_loss_plot2.png}
+      \caption{$\alpha =$ 1E-5}
+      \label{fig:gd_1e-5}
+    \end{subfigure}
+    
+    \caption{Plots of the $L_1$ loss against each of the (a) 1,000,000 and (b) 5,000,000 iterations. Each contour consists of $n = 100$ points. The initial parameters used are (a) $b = 0.7$ and $y = 0.895588$ (b) $b = 0.3227341040398728$ and $y = 1.8244690757568378$. Figure (a)'s lowest score was $L_1 \approx$ 3E-2 with the initial parameters of (b). Figure (b)'s lowest score was $L_1 \approx$ 1E-3 with parameters $b = 0.14124692711511863$ and $y = 2.6503746377415633$.}
+    \label{fig:MAE_Abate_Whitt}
+\end{figure}
+
+From our first attempt at the gradient descent (GD) algorithm (\autoref{fig:gd_1e-3}), we see that the $L_1$ loss converges to a higher value than the best loss of $L_1 = 0.03390312294797621 \approx$ 3E-2 with parameters $b = 0.3227341040398728$ and $y = 1.8244690757568378$. This indicates that the GD algorithm did not effectively reduce the loss suggesting that the learning rate $\alpha$ might be too high, causing the algorithm  to overshoot the optimal parameter values.
+
+Given the suboptimal convergence observed in Figure (\ref{fig:gd_1e-3}), we ran a second set of experiments with a reduced learning rate of $\alpha = 1 \times 10^{-5}$ over 1,000,000 iterations initially. We used the parameters that achieved the best loss from our first run and we see a much better convergence rate in Figure (\ref{fig:gd_1e-5}) for the first 1,000,000 iterations. We then extend this over till we see a notable decrease in the convergence rate at around iteration $5 \times 10^{6}$. By lowering the learning rate, the GD algorithm was able to achieve a lower $L_1$ loss of $0.0012438982603344348 \approx $ 1E-3.
+
+\begin{figure}[H]
+    \begin{subfigure}{.33\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/initial_params_GD.png}
+      \caption{$L_1 = 2.89186578074851$}
+      \label{fig:gd_initial_params}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.33\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/params_after_first_GD.png}
+      \caption{$L_1 = 0.03390312294797621$}
+      \label{fig:gd_after_first_run}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.33\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/params_after_GD.png}
+      \caption{$L_1 = 0.0012438982603344348$}
+      \label{fig:gd_final}
+    \end{subfigure}
+    
+    \caption{Visualisation of the contours achieved by the gradient descent algorithm in comparison to our initial parameters with their respective $L_1$ loss values. }
+    \label{fig:gd_param_visuals}
+\end{figure}
+
+Whilst we can see the gradual improvements (\autoref{fig:gd_param_visuals}), this is still very far from that of the unit circle with $L_1 \approx 7E-31$. And whilst reducing the learning rate will achieve a better loss, continuous adjustments of learning rate $\alpha$ is rather tedious practically. We thus employ ADAM optimiser in attempt to achieve a higher level of accuracy.
+
+% ========================================
+% ADAM Optimiser
+% ========================================
+\subsection{ADAM Optimiser}
+\begin{figure}[H]
+    \begin{subfigure}{.7\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/ADAM_loss.png}
+      \caption{1,000,000 iterations with $\alpha =$ 1E-5 and initial loss of $L_1 \approx$ 1.2E-3 }
+    \end{subfigure}\hfill
+    \begin{subfigure}{.3\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/params_after_first_ADAM.png}
+      \caption{$L_1 \approx$ 5.8E-6}
+      \label{fig:first_adam}
+    \end{subfigure}
+    
+    \caption{$L_1$ loss plot over 1,000,000 iterations initialised with $n = 100$ points, $b = 0.14124692711511863 $ and $y = 2.6503746377415633$. The optimiser achieves Figure (\ref{fig:first_adam}) after its first execution constructed with parameters $b = 0.0369625708464355$ and $y = 3.9909964437511105$. }
+\end{figure}
+
+The Adaptive Moment Estimation (ADAM) optimiser provides a more sophisticated approach to parameter tuning as discussed in Section (\ref{section:ADAM}). We conducted our experiments initially with parameters set to $b = 0.14124692711511863$ and $y = 2.6503746377415633$, and the learning rate $\alpha$ was set to $1 \times 10^{5}$. At first glance, we see a much a better convergence and $L_1$ loss in Figure (\ref{fig:first_adam}), plotted over 1,000,000 iterations, compared to Figure (\ref{fig:gd_1e-5}), plotted over 5,000,000 iterations. We thus reiterate the experiment but change the initial parameters in hopes of achieving a better $L_1$ score. 
+
+Here, we document the results of various runs with re-feeding the parameters back-to-back for each run. The table below lists the best $L_1$ losses during different stages of these runs.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+b & y & $L_1$ Loss \\
+\hline
+0.023601865718395856 & 4.4395753229571016 & 9.888987368769754E-07 \\
+0.012128186643020126 & 5.105370236695753 & 6.761351664008986E-08 \\
+0.006856851878987493 & 5.675654087958846 & 6.90825126014524E-09 \\
+0.0016260199411660154 & 7.114767183400269 & 2.1845205202267918E-11 \\
+0.0010793477830991617 & 7.5245455065711715 & 4.241412093544462E-12 \\
+1.2712609608154088E-05 & 11.966063364769047 & 9.33039337162676E-15 \\
+1.2786721545826545E-05 & 11.960250483055397 & 4.955043180518183E-16 \\
+6.515415674882209E-05 & 10.331901633745023 & 8.120200210832519E-17 \\
+1.4883598328756484E-05 & 11.80839791524078 & 4.682445773102879E-19 \\
+1.48835270677098E-05 & 11.808402703087143 & 1.5334589506224306E-19 \\
+\hline
+\end{tabular}
+\caption{Best $L_1$ loss, with corresponding parameters $b$ and $y$,  achieved during several stages of the runs using ADAM optimiser with varying initial learning rates of 1E-3 $\leq \alpha \leq$ 1E-7.}
+\end{table}
+
+After multiple runs and tinkering of the hyper-parameters, we achieve a loss of $L_1 \approx$ 1.5E-19 with parameters $b = 1.48835270677098$E-05 and $y = 11.808402703087143$. Whilst we were unable to find better parameters given the time constraints of this project, we deem this sufficient enough given the similarity to that of the unit circle, with a loss of $L_1 \approx$ 7E-31. This is visually shown in the following figure:
+\begin{figure}[H]
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/unit_circle.png}
+      \caption{Circle Contour: $z = re^{i\theta}$}
+      \label{fig:circle_contour}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/gd/best_params.png}
+      \caption{Sinh Deformation: $\sigma + ib\sinh(\omega + y)$}
+      \label{fig:perfect_sinh}
+    \end{subfigure}
+    
+    \caption{Visual representation for $n = 100$ points of the (a) circle contour with $r = 1$ and $0 \leq \theta < \pi$, and (b) sinh deformation with $\sigma = 0.0$, $b = 1.48835270677098$E-05, $y = 11.808402703087143$ and $-\frac{\pi}{2} \leq \omega < \frac{\pi}{2}$.}
+\end{figure}
+
+As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394.
+
+% ========================================
+% Numerical Benchmarking
+% ========================================
 \section{Numerical Benchmarking}
 
-\todo[inline]{Add Machine Specs}
-
+% ========================================
+% Abate and Whitt 1992
+% ========================================
 \subsection{Abate and Whitt 1992}
 
 \begin{figure}[H]
-    \begin{subfigure}{.475\linewidth}
+    \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/heaviside.png}
       \caption{Heaviside Step ($1 \leq \lambda \leq 17$)}
     \end{subfigure}\hfill
-    \begin{subfigure}{.475\linewidth}
+    \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_zoomed.png}
       \caption{Heaviside Step ($8 \leq \lambda \leq 17$)}
     \end{subfigure}
@@ -899,8 +1115,19 @@ L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
       \caption{Polynomial ($8 \leq \lambda \leq 17$)}
     \end{subfigure}
     
+    \medskip
+    
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/decaying_exp.png}
+      \caption{Decaying Exponential ($1 \leq \lambda \leq 17)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.5\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/decaying_exp_zoomed.png}
+      \caption{Decaying Exponential ($8 \leq \lambda \leq 17$)}
+    \end{subfigure}
+    
     \todo[inline]{Add Decay Exp \& Sinusoidal}
-    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the (a, b) Heaviside Step and (c, d) Polynomial transform pairs. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.01$. The different lines represent the MAE for subsets of $n$ values: N = 32, 64, 128, 256, 512.}
+    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial and (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
     \label{fig:MAE_Abate_Whitt}
 \end{figure}
 
@@ -929,8 +1156,15 @@ L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
     \label{fig:timings_abate_whitt}
 \end{figure}
 
+% ========================================
+% Cavers 1972
+% ========================================
 \subsection{Cavers 1972}
 
+
+% ========================================
+% Comparative Analysis
+% ========================================
 \subsection{Comparative Analysis}
 \begin{itemize}
 	\item Select few N's and hyper-parameter choices
@@ -955,13 +1189,6 @@ L_1 = \sum_{i=1}^n \left( |z_i| - 1 \right)^2
 
 \subsection{Series Acceleration}
 
-\subsection{DFT vs FFT vs QFT}
-\begin{itemize}
-	\item Discrete Fourier Transform: O($N^2$)
-	\item Fast Fourier Transform: O($N\log N$)
-	\item Quantum Fourier Transform: O($\log(N)^2$)	
-\end{itemize}
-
 % ========================================
 % Parameter Selection
 % ========================================
@@ -978,11 +1205,6 @@ During the course of the project, there was no set method for selecting the para
 % ========================================
 % Appendix
 % ========================================
-\begin{appendices}
-
-% \chapter{Initial Project Plan}
-% \includepdf[pages=-]{initial_project_plan.pdf}
-    
-\end{appendices}
+\include{appendix}
 
 \end{document}

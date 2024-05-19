@@ -18,6 +18,10 @@
     urlcolor=black
 }
 
+%\usepackage{etoolbox}
+%\patchcmd{\abstract}{\titlepage}{}{}{}
+%\patchcmd{\endabstract}{\endtitlepage}{}{}
+
 \usepackage[authoryear]{natbib}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -40,3 +44,33 @@
 \newcommand{\rats}{\mbox{\(\mathbb Q\)}}
 \newcommand{\reals}{\mbox{\(\mathbb R\)}}
 \newcommand{\ints}{\mbox{\(\mathbb Z\)}}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codeblue}{rgb}{0, 0, 204}
+\definecolor{backcolour}{rgb}{248,255,235}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
