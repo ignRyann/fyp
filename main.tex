@@ -40,7 +40,6 @@ need to write something.
 \renewcommand{\abstractname}{Abstract}
 \begin{abstract}
 \begin{itemize}
-\item define notation for the entire project: $f(t) : \tilde{f}(z), f(t) : F(z), x(t) : X(z)$
 \item Add more examples for completeness
 \item follow Figure (XX) or (Figure XX)	
 \item follow Section (XX) or (Section XX)
@@ -62,9 +61,9 @@ need to write something.
 % ========================================
 \chapter{Introduction}
 \section{Motivation}
-Standard (vanilla) options are the most basic and commonly traded type of options which give the holder the opportunity to buy or sell the asset at a later point in time. We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
+Standard (vanilla) options are the most basic and commonly traded options that allow the holder to buy or sell the asset at a later time. We attribute the first recorded option contract to that of the Greek philosopher Thales of Miletus \citep{thompson1994aristotle}. Believing that the olive harvest would be plentiful, Thales secured the right to use the olive presses at a low price. This agreement is considered a call option as it gives the holder the right, but not the obligation, to execute the contract at a predetermined price.
 
-The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, which standardised option contracts and provided a platform for trading. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
+The formal study of pricing options began much later with \citet{bachelier1900theorie}'s work in modelling stock prices as a Brownian motion and his derivation of an option pricing formula. However, we deem the seminal work of \citet{black1973pricing} in laying out the foundation for modern option pricing theory. The introduction of the Black-Scholes model coincided with the establishment of the Chicago Board Options Exchange (CBOE) in 1973, standardising option contracts and providing a trading platform. The rapid growth (Fig \ref{fig:volume_of_options}) in the options market sparked a demand and increased interest in option pricing research.
 
 \begin{figure}[h]
 	\centering
@@ -73,14 +72,14 @@ The formal study of pricing options began much later with \citet{bachelier1900th
     \caption{Visualisation of the volume of options (in billions) traded over the past 17 years on exchanges CBOE, BATS, C2 and EDGX.}
     \label{fig:volume_of_options}
 \end{figure}
-However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff, and underlying asset to meet specific investor needs or market conditions. For instance, path-dependent options have payoffs determined by the path of the underlying asset price over the life of the option, rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
+However, the assumptions of the Black-Scholes model do not lend themselves to an accurate representation of real-world asset prices. Furthermore, exotic options differ in terms of their structure, payoff, and underlying assets to meet specific investor needs or market conditions. For instance, path-dependent options have payoffs determined by the path of the underlying asset price over the life of the option rather than just the price at expiration. The price of the underlying asset is monitored at discrete points in time. One could say that in practice, most, if not all, path-dependent options in markets are discrete path-dependent options \citep{kou2007discrete}.
 
 The pricing of discrete path-dependent options has been a longstanding area of research in the financial mathematics literature. The importance and value of these options results in a vast array of research including around geometric Brownian motions \citep{lu2017improved, guardasoni2020mellin}, general L\'evy processes \citep{fang2009novel, fusai2016spitzer, phelan2018fourier, chen2021sinc, levendorskii2022sinh}, general Markov processes \citep{cui2021pricing, zhang2023general} and stochastic volatility \citep{soleymani2019pricing, kirkby2020efficient}.
 
 A common problem faced by those in the literature is the linear dependency on the monitoring dates of the underlying asset price. \citet{fusai2016spitzer} demonstrated that the iteration on the monitoring dates can be avoided by working in the $z$-domain, extending on work by that of \citet{carr1999option}. Applying the \citet{spitzer1957wiener} identities and solving the resulting equations requires an inverse operation to obtain the option price. Reverting from the $z$-domain to the time domain requires a numerical approximation of the inverse $z$-transform. Despite its relation to the Fourier transform, the literature lacks in comparison; the performance of existing approximations, in terms of accuracy and efficiency, necessitates a specific setup, choice of parameters and desired trade-off.
 
 \section{Aims and Objectives}
-Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, our aim is to try and discover which methods provide the best fit in terms of efficiency and accuracy and what is the best setup to achieve this. The measurable objectives (O1-O5) associated with this aim are as follows:
+Given the importance of the numerical inverse $z$-transform (NIZT), the focus of this project will be \textbf{(i)} studying the effect of the parameters on the varying methods, and \textbf{(ii)} testing on a group of well-defined transform pairs. Thus, we aim to try and discover which methods provide the best fit in terms of efficiency and accuracy and what the best setup to achieve this is. The measurable objectives (O1-O5) associated with this aim are as follows:
 
 \begin{itemize}
 	\item (O1) Research into the pricing of options
@@ -91,7 +90,7 @@ Given the importance of the numerical inverse $z$-transform (NIZT), the focus of
 \end{itemize}
 
 \section{Overview}
-The upcoming chapters of this report aims to provide a detailed description of the different stages taken through this project. In Chapter 2, we provide a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process. We then provide the results on a list of transform pairs and discuss the implications of the findings. Finally, Chapter 5 summarises the steps taken and the findings of this project with suggested work for further continuation. 
+The upcoming chapters of this report provide a detailed description of the different stages taken through this project. Chapter 2 provides a self-contained technical background on the key concepts and methods used in this project. Given the breadth of the topic, references are included for those looking to delve deeper into the subject. In Chapter 3, we outline the experiments conducted in Chapter 4 to evaluate the performance of the numerical approximation methods. We detail the implementation of the methods and the experimental setup, including parameter selection and the benchmarking process. We then provide the results on a list of transform pairs and discuss the implications of the findings. Finally, Chapter 5 summarises the steps taken and the findings of this project with suggested work for further continuation. 
 
 % ========================================
 % Background
@@ -100,37 +99,33 @@ The upcoming chapters of this report aims to provide a detailed description of t
 
 In Chapter 2, we establish a foundational understanding of the topic in hand. This section is designed to be self-contained, providing essential background for all readers, while references are included for those seeking a deeper exploration.
 
-We conduct an analysis into the mathematical concepts used in option pricing, with a focus on Fourier-based methods. While a large body of theoretical work exists in this area, the practical implementation of these methods is often computationally expensive, especially when evaluating high-dimensional integrals involved in the pricing formulas. We study literature on numerical approximation methods and the application in the pricing of exotic options, specifically lookback and barrier options. Subsequently, we explore the use-case of machine learning techniques to optimise parameters during our experimentation in Chapter 3.
+We conduct an analysis of the mathematical concepts used in option pricing, with a focus on Fourier-based methods. While a large body of theoretical work exists in this area, the practical implementation of these methods is often computationally expensive, especially when evaluating high-dimensional integrals involved in the pricing formulas. We study literature on numerical approximation methods and their application in the pricing of exotic options, specifically lookback and barrier options. Subsequently, we explore the use-case of machine learning techniques to optimise parameters during our experimentation in Chapter 3.
 
 % ========================================
 % The Z-Transform
 % ========================================
 \section{The \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}\label{z_transform}
 
-The $z$-transform is a transformation of a real or complex time function $x(n)$, often used for analysing discrete-time signals and systems. It is a generalisation of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The bilateral Z-transform is formally defined as:
-
+The $z$-transform is a transformation of a real or complex time function $f(n)$, often used for analysing discrete-time signals and systems. It is a generalisation of the discrete-time Fourier transform (DTFT) that extends the analysis to the complex plane. The bilateral Z-transform is formally defined as:
 \begin{equation}\label{bilateral_z-transform}
-X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = -\infty} x(n)z^{-n}
+\tilde{f}(z) = \mathcal{Z}_{n \rightarrow z}[f(n)] = \sum^{\infty}_{n = -\infty} f(n)z^{-n}
 \end{equation}
 ``By definition, a complex number $z$ is an ordered pair $(x, y)$ of real numbers $x$ and $y$, written $z = (x, y)$'' \citep{kreyszig2010advanced}. In practice, complex numbers are written in the form $z = x + iy$, where $x$ and $y$ are real numbers and $i$ is the imaginary unit. We may find it easier to represent complex numbers in their polar form, $z = re^{i\theta}$, where $r$ represents the magnitude of $z$ and $\theta$ represents the angle of $z$ with respect to the positive real axis.
 
-In the analysis of causal systems - systems for which a time origin is defined and is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Eq. (\ref{bilateral_z-transform}), we sum from zero to positive infinity yielding
-
+In the analysis of causal systems - systems for which a time origin is defined and it is illogical to consider signal values for negative time - the unilateral $z$-transform is used. Unlike the bilateral $z$-transform in Eq. (\ref{bilateral_z-transform}), we sum from zero to positive infinity, yielding:
 \begin{equation}\label{unilateral_z-transform}
-X(z) = \mathcal{Z}_{n \rightarrow z}[x(n)] = \sum^{\infty}_{n = 0} x(n)z^{-n}
+\tilde{f}(z) = \mathcal{Z}_{n \rightarrow z}[f(n)] = \sum^{\infty}_{n = 0} f(n)z^{-n}
 \end{equation}
 
-The region within the complex $z$-plane where the $z$-transform converges is known as the Region of Convergence (ROC). The ROC is defined for the set of values of $z$ for which the $z$-transform is absolutely summable
-
+The region within the complex $z$-plane where the $z$-transform converges is known as the Region of Convergence (ROC). The ROC is defined for the set of values of $z$ for which the $z$-transform is absolutely summable:
 \begin{equation}\label{roc}
-\textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |x(n)z^{-n}| < \infty \Biggr\}
+\textbf{ROC} = \Biggl\{ z : \sum^{\infty}_{n = 0} |f(n)z^{-n}| < \infty \Biggr\}
 \end{equation}
 
-For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles themselves, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{loveless2021guido}.
+For causal sequences, the ROC is typically the exterior of the outermost pole in the $Z$-plane, denoted as $|z| > a$. If we say that $z_1$ converges, then $z_1$ exists within the ROC. Thus, all $z$ such that $|z| \geq |z_1|$ also converge. This region excludes the poles, as the transform does not converge at those points. For the system to be $stable$, the ROC must include the unit circle, $|z| = 1$, implying that all poles must lie within the unit circle \citep{loveless2021guido}.
 
 \begin{example}\label{example:roc_poles}
     Consider the function given by
-    
     \begin{equation}
         H(z) = \frac{(z - i)(z + i)}{\left(z - \left(-\frac{1}{4} - \frac{1}{2}i\right)\right)\left(z - \left(\frac{1}{2} + \frac{1}{2}i\right)\right)}
     \end{equation}
@@ -143,24 +138,21 @@ For causal sequences, the ROC is typically the exterior of the outermost pole in
 % Relation to Fourier Transform
 % ========================================
 \subsection{Relation to the Fourier Transform}\label{rs_fourier_transform}
-It is useful to note the relationship between the $z$-transform and the Fourier transform. Taking the Fourier transform of a sampled function $x(t)$ results in:
-
+It is useful to note the relationship between the $z$-transform and the Fourier transform. Taking the Fourier transform of a sampled function $f(t)$ results in:
 \begin{flalign}
-&& \mathcal{F}\bigg[x(t) \sum^{\infty}_{n = -\infty} \delta(t - n \Delta t)\bigg] &= \int^{\infty}_{-\infty} x(t) \sum_{n = - \infty}^{\infty} \delta (t - n\Delta t)e^{-i \omega t} dt && \\
-&& &= \sum_{n = - \infty}^{\infty} \int^{\infty}_{-\infty} x(t) \delta (t - n\Delta t)e^{-i \omega t} dt && \\
-&& &= \sum^{\infty}_{n=-\infty} x(n \Delta t)e^{-i \omega nt} &&
+&& \mathcal{F}\bigg[f(t) \sum^{\infty}_{n = -\infty} \delta(t - n \Delta t)\bigg] &= \int^{\infty}_{-\infty} f(t) \sum_{n = - \infty}^{\infty} \delta (t - n\Delta t)e^{-i \omega t} dt && \\
+&& &= \sum_{n = - \infty}^{\infty} \int^{\infty}_{-\infty} f(t) \delta (t - n\Delta t)e^{-i \omega t} dt && \\
+&& &= \sum^{\infty}_{n=-\infty} f(n \Delta t)e^{-i \omega nt} &&
 \end{flalign}
 
-where we make use of the sifting property of the delta function. If we normalise the sampling interval to 1, we get
-
+where we make use of the sifting property of the delta function. If we normalise the sampling interval to 1, we get:
 \begin{equation}\label{dtft}
-\sum^{\infty}_{n = - \infty} x(n)e^{-i n \omega}
+\sum^{\infty}_{n = - \infty} f(n)e^{-i n \omega}
 \end{equation}
 
-This is the discrete-time Fourier transform (DTFT) of the sequence $x(n)$. The sequence $x(n)$ is sampled at discrete-time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples. The DTFT is a periodic function of $\omega$ with period $2\pi$, and its existence relies on the absolute summability of the sequence $x(n)$:
-
+This is the discrete-time Fourier transform (DTFT) of the sequence $f(n)$. The sequence $f(n)$ is sampled at discrete-time intervals $t_n = n \triangle t$, where the sampling interval $\triangle t$ is the time between consecutive samples and the time index $n$ numbers the samples. The DTFT is a periodic function of $\omega$ with period $2\pi$, and its existence relies on the absolute summability of the sequence $f(n)$:
 \begin{equation}
-\sum^{\infty}_{n = -\infty} |x(n)| < \infty
+\sum^{\infty}_{n = -\infty} |f(n)| < \infty
 \end{equation}
 
 The Z-transform generalises Eq. (\ref{dtft}) to the complex plane, not just the unit circle where $r = 1$ \citep{Oppenheim1989DTSP}.
@@ -169,38 +161,32 @@ The Z-transform generalises Eq. (\ref{dtft}) to the complex plane, not just the 
 % Relation to PDFs
 % ========================================
 \subsection{Relation to Probability Distribution Functions}\label{pdfs}
-Random events and signals refer to situations where the outcome is not deterministic, but can be described by probability. Understanding these concepts involves using Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing our attention on the PMF.
+Random events and signals refer to situations where the outcome is not deterministic, but can be described by probability. Understanding these concepts involves using Probability Distribution Functions; the Probability Mass Function (PMF) for discrete random variables and the Probability Density Function (PDF) for continuous random variables. Given the nature of this project, we'll be focusing on the PMF.
 
 The PMF is defined for a discrete random variable $X$ taking on values $x_i$ with probabilities $p_i$, as $P(X=x_i) = p_i$. The PMF satisfies the following properties:
-
 \begin{equation}
     \sum_{i=0}^n p_i = 1 \hspace{2em}\text{and}\hspace{2em} 0 \leq p_i \leq 1 \hspace{0.5em}\forall i
 \end{equation}
 
-We may find it useful to provide a concise representation of the entire distribution such that we expand upon the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as
-
+We may find it useful to provide a concise representation of the entire distribution such that we expand upon the PMF, $p(x)$, to obtain the Probability Generating Function (PGF), $G_X(q)$, defined as:
 \begin{equation}
 	G_X(q) = E[q^X] = \sum^{\infty}_{x = 0} p(x)q^x,
 \end{equation}
-where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform (Eqn. \ref{z_transform}).
+where $E[\cdot]$ denotes the expectation operator, and $q$ is a complex number. We deliberately use $q$ to distinguish the PGF from the $z$-transform (Eq. \ref{unilateral_z-transform}).
 
 % Example using a fair dice
 \begin{example}
     Consider a fair six-sided dice. The PMF for the dice roll is given by
-    
     \begin{equation}
         p(x) = \begin{cases}
             \frac{1}{6} & \text{if } x = 1, 2, 3, 4, 5, 6 \\
             0 & \text{otherwise}
         \end{cases}
     \end{equation}
-
     where $p(x)$ is the probability of rolling a number $x$. The PGF for the dice roll is then
-
     \begin{equation}
         G_X(q) = \sum^{\infty}_{x = 0} p(x)q^x = \frac{1}{6} \sum^6_{x = 1} q^x = \frac{q}{6}\cdot \frac{1-q^6}{1-q},
     \end{equation}
-
     where we use the formula for the sum of a geometric series. The PGF encapsulates the entire distribution of the dice roll into a single function.
 \end{example}
 
@@ -210,15 +196,13 @@ The concept of summarising information is not unique to probability theory. In t
 % The Inverse Z-Transform
 % ========================================
 \section{The Inverse \texorpdfstring{$\mathcal{Z}$}{Lg}-Transform}\label{section:inverse_z}
-The inverse $Z$-transform aims to retrieve the sequence $x(n)$ from its $Z$-transform $X(z)$. While this transform is typically defined for finding individual values of $n$, it can also be extended to calculate the entire sequence. This is commonly defined by the Cauchy integral around a contour $C$ in the complex plane. The chosen contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC) of $X(z)$. Formally, the inverse $Z$-transform is given by
+The inverse $Z$-transform aims to retrieve the sequence $f(n)$ from its $Z$-transform $\tilde{f}(z)$. While this transform is typically defined for finding individual values of $n$, it can also be extended to calculate the entire sequence. This is commonly defined by the Cauchy integral around a contour $C$ in the complex plane. The chosen contour $C$ is a counter-clockwise closed path that encloses the region of convergence (ROC) of $\tilde{f}(z)$. Formally, the inverse $Z$-transform is given by
 
 \begin{equation}\label{inverse_z-transform}
-	x(n) = \mathcal{Z}^{-1}_{z \rightarrow n}[X(z)] = \frac{1}{2\pi i} \oint_C X(z)z^{n-1}dz
+	f(n) = \mathcal{Z}^{-1}_{z \rightarrow n}[\tilde{f}(z)] = \frac{1}{2\pi i} \oint_C \tilde{f}(z)z^{n-1}dz
 \end{equation}
 
-The integral approach enables the extraction of the complete sequence $x(n)$ for all integer values $n$, provided the ROC and the properties of $X(z)$ allow. In practical settings, numerical approximations are often used due to the computational challenges of evaluating the Cauchy integral. Whilst there are many ways to go about this \citep{merrikh2014linearsys, rajkovic2004method, horvath2020numerical}, most methods are done on a circular contour. Aligning with the focus of our project, we shift our attention to contour integrals.
-
-% MAYBE: include other methods if we have time
+The integral approach enables the extraction of the complete sequence $f(n)$ for all integer values $n$, provided the ROC and the properties of $\tilde{f}(z)$ allow. In practical settings, numerical approximations are often used due to the computational challenges of evaluating the Cauchy integral. Whilst there are many ways to go about this \citep{merrikh2014linearsys, rajkovic2004method, horvath2020numerical}, most methods are done on a circular contour. Aligning with the focus of our project, we shift our attention to contour integrals.
 
 % ========================================
 % Abate and Whitt 1992
@@ -227,15 +211,15 @@ The integral approach enables the extraction of the complete sequence $x(n)$ for
 The numerical approximation formula offered by \citet{AbateWhitt1992a, AbateWhitt1992b} is based on a Fourier series catering to the inversion of probability generating functions as elucidated in Section \ref{pdfs}. The format is conducive to queuing theory and other probabilistic models where the $Z$-transform is defined as $q = 1 / z$. The authors approximate the inversion using a trapezoidal rule for numerical integration over a complex contour given by
 
 \begin{equation}\label{aw_inversion_original}
-	x(n) \approx \frac{1}{2nr^n} \biggr( X(r) + 2\sum^{n-1}_{k = 1} (-1)^k \mathrm{Re}\bigg( X(re^{\frac{ik\pi}{n}})\bigg) + (-1)^nX(-r) \biggl)
+	f(n) \approx \frac{1}{2nr^n} \biggr( \tilde{f}(r) + 2\sum^{n-1}_{k = 1} (-1)^k \mathrm{Re}\bigg( \tilde{f}(re^{\frac{ik\pi}{n}})\bigg) + (-1)^n\tilde{f}(-r) \biggl)
 \end{equation}
 
-The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $X(z)$; each term $X(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
+The parameter $r$ is used to control the error; setting $r = 10^{-\lambda / 2n}$ yields an accuracy bound of $10^{-\lambda}$. The authors leverage the inherent symmetry within the complex plane to enhance computational efficiency by exploiting the complex conjugate symmetry of $\tilde{f}(z)$; each term $\tilde{f}(re^{\frac{ik\pi}{n}})$ in the upper half has a mirror image in the lower half. The computational load is thus halved by \textit{folding} the problem in this manner.
 
-Given the nature of this project, we may find it easier to use the following definition, where we set the input of $X(z)$ to that of $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
+Given the nature of this project, we may find it easier to use the following definition, where we set the input of $\tilde{f}(z)$ to that of $z = 1 / q$, to approximate Eq. (\ref{inverse_z-transform}).
 
 \begin{equation}\label{eq:aw_inversion}
-	x(n) \approx \frac{1}{2nr^n} \biggr( X(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( X\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^nX(-\frac{1}{r}) \biggl)
+	f(n) \approx \frac{1}{2nr^n} \biggr( \tilde{f}(\frac{1}{r}) + 2\sum^{n-1}_{k = 1} (-1)^k \text{Re}\bigg( \tilde{f}\big(\frac{1}{re^{\frac{ik\pi}{n}}}\big)\bigg) + (-1)^n\tilde{f}(-\frac{1}{r}) \biggl)
 \end{equation}
 
 The Nyquist-Shannon sampling theorem states that a signal must be sampled at a rate of at least twice the highest frequency present in the signal to avoid aliasing \citep{shannon1949communication,nyquist1928certain}. The number of points, $n$, used in Eq. (\ref{eq:aw_inversion}) must be sufficient to capture the information properly. If $n$ is too small, the approximation may lead to inaccuracies - akin to aliasing in signal processing.
@@ -247,11 +231,11 @@ The Nyquist-Shannon sampling theorem states that a signal must be sampled at a r
 Building on our analysis in Section (\ref{rs_fourier_transform}), \citet{Cavers1978FFT} proposes sampling the $z$-transform of a function on a circular contour at equally spaced points and then applying the inverse fast Fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast Fourier transform (FFT), with a time complexity of O(NlogN). We can formulate this as:
 
 \begin{equation}\label{cavers}
-	x(n) = r^n \text{IFFT}[X(re^{2\pi ik / N})],
+	f(n) = r^n \text{IFFT}[\tilde{f}(re^{2\pi ik / N})],
 \end{equation}
 which can be rewritten into the following:
 \begin{equation}
-		x(n) = \frac{r^n}{N} \text{FFT}[X(re^{2\pi ik / N})],
+		f(n) = \frac{r^n}{N} \text{FFT}[\tilde{f}(re^{2\pi ik / N})],
 \end{equation}
 
 where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is the number of points within the integration grid. The factor $r^n$ scales the result appropriately based on the radius of the contour. Recent studies, such as those by \citet{loveless2021guido}, show that increasing \(N\) results in an error tolerance approaching E-16, \textit{i.e. machine zero}, with double precision; note that this requires some optimisation of the chosen parameters. 
@@ -259,7 +243,7 @@ where $r$ denotes the radius of the contour, $n$ is the time index, and $N$ is t
 \citet{loveless2023phelanguido} explores replacing the IFFT of Eq. (\ref{cavers}) with a numerical summation over the grind points on half of the unit circle, similar to that of \citet{AbateWhitt1992a, AbateWhitt1992b}'s implementation. This is given as
 
 \begin{equation}\label{equation:cavers_sum}
-	x(n) = r^n \sum^{N}_{k = 1} X(re^{-\pi ik/N})
+	f(n) = r^n \sum^{N}_{k = 1} \tilde{f}(re^{-\pi ik/N})
 \end{equation}
 
 The authors conclude that both implementations achieve machine-level accuracy of E-16 with some slight deviations and requiring an optimal hyperparameter setup.
@@ -314,9 +298,9 @@ x_{k+1} = x_k - \alpha_k \nabla f_{i_k}(x_k)
 where $\nabla f_{i_k}(x_k)$ is the gradient of the cost function with respect to a random subset $i_k$.
 
 % ========================================
-% Adam Optimizer
+% Adam Optimiser
 % ========================================
-\subsubsection{ADAM Optimizer}\label{section:ADAM}
+\subsubsection{ADAM Optimiser}\label{section:ADAM}
 ADAM (Adaptive Moment Estimation) is a popular optimisation algorithm introduced by \citet{kingma2014adam} that combines the advantages of two extensions to the stochastic gradient descent method: AdaGrad \citep{duchi2011adaptive} and RMSProp \citep{tieleman2012rmsprop}. ADAM computes adaptive learning rates for each parameter by estimating the first and second moments of the gradients. This makes the method particularly well-suited for large-scale and complex optimisation problems, such as those countered in deep learning and computational optimisation. It's ability to adjust learning rates based on gradient information allows ADAM to efficiently navigate the parameter space and converge to extremely precise solutions \citep{reddi2019convergence}. The update rule is given by:
 
 \begin{equation}
@@ -325,7 +309,7 @@ x_{k+1} = x_{k} - \alpha \frac{\hat{m}_{k}}{\sqrt{\hat{v}_{k}} + \epsilon},
 where first moment estimate $m_k$ and the second moment estimate $v_k$ are computed as exponential moving averages of the gradient and the squared gradient, respectively. The hyperparameters $\beta_1$ and $\beta_2$ control the decay rates of these moving averages. To correct for initialisation bias, the estimates of the first and second moments ($\hat{m}_k$and $\hat{v}_k$) are bias-corrected. The parameter update is performed using the adapted learning rate $\alpha$ and the bias-corrected estimates of the moments. We add $\epsilon$ to the denominator to prevent division be zero; typically set to $10^{-8}$. This process is shown in the pseudocode below:
 
 \begin{algorithm}[H]
-\caption{ADAM Optimizer}
+\caption{ADAM Optimiser}
 \label{algo:ADAM}
 \begin{algorithmic}[1]
 \State Initialise \( x_0 \), \( m_0 = 0 \), \( v_0 = 0 \), set \( k = 0 \)
@@ -441,7 +425,6 @@ We extend Eq. (\ref{black_scholes_equation}) by incorporating jump processes to 
 dX(t) = \mu dt + \sigma dW(t) + dJ(t),
 \end{equation}
 where $J(t)$ represents a jump process (typically a compound Poisson process) to account for sudden, significant changes. An exponential L\'evy process describes the asset price process as:
-
 \begin{equation}
 S(t) = S(0)e^{X(t)}	
 \end{equation}
@@ -462,7 +445,6 @@ In an effort to eliminate the computational inefficiency tied to the number of m
 % NIZT in Option Pricing
 % ========================================
 \subsection{NIZT in Option Pricing}
-\todo[inline]{Need to solidify understanding}
 We consider the case that of a double barrier option (Section \ref{double_barrier}), which are characterised by their dependency on the asset's price staying within a specified range between an upper boundary $u$ and a lower boundary $l$. The probability of the asset's price being at $x$ at the $n$th monitoring without hitting these barriers is represented by $f(x, n)$. This forms the basis of our recursive relationship for these options:
 
 \begin{equation}
@@ -506,14 +488,14 @@ All experiments were designed to be used on Visual Studio Code 1.89.1 using Pyth
 % ========================================
 % Transform Pairs
 % ========================================
-\section{Transform Pairs}
-To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus on those listed in Table (\ref{table:transform_pairs}) as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $x(t)$, we derive the corresponding transform pair in the subsequent sections.
+\section{Transform Pairs}\label{section:transform_pairs}
+To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus on those listed in Table (\ref{table:transform_pairs}) as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $f(t)$, we derive the corresponding transform pair in the subsequent sections.
 
 \begin{table}[H]
     \centering
     \renewcommand{\arraystretch}{1.2} % row height
     \begin{tabular}{c|cc}
-    \textbf{Function} & $x(t)$ & $X(z)$ \\
+    \textbf{Function} & $f(t)$ & $\tilde{f}(z)$ \\
     \hline
     Heaviside Step & 1 & $\frac{z}{z-1}$ \\
     Polynomial & $t$ & $\frac{z}{(z-1)^2}$ \\
@@ -529,9 +511,9 @@ To measure the \textit{success} of our implementations, we find it convenient to
 % Heaviside Step
 % ========================================
 \subsection{Heaviside Step}\label{section:heaviside_step}
-The Heaviside step function, $x(t)$, is an important piecewise function in signal processing and control theory \citep{proakis2007digital}. This is commonly defined as
+The Heaviside step function, $f(t)$, is an important piecewise function in signal processing and control theory \citep{proakis2007digital}. This is commonly defined as
 \begin{equation}
-	x(t) = 
+	f(t) = 
 	\begin{cases}
         0 & \text{if } t < 0 \\
         1 & \text{if } t \geq 0
@@ -541,7 +523,7 @@ The Heaviside step function, $x(t)$, is an important piecewise function in signa
 The unilateral $z$-transform of the Heaviside step function can be calculated using Eq. (\ref{unilateral_z-transform}):
 
 \begin{equation}
-X(z) = 	\mathcal{Z}_{t \rightarrow z}[x(t)] = \sum^{\infty}_{t = 0}x(t)z^{-t} = \sum^{\infty}_{t=0} z^{-t}
+\tilde{f}(z) = 	\mathcal{Z}_{t \rightarrow z}[f(t)] = \sum^{\infty}_{t = 0}f(t)z^{-t} = \sum^{\infty}_{t=0} z^{-t}
 \end{equation}
 
 We identify this as a geometric series where each term has the form $r^n$ with $r = z^{-1}$ and $n = t$. The sum of an infinite geometric series with first term $a$ and a common ratio $r$, where $|r| < 1$ is given by
@@ -552,64 +534,64 @@ S_\infty = \frac{a}{1-r}
 For the sum to converge, we require $|z > 1|$ given the pole at $z = 1$, and it follows that
 
 \begin{equation}
-X(z) = \frac{1}{1 - z^{-1}} = \frac{z}{z - 1}
+\tilde{f}(z) = \frac{1}{1 - z^{-1}} = \frac{z}{z - 1}
 \end{equation}
 
 % ========================================
 % Polynomial
 % ========================================
 \subsection{Polynomial}\label{section:polynomial}
-The polynomial function, often referred to as the linear ramp function, is defined as $x(t) = t$ for $t \geq 0	$. Following a similar approach to that of the previous section, we have
+The polynomial function, often referred to as the linear ramp function, is defined as $f(t) = t$ for $t \geq 0	$. Following a similar approach to that of the previous section, we have
 
 \begin{equation}
-X(z) = 	\mathcal{Z}_{t \rightarrow z}[x(t)] = \sum^{\infty}_{t = 0}x(t)z^{-t} = \sum^{\infty}_{t=0} tz^{-t},
+\tilde{f}(z) = 	\mathcal{Z}_{t \rightarrow z}[f(t)] = \sum^{\infty}_{t = 0}f(t)z^{-t} = \sum^{\infty}_{t=0} tz^{-t},
 \end{equation}
 in which we take note of the increasing integer multiplier $t$ and the kernel $z^{-t}$. To solve this series, we use the derivative property of the $z$-transform  given by
 
 \begin{equation}
-\mathcal{Z}_{t \rightarrow z}[tf(t)] = -z \frac{dF(z)}{dz},
+\mathcal{Z}_{t \rightarrow z}[tf(t)] = -z \frac{d\tilde{f}(z)}{dz},
 \end{equation}
-which shows that multiplying the sequence $f(t)$ by $t$ in the time domain corresponds to multiplying the z-transform $F(z)$ by $-z$ and taking the derivative with respect to $z$ in the z-domain. Thus, if we consider the Heaviside step function, it leads on that 
+which shows that multiplying the sequence $f(t)$ by $t$ in the time domain corresponds to multiplying the z-transform $\tilde{f}(z)$ by $-z$ and taking the derivative with respect to $z$ in the z-domain. Thus, if we consider the Heaviside step function, it leads on that 
 
 \begin{equation}
-X(z) = -z \frac{d}{dz} \left( \frac{z}{z-1} \right) = -z \left( \frac{z - 1 - z}{(z-1)^2} \right) = \frac{z}{(z-1)^2}
+\tilde{f}(z) = -z \frac{d}{dz} \left( \frac{z}{z-1} \right) = -z \left( \frac{z - 1 - z}{(z-1)^2} \right) = \frac{z}{(z-1)^2}
 \end{equation}
 
 % ========================================
 % Decaying Exponential
 % ========================================
 \subsection{Decaying Exponential}\label{section:decaying_exp}
-The decaying exponential function, commonly expressed as $x(t) = e^{-at}$ for $t \geq 0$ and $a > 0$, is very useful in the analysis of systems with exponential decay or growth characteristics. However, such a signal is sampled at discrete time intervals; if $\triangle t$ is the sampling interval and $n$ represents the discrete time index, then the continuous function $x(t)$ becomes $x[n] = e^{-an\triangle t}$ when sampled at intervals of $\triangle t$. The unilateral $z$-transform of $x[n]$ is given by
+The decaying exponential function, commonly expressed as $f(t) = e^{-at}$ for $t \geq 0$ and $a > 0$, is very useful in the analysis of systems with exponential decay or growth characteristics. However, such a signal is sampled at discrete time intervals; if $\triangle t$ is the sampling interval and $n$ represents the discrete time index, then the continuous function $f(t)$ becomes $f[n] = e^{-an\triangle t}$ when sampled at intervals of $\triangle t$. The unilateral $z$-transform of $f[n]$ is given by
 \begin{equation}
-	X(z) = 	\mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n=0} e^{-an\triangle t}z^{-n}
+	\tilde{f}(z) = 	\mathcal{Z}_{n \rightarrow z}[f[n]] = \sum^{\infty}_{n = 0}f[n]z^{-n} = \sum^{\infty}_{n=0} e^{-an\triangle t}z^{-n}
 \end{equation}
 
-This is a geometric series where each term is $(e^{-a\triangle t}z^{-1})^n$. Using Eq. (\ref{equation:geometric_series}), we can express $X(z)$ as:
+This is a geometric series where each term is $(e^{-a\triangle t}z^{-1})^n$. Using Eq. (\ref{equation:geometric_series}), we can express $\tilde{f}(z)$ as:
 \begin{equation}
-X(z) = \frac{1}{1 - (e^{-a\triangle t}z^{-1})}= \frac{z}{(z-e^{-a\triangle t})}
+\tilde{f}(z) = \frac{1}{1 - (e^{-a\triangle t}z^{-1})}= \frac{z}{(z-e^{-a\triangle t})}
 \end{equation}
 
 % ========================================
 % Sinusoidal
 % ========================================
 \subsection{Sinusoidal}\label{section:sinusoidal}
-The sinusoidal function $x(t) = \sin(\omega t)$ is a key waveform given its periodic nature. Similar to that of the decaying exponential transform pair, we discretely sample the function at intervals $\triangle t$, which results in the discrete time function $x[n] = \sin(\omega n \triangle t)$. Thus, the unilateral $z$-transform is computed as
+The sinusoidal function $f(t) = \sin(\omega t)$ is a key waveform given its periodic nature. Similar to that of the decaying exponential transform pair, we discretely sample the function at intervals $\triangle t$, which results in the discrete time function $x[n] = \sin(\omega n \triangle t)$. Thus, the unilateral $z$-transform is computed as
 \begin{equation}
-X(z) = \mathcal{Z}_{n \rightarrow z}[x[n]] = \sum^{\infty}_{n = 0}x[n]z^{-n} = \sum^{\infty}_{n = 0} \sin(\omega n \triangle t)z^{-n}
+\tilde{f}(z) = \mathcal{Z}_{n \rightarrow z}[f[n]] = \sum^{\infty}_{n = 0}f[n]z^{-n} = \sum^{\infty}_{n = 0} \sin(\omega n \triangle t)z^{-n}
 \end{equation}
 
 We make use of Euler's formula, defined as $\sin(x) = \frac{e^{ix} - e^{-ix}}{2i}$, to express our sine function and split the term into two separate geometric series:
 \begin{equation}
-	X(z) = \sum^{\infty}_{n = 0} \left( \frac{e^{i\omega n\triangle t} - e^{-i\omega n\triangle t}}{2i} \right) z^{-n} = \frac{1}{2i}\cdot\left( \sum^{\infty}_{n = 0} e^{i\omega n\triangle t} z^{-n} - \sum^{\infty}_{n = 0} e^{-i\omega n\triangle t}z^{-n}\right)
+	\tilde{f}(z) = \sum^{\infty}_{n = 0} \left( \frac{e^{i\omega n\triangle t} - e^{-i\omega n\triangle t}}{2i} \right) z^{-n} = \frac{1}{2i}\cdot\left( \sum^{\infty}_{n = 0} e^{i\omega n\triangle t} z^{-n} - \sum^{\infty}_{n = 0} e^{-i\omega n\triangle t}z^{-n}\right)
 \end{equation}
  
  We then refer back to Eq. (\ref{equation:geometric_series}) to express the summations as functions of $z$. It follows on that
 \begin{equation}
-	X(z) = \frac{1}{2i}\cdot \left( \frac{1}{1 - e^{i\omega \triangle t}z^{-1}} - \frac{1}{1 - e^{-i\omega \triangle t}z^{-1}} \right)
+	\tilde{f}(z) = \frac{1}{2i}\cdot \left( \frac{1}{1 - e^{i\omega \triangle t}z^{-1}} - \frac{1}{1 - e^{-i\omega \triangle t}z^{-1}} \right)
 \end{equation}
 where we simplify it into the form:
 \begin{equation}
-X(z) = \frac{1}{2i} \cdot \frac{ -z^{-1}(e^{i\omega \triangle t} - e^{i\omega \triangle t})}{(1 - e^{i\omega \triangle t}z^{-1})(1 - e^{-i\omega \triangle t}z^{-1})} = \frac{z^{-1}\sin(\omega \triangle t)}{1 - 2\cos(\omega\triangle t)z^{-1} + z^{-2}}
+\tilde{f}(z) = \frac{1}{2i} \cdot \frac{ -z^{-1}(e^{i\omega \triangle t} - e^{i\omega \triangle t})}{(1 - e^{i\omega \triangle t}z^{-1})(1 - e^{-i\omega \triangle t}z^{-1})} = \frac{z^{-1}\sin(\omega \triangle t)}{1 - 2\cos(\omega\triangle t)z^{-1} + z^{-2}}
 \end{equation}
 
 % ========================================
@@ -673,7 +655,7 @@ where the approximation holds for large $r^N$. As discussed in Section (\ref{sec
 Thus, we investigate the effect of different values of $\lambda$ on the accuracy of the Abate-Whitt method when applied to the Heaviside step and polynomial transform pairs (Table \ref{table:transform_pairs}). We expect to observe an increase in accuracy as $\lambda$ increases, up to a certain point where the limitations of machine precision and rounding errors become dominant.
 
 \subsubsection{Computational Speed}\label{section:aw_speed}
-In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop. With each iteration, the dominant operations is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
+In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop. With each iteration, the dominant operation is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
 
 We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice. Practically, it is not feasible to eliminate any interference from external background processes. However, we make efforts to minimise such effects by executing multiple runs of each test and taking the average.
 
@@ -702,7 +684,7 @@ As discussed in Section (\ref{section:cavers}), \citet{Cavers1978FFT} introduces
     \end{algorithmic}
 \end{algorithm}
 
-Whilst the latter makes use of the IFFT, we look into analysing the comparative metrics with the definition including that of the numerical approximation given by Eq (\ref{equation:cavers_sum}). We denote the the number of points in the secondary grid as $J$ and let $N$ be the last value / length of $n$.
+Whilst the latter makes use of the IFFT, we look into analysing the comparative metrics with the definition including that of the numerical approximation given by Eq (\ref{equation:cavers_sum}). We denote the number of points in the secondary grid as $J$ and let $N$ be the last value / length of $n$.
 
 \begin{algorithm}[H]
 \caption{Implementation of \autoref{equation:cavers_sum}}
@@ -741,15 +723,15 @@ A circular contour integral is commonly used for approximating the inverse $z$-t
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\theta + y),
 \end{equation}
-where parameters are chosen such that $\sigma,y_\in \mathbb{R}$, $b_\in \mathbb{R}^+$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $X(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
+where parameters are chosen such that $\sigma,y_\in \mathbb{R}$, $b_\in \mathbb{R}^+$, and $\theta$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $\tilde{f}(z)$. The authors state that the conformal mapping alleviates typical errors which are discussed in the relevant texts \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing}. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
 
 \begin{equation}
-    x(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) X(\xi(y)) dy.
+    f(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\theta + y) \tilde{f}(\xi(y)) dy.
 \end{equation}
 
-By denoting the integrand as $f_n(y)$ and approximating the application of the infinite trapezoidal, we have 
+By denoting the integrand as $x_n(y)$ and approximating the application of the infinite trapezoidal, we have 
 \begin{equation}
-    x(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} f_n(j \epsilon)(1 - \delta_{j0}/2) \right)
+    f(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} x_n(j \epsilon)(1 - \delta_{j0}/2) \right)
 \end{equation}
 
 \todo[inline]{need to look more into it}
@@ -770,13 +752,13 @@ In an attempt to recreate the unit circle from the conformal mapping (\autoref{e
 \caption{Implementation of \autoref{equation:conformal_mapping}}
 \label{algo:hyperbolic_sine}
 \begin{algorithmic}[1]
-\Procedure{Hyperbolic\_sine}{$\sigma, b, y, N$}
-    \State $z \gets \text{Array}[N]$ \Comment{$z_{\in} \mathbb{C}^N$}
-    \For{$k \gets -\frac{N}{2}$ \textbf{to} $\frac{N}{2}$}
-        \State $\omega \gets \frac{i\pi  k}{N}$
-        \State $z[k + \frac{n}{2}] \gets \sigma + i * b * \sinh(\omega + y)$
-    \EndFor
-    \State \textbf{return} $z$
+\Procedure{Hyperbolic\_ sine}{$\sigma, b, y, N$}
+\State $z \gets \text{Array}[N]$ \Comment{$z \in \mathbb{C}^N$}
+\For{$k \gets 0$ \textbf{to} $N-1$}
+\State $\omega \gets i \cdot (-\frac{\pi}{2} + \frac{k\pi}{N})$
+\State $z[k] \gets \sigma + i \cdot b \cdot \sinh(\omega + y)$
+\EndFor
+\State \textbf{return} $z$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -876,7 +858,7 @@ L_1 = \sum_{i=0}^{n-1} \left( |z_i| - 1 \right)^2,
 \end{equation}
 where we square the deviation of each point $z_i$ from that of the unit radius to account for both positive and negative differences. The summation of all the squared deviations gives us our total loss. As a comparative measure, we compute the loss for the upper half of the unit circle for $n = 100$ points and $\theta_\in [0, \pi]$: $L_1\approx$ 7E-31.
 
-To minimise $L_1$ for a given contour, we initially use the gradient descent algorithm outlined in Algorithm (\ref{algo:gradient_descent}). We numerically estimate the partial derivative of $L_1$, with respect to $x$, using finite difference approximation with $\epsilon = 10^{-8}$; consult \citep{burden1997numerical}:
+To minimise $L_1$ for a given contour, we initially use the gradient descent algorithm outlined in Algorithm (\ref{algo:gradient_descent}). We numerically estimate the partial derivative of $L_1$, with respect to $x$, using finite difference approximation with $\epsilon = 10^{-8}$; see \citet{burden1997numerical}:
 \begin{equation}\label{eq:finite_diff}
 \frac{\partial L_1}{\partial x} \approx \frac{L_1(x + \epsilon) - L_1(x)}{\epsilon}
 \end{equation}
@@ -894,7 +876,7 @@ From our understanding of the parameter $\sigma$, seen in Section (\ref{section:
     \State $L_1 \gets \infty$
     \While {$L_1 < \ell$} \Comment until loss within acceptable tolerance 
         \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
-        \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
+        \State $L_1 \gets \sum_{i=0}^{|z|} (|z_i| - 1)^2$
         \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$
         \State $b \gets b - \alpha \frac{\partial L_1}{\partial b}$
         \State $y \gets y - \alpha \frac{\partial L_1}{\partial y}$
@@ -919,7 +901,7 @@ For the learning of these parameters, we stick to $n = 100$ points. Within our f
 \State $L_1 \gets \infty$
 \While {$L_1 > \ell$} \Comment $\ell$ denotes the acceptable tolerance
 \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
-        \State $L_1 \gets \sum_{i=0}^{|z|} (|z2_i| - 1)^2$
+        \State $L_1 \gets \sum_{i=0}^{|z|} (|z_i| - 1)^2$
 \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$ \Comment using Eq.~(\ref{eq:finite_diff})
 \State $m_b \gets \beta_1 m_b + (1 - \beta_1) \frac{\partial L_1}{\partial b}$
 \State $m_y \gets \beta_1 m_y + (1 - \beta_1) \frac{\partial L_1}{\partial y}$
@@ -1064,7 +1046,7 @@ b & y & $L_1$ Loss \\
 \caption{Best $L_1$ loss, with corresponding parameters $b$ and $y$,  achieved during several stages of the runs using ADAM optimiser with varying initial learning rates of 1E-3 $\leq \alpha \leq$ 1E-7.}
 \end{table}
 
-After multiple runs and tinkering of the hyper-parameters, we achieve a loss of $L_1 \approx$ 1.5E-19 with parameters $b = 1.48835270677098$E-05 and $y = 11.808402703087143$. Whilst we were unable to find better parameters given the time constraints of this project, we deem this sufficient enough given the similarity to that of the unit circle (up to 18 decimal places). This is visually shown in the following figure:
+After multiple runs and adjustments to the initial learning rate, we achieve a loss of $L_1 \approx$ 1.5E-19 with parameters $b = 1.48835270677098$E-05 and $y = 11.808402703087143$. Whilst we were unable to find better parameters given the time constraints of this project, we deem this sufficient enough given the similarity to that of the unit circle (up to 18 decimal places). This is visually shown in the following figure:
 \begin{figure}[H]
     \begin{subfigure}{.5\linewidth}
       \includegraphics[width=\linewidth]{images/gd/unit_circle.png}
@@ -1080,12 +1062,13 @@ After multiple runs and tinkering of the hyper-parameters, we achieve a loss of 
     \caption{Visual representation for $n = 100$ points of the (a) circle contour with $r = 1$ and $0 \leq \theta < \pi$, and (b) sinh deformation with $\sigma = 0.0$, $b = 1.48835270677098$E-05, $y = 11.808402703087143$ and $-\frac{\pi}{2} \leq \omega < \frac{\pi}{2}$.}
 \end{figure}
 
-As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394. The numerical implementations of the contours are accurate up to 5 significant figures. However, the similarity of both contours to each other goes up to 17 significant figures. With both this affirmation and that of the $L_1$ loss, we can say the parameters provide a good level of success in regards to constructing the circular contour with the conformal mapping.
+As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394. The numerical implementations of the contours are accurate up to 5 significant figures. However, the similarity of both contours to each other goes up to 17 significant figures. With both this affirmation and that of the $L_1$ loss, we can say the parameters provide a good level of success in regard to constructing the circular contour with the conformal mapping.
 
 % ========================================
 % Numerical Benchmarking
 % ========================================
 \section{Numerical Benchmarking}
+Our next experiment is to evaluate the performance of the different NIZT techniques. The focus is on the efficiency and accuracy of the methods applied to various transform pairs (Section \ref{section:transform_pairs}). The results are discussed in terms of the mean absolute error (MAE) and computational time.
 
 % ========================================
 % Abate and Whitt 1992
@@ -1093,73 +1076,86 @@ As discussed in Section (\ref{section:point_distance}), we check to see the aver
 \subsection{Abate and Whitt 1992}
 
 \begin{figure}[H]
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/heaviside.png}
-      \caption{Heaviside Step ($1 \leq \lambda \leq 17$)}
+      \caption{Heaviside Step ($1 \leq \lambda < 17$)}
     \end{subfigure}\hfill
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_zoomed.png}
-      \caption{Heaviside Step ($8 \leq \lambda \leq 17$)}
+      \caption{Heaviside Step ($8 \leq \lambda < 17$)}
     \end{subfigure}
     
     \medskip
     
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/polynomial.png}
-      \caption{Polynomial ($1 \leq \lambda \leq 17)$}
+      \caption{Polynomial ($1 \leq \lambda < 17)$}
     \end{subfigure}\hfill
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/polynomial_zoomed.png}
-      \caption{Polynomial ($8 \leq \lambda \leq 17$)}
+      \caption{Polynomial ($8 \leq \lambda < 17$)}
     \end{subfigure}
     
     \medskip
     
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/decaying_exp.png}
-      \caption{Decaying Exponential ($1 \leq \lambda \leq 17)$}
+      \caption{Decaying Exponential ($1 \leq \lambda < 17)$}
     \end{subfigure}\hfill
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/decaying_exp_zoomed.png}
-      \caption{Decaying Exponential ($8 \leq \lambda \leq 17$)}
+      \caption{Decaying Exponential ($8 \leq \lambda < 17$)}
     \end{subfigure}
     
     \medskip
     
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/sinusoidal.png}
-      \caption{Sinusoidal ($1 \leq \lambda \leq 17)$}
+      \caption{Sinusoidal ($1 \leq \lambda < 17)$}
     \end{subfigure}\hfill
-    \begin{subfigure}{.5\linewidth}
+    \begin{subfigure}{.45\linewidth}
       \includegraphics[width=\linewidth]{images/abate_whitt/sinusoidal_zoomed.png}
-      \caption{Sinusoidal ($8 \leq \lambda \leq 17$)}
+      \caption{Sinusoidal ($8 \leq \lambda < 17$)}
     \end{subfigure}
     
     \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial and (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$ and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
     \label{fig:MAE_Abate_Whitt}
 \end{figure}
 
+\subsubsection{Error Analysis}
+
+\subsubsection{Efficiency}
+
+\subsubsection{Transform Pair Characteristics}
+
 \begin{figure}[H]
     \begin{subfigure}{1\linewidth}
-      \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_speed.png}
+      \includegraphics[width=\linewidth]{images/abate_whitt/heaviside_step_speeds.png}
       \caption{Heaviside Step ($1 \leq N \leq 512$)}
     \end{subfigure}
     
     \medskip
     
     \begin{subfigure}{1\linewidth}
-      \includegraphics[width=\linewidth]{images/abate_whitt/polynomial_speed.png}
+      \includegraphics[width=\linewidth]{images/abate_whitt/polynomial_speeds.png}
       \caption{Polynomial ($1 \leq N \leq 512$)}
     \end{subfigure}
     
     \medskip
     
     \begin{subfigure}{1\linewidth}
-      \includegraphics[width=\linewidth]{images/abate_whitt/decay_exp_speed.png}
+      \includegraphics[width=\linewidth]{images/abate_whitt/decay_exp_speeds.png}
       \caption{Decaying Exponential ($1 \leq N \leq 512$)}
     \end{subfigure}
     
-    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the transform pairs: (a) Heaviside Step, (b) Polynomial, (c) Decaying Exponential and (d) Sinusoidal. The different lines represent the chosen $\lambda$ for each run.}
+    \medskip
+    
+    \begin{subfigure}{1\linewidth}
+      \includegraphics[width=\linewidth]{images/abate_whitt/sinusoidal_speeds.png}
+      \caption{Sinusoidal ($1 \leq N \leq 512$)}
+    \end{subfigure}
+    
+    \caption{Timings, in seconds, of the Abate-Whitt method for different values of $N$ when applied to the transform pairs: (a) Heaviside Step, (b) Polynomial, (c) Decaying Exponential and (d) Sinusoidal. The different lines represent the chosen $\lambda$ for each run. Each benchmark is taken as the average over 5 experiments taking the 3rd run of each experiment after restarting the kernel.}
     \label{fig:timings_abate_whitt}
 \end{figure}
 
