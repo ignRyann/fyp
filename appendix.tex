@@ -9,7 +9,7 @@
 % Transform Pairs
 % ========================================
 \section{Transform Pairs}
-These transform pairs serve as benchmarks for testing the accuracy and efficiency of numerical inversion methods. Each pair consists of a time-domain function and its corresponding Z-transform, providing a practical basis for analysing and validating the implemented algorithms. The code is given in Python.
+These transform pairs serve as benchmarks for testing the accuracy and efficiency of numerical inversion methods. Each pair consists of a time-domain function and its corresponding Z-transform, providing a practical basis for analysing and validating the implemented algorithms.
 
 \subsection{Heaviside Step}
 \begin{lstlisting}[language=Python, caption= Implementation of the Heaviside Step function and its $\mathcal{Z}$-transform (Section \ref{section:heaviside_step})]
@@ -53,11 +53,11 @@ def ftilde(z, omega, t, N):
     return numerator / denominator
 \end{lstlisting}
 
-\newpage
+%\newpage
 \section{Contours}
 
 \subsection{Circular}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of a circular contour from $0 \leq \theta < \pi$.]
 def circle(r, n):
     z = []
     for k in range(0, n):
@@ -67,7 +67,7 @@ def circle(r, n):
     return z
 \end{lstlisting}
 
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of a circular contour from $0 \leq \theta \leq \pi$.]
 def circle(r, n):
     z = []
     for k in range(0, n):
@@ -78,21 +78,21 @@ def circle(r, n):
 \end{lstlisting}
 
 \subsection{Sinh Deformation}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the conformal mapping (Equation \ref{equation:conformal_mapping}) from $-\frac{\pi}{2} \leq \omega < \frac{\pi}{2}$.]
 def hyperbolic_sine(sigma, b, y, n):
     z = np.zeros(n, dtype=complex)
-    for k in range(-n//2, n//2):
-        omega = 1j * (np.pi) * k / n
-        z[k + n//2] = sigma + 1j * b * np.sinh(omega + y)
+    for k in range(n):
+        omega = 1j * (-np.pi/2 + k * np.pi / n)
+        z[k] = sigma + 1j * b * np.sinh(omega + y)
     return z
 \end{lstlisting}
 
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the conformal mapping (Equation \ref{equation:conformal_mapping}) from $-\frac{\pi}{2} \leq \omega \leq \frac{\pi}{2}$.]
 def hyperbolic_sine(sigma, b, y, n):
     z = np.zeros(n, dtype=complex)
-    for k in range(-n//2, n//2):
-        omega = 1j * (np.pi + np.pi / n) * k / n
-        z[k + n//2] = sigma + 1j * b * np.sinh(omega + y)
+    for k in range(n):
+        omega = 1j * (np.pi) * (k - (n - 1) / 2) / (n - 1)
+        z[k] = sigma + 1j * b * np.sinh(omega + y)
     return z
 \end{lstlisting}
 
@@ -103,7 +103,7 @@ def hyperbolic_sine(sigma, b, y, n):
 \section{Numerical Inverse $\mathcal{Z}$-Transform}
 
 \subsection{Abate and Whitt 1992}
-\begin{lstlisting}[language=Python, caption= null ]
+\begin{lstlisting}[language=Python, caption= Implementation of \citet{AbateWhitt1992a, AbateWhitt1992b}'s NIZT (Equation \ref{eq:aw_inversion}).]
 def abate_whitt(ftilde, n, lmbda):
     rho = 10 ** (-lmbda / (2 * n))
 
@@ -124,7 +124,7 @@ def abate_whitt(ftilde, n, lmbda):
 \end{lstlisting}
 
 \subsection{Cavers 1978}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT}'s FFT NIZT (Equation \ref{cavers})]
 def cavers(ftilde, n, N, gamma):
     r = 10 ** (gamma / (N))
     k = np.arange(N)
@@ -134,7 +134,7 @@ def cavers(ftilde, n, N, gamma):
     return f
 \end{lstlisting}
 
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT}'s DFT NIZT (Equation \ref{equation:cavers_sum})]
 def cavers_dft(ftilde, n, J, gamma):
     N = n[-1]
     r = 10 ** (gamma / J)
