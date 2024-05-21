@@ -624,7 +624,7 @@ We thus formulate an algorithmic approach to the implementations of the NIZT out
 % ========================================
 % Abate and Whitt 1992
 % ========================================
-\subsection{Abate and Whitt 1992}
+\subsection{Abate and Whitt 1992}\label{sec:experiment_aw}
 Given a sufficient hyperparameter setup, we will require, as input,  just the function to be inverted, $\tilde{f}: \mathbb{C}\rightarrow \mathbb{C}$, and the point $n_\in \mathbb{R}$. The implementation of such a function follows very easily from Eq. (\ref{eq:aw_inversion}) as shown in the pseudocode below:
 
 \begin{algorithm}[H]
@@ -645,7 +645,7 @@ Given a sufficient hyperparameter setup, we will require, as input,  just the fu
     \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Computational Accuracy}
+\subsubsection{Computational Accuracy}\label{sec:aw_accuracy}
 \citet{AbateWhitt1992a, AbateWhitt1992b} showed that the absolute error, $|\epsilon |$, of their implementation is bounded by
 \begin{equation}
 	| \epsilon | = \frac{1}{r^N - 1} \approx \frac{1}{r^N},
@@ -1118,15 +1118,9 @@ Our next experiment is to evaluate the performance of the different NIZT techniq
       \caption{Sinusoidal ($8 \leq \lambda < 17$)}
     \end{subfigure}
     
-    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial and (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$ and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
+    \caption{Mean absolute error (MAE) of the Abate-Whitt method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial, (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$, and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE for values of N: 32, 64, 128, 256, 512.}
     \label{fig:MAE_Abate_Whitt}
 \end{figure}
-
-\subsubsection{Error Analysis}
-
-\subsubsection{Efficiency}
-
-\subsubsection{Transform Pair Characteristics}
 
 \begin{figure}[H]
     \begin{subfigure}{1\linewidth}
@@ -1159,27 +1153,181 @@ Our next experiment is to evaluate the performance of the different NIZT techniq
     \label{fig:timings_abate_whitt}
 \end{figure}
 
+\newpage
+% ========================================
+% Error Analysis
+% ========================================
+\subsubsection{Error Analysis}
+Our results (\autoref{fig:MAE_Abate_Whitt}) show that the mean absolute error for the different transform pairs (Heaviside Step, Polynomial, Decaying Exponential and Sinusoidal) varies significantly with the parameter $\lambda$ for all $N = 32, 64, 128, 256 \text{ and } 512$. According to our analysis in Section \ref{sec:aw_accuracy}, the choice of the contour radius $r$ influences the accuracy of the numerical inverse $z$-transform. Our results align with that of \citet{loveless2021guido} as we see our mean absolute error achieving around 11 significant figures until the accuracy decreases for $\lambda \geq 12$; this is the general case for all transform pairs explored in the experiment.
+
+% ========================================
+% Efficiency
+% ========================================
+\subsubsection{Efficiency}
+For each benchmark of the transform pairs, we restarted the Jupyter kernel and ran 2 successive runs to avoid any additional computational overhead and setup. The timings of the 3rd run were recorded and this was repeated 5 different times. \autoref{fig:timings_abate_whitt} shows the average of these 5 runs for each of the transform pairs (Heaviside Step, Polynomial, Exponential and Sinusoidal).
+
+The results directly correlates with the discussion in Section \ref{section:aw_speed} on the computational complexity of the method as we see a strong linear relationship on the number of points, N, for all transform pairs.
+
+% ========================================
+% Transform Pair Characteristics
+% ========================================
+\subsubsection{Transform Pair Characteristics}
+While the general case, in terms of efficiency and accuracy , are similar for each transform pair, we do mention some of the differences we have observed. For the decaying exponential and sinusoidal transform pairs, the mean absolute error remains relatively low across a range $\lambda$ values, suggesting that the NIZT method handles these functions more effectively; we do note a significant time in computation for the Sinusoidal function. This is most likely due to the oscillatory nature of the sinusoidal function and the additional overhead from using NumPy's sine function in these evaluations \citep{harris2020array}.
+
 % ========================================
 % Cavers 1972
 % ========================================
 \subsection{Cavers 1972}
 
+\begin{figure}[H]
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_2N.png}
+      \caption{Heaviside Step ($1 \leq \lambda < 19$)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_zoomed_2N.png}
+      \caption{Heaviside Step ($10 \leq \lambda < 16$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_2N.png}
+      \caption{Polynomial ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_zoomed_2N.png}
+      \caption{Polynomial ($11 \leq \lambda < 17$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/decay_exp_2N.png}
+      \caption{Decaying Exponential ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/decay_exp_zoomed_2N.png}
+      \caption{Decaying Exponential ($8 \leq \lambda < 14$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/sinusoidal_2N.png}
+      \caption{Sinusoidal ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/sinusoidal_zoomed_2N.png}
+      \caption{Sinusoidal ($9 \leq \lambda < 15$)}
+    \end{subfigure}
+    
+    \caption{Mean absolute error (MAE) of the Cavers IFFT method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial, (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$, and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE values of N, presented in the legend, with $J =$ 2N.}
+    \label{fig:MAE_Cavers_IFFT_2N}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside.png}
+      \caption{Heaviside Step ($1 \leq \lambda < 19$)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_zoomed.png}
+      \caption{Heaviside Step ($13 \leq \lambda < 19$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial.png}
+      \caption{Polynomial ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_zoomed.png}
+      \caption{Polynomial ($13 \leq \lambda < 19$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/decay_exp.png}
+      \caption{Decaying Exponential ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/decay_exp_zoomed.png}
+      \caption{Decaying Exponential ($7 \leq \lambda < 13$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/sinusoidal.png}
+      \caption{Sinusoidal ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/sinusoidal_zoomed.png}
+      \caption{Sinusoidal ($11 \leq \lambda < 17$)}
+    \end{subfigure}
+    
+    \caption{Mean absolute error (MAE) of the Cavers IFFT method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, (c, d) Polynomial, (e, f) Decaying Exponential with $a = 0.1$ and $t = 10$, and (g, h) Sinusoidal with $\omega = \frac{\pi}{4}$ and $t = 10$. The MAE is plotted on a logarithmic scale against $\lambda$ values, where $\triangle \lambda = 0.1$. The different lines represent the MAE values of N, presented in the legend, with $J =$ 8N.}
+    \label{fig:MAE_Cavers_IFFT_8N}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_dft.png}
+      \caption{Heaviside Step ($1 \leq \lambda < 19$)}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_zoomed_dft.png}
+      \caption{Heaviside Step ($9 \leq \lambda < 15$)}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_dft.png}
+      \caption{Polynomial ($1 \leq \lambda < 19)$}
+    \end{subfigure}\hfill
+    \begin{subfigure}{.45\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_zoomed_dft.png}
+      \caption{Polynomial ($10 \leq \lambda < 16$)}
+    \end{subfigure}
+    
+    \caption{Mean absolute error (MAE) of the Cavers DFT method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, and (c, d) Polynomial. The different lines represent the MAE values of N, presented in the legend, with $J =$ 2N.}
+    \label{fig:MAE_Cavers_DFT_2N}
+\end{figure}
+
+% talk about accuracy
+
+\begin{figure}[H]
+    \begin{subfigure}{1\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/heaviside_log_speeds.png}
+      \caption{Heaviside Step ($1 \leq N \leq 1024$) with J = 2N}
+    \end{subfigure}
+    
+    \medskip
+    
+    \begin{subfigure}{1\linewidth}
+      \includegraphics[width=\linewidth]{images/cavers/polynomial_log_speeds.png}
+      \caption{Polynomial ($1 \leq N \leq 512$) with J = 2N}
+    \end{subfigure}
+    
+    \caption{Timings, in seconds, of the Cavers IFFT method for different values of N when applied to the transform pairs: (a, c) Heaviside Step, and (b, d) Polynomial. The different lines represent the chosen $\gamma$ for each run. Each benchmark is taken as the average over 5 experiments taking the 3rd run of each experiment after restarting the kernel. The timings are plotted on a logarithmic scaled and are computed with J=2N points.}
+    \label{fig:timings_cavers}
+\end{figure}
 
 % ========================================
 % Comparative Analysis
 % ========================================
 \subsection{Comparative Analysis}
-\begin{itemize}
-	\item Select few N's and hyper-parameter choices
-	\item Abate Whitt vs Cavers: Transform Pair, Method, Hyper-Parameters, Actual, Estimated, Accuracy, Time	
-\end{itemize}
 
 
 % ========================================
 % Conclusion
 % ========================================
 \chapter{Conclusion}
-
+In conclusion, the results seen validate the theoretical considerations outlined in Section \ref{sec:experiment_aw}, demonstrating that the choice of parameters and the nature of the transform pair impact the accuracy and efficiency of the inverse $z$-transform using the approximation method (Section \ref{section:abate_whitt}).
 % ========================================
 % Summary
 % ========================================
