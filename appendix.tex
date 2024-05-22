@@ -53,7 +53,7 @@ def ftilde(z, omega, t, N):
     return numerator / denominator
 \end{lstlisting}
 
-%\newpage
+\newpage
 \section{Contours}
 
 \subsection{Circular}
@@ -101,25 +101,18 @@ def hyperbolic_sine(sigma, b, y, n):
 % ========================================
 \newpage
 \section{Numerical Inverse $\mathcal{Z}$-Transform}
+We provide the python implementation of the numerical inverse $z$-transform for the methods discussed in Section \ref{section:inverse_z}. The implementations are structured such that we make use of NumPy's vectorised operations in an attempt of achieving the best performance possible.
 
 \subsection{Abate and Whitt 1992}
 \begin{lstlisting}[language=Python, caption= Implementation of \citet{AbateWhitt1992a, AbateWhitt1992b}'s NIZT (Equation \ref{eq:aw_inversion}).]
 def abate_whitt(ftilde, n, lmbda):
     rho = 10 ** (-lmbda / (2 * n))
-
-    summation = 0
-    for k in range(1, n):
-        z = 1 / (rho * np.exp(1j * k * np.pi / n))
-        term = ftilde(z)
-        summation += ((-1)**k) * np.real(term)
-    summation *= 2
     
-    start = ftilde(1 / rho)
-    end = ((-1)**n) * ftilde(1 / -rho)
-    scale_factor = 1 / (2 * n * rho**n)
-
-    result = scale_factor * (start + summation + end)
-
+    k = np.arange(1, n)
+    z = 1 / (rho * np.exp(1j * k * np.pi / n))
+    summation = 2 * np.sum(((-1) ** k) * np.real(ftilde(z)))
+    
+    result = (1 / (2 * n * rho ** n)) * (ftilde(1 / rho) + summation + ((-1) ** n) * ftilde(-1 / rho))
     return result
 \end{lstlisting}
 
@@ -136,15 +129,15 @@ def cavers(ftilde, n, N, gamma):
 
 \begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT}'s DFT NIZT (Equation \ref{equation:cavers_sum})]
 def cavers_dft(ftilde, n, J, gamma):
-    N = n[-1]
     r = 10 ** (gamma / J)
     
-    j = np.arange(J) # secondary grid points
+    j = np.arange(J)
     z = r * np.exp(1j * 2 * np.pi * j / J)
     
-    f = np.zeros(N + 1, dtype=complex)
-    for i in range(N + 1):
-        f[i] = np.sum(z**n[i] * ftilde(z)) / J
+    z_ftilde = ftilde(z)
+    z_power = z[:, None] ** n  # Compute z^n for all n and z
+    
+    f = np.sum(z_power * z_ftilde[:, None], axis=0) / J
     return f
 \end{lstlisting}
 
