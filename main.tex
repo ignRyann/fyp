@@ -9,7 +9,7 @@
 % Title Page
 % ========================================
 \title{{\vspace{-14em} \includegraphics[scale=0.4]{Logos/ucl_logo.png}}\\
-{{\vspace{2em} \Huge Review of the Inverse $\mathcal{Z}$-Transform in the Pricing of Discrete Path-Dependent Options}}\\
+{{\vspace{2em} \Huge Review of the Inverse $\mathcal{Z}$-Transform and Its Use in the Pricing of Discrete Path-Dependent Options}}\\
 {\large Final Year Project Report}\\
 }
 \date{Submission date: \today}
@@ -17,7 +17,7 @@
 {\bf Disclaimer:}
 This report is submitted as part requirement for the MEng degree in Mathematical Computation at UCL. It is substantially the result of my own work except where explicitly indicated in the text. The report may be freely copied and distributed provided the source is explicitly acknowledged.}
 \\ \\ Dr Carolyn Phelan
-\\ \\ \\ \\ Department of Computer Science
+\\ \\ \\ Department of Computer Science
 \\ University College London
 \\ \\
 }
@@ -34,19 +34,28 @@ This report is submitted as part requirement for the MEng degree in Mathematical
 
 \renewcommand{\abstractname}{Acknowledgements}
 \begin{abstract}
-need to write something.
+\begin{center}
+\textit{``And that there is not for man except that for which he strives."}
+\\ \text{(Surah An-Najm, No. 53, Ayat 39)}
+\end{center}
+
+I want to extend my heartfelt gratitude to my beloved mother and her support through my journey. Her sacrifices, encouragement and constant duas (prayers) have brought me to where I am today. May Allah shower my mother with endless happiness and contentment in every aspect of her life.
+\\\\
+I'd also like to extend my thanks to my dear brother and sister, outer family and friends for their continuous encouragement, support and motivation. I am truly grateful for your presence in my life, and for the countless ways in which you have contributed to my success and enjoyment.
+\\\\
+To Carolyn Phelan - I am profoundly grateful for the continuous support and guidance provided during my final year of study. Your support was not limited to academic matters and provided a source of inspiration. I would also like to extend my thanks to Guido Germano and Benjamin Loveless for their indirect support through their academic publications.
+\\\\
+Finally, I owe it to myself for putting my head down and persevering to complete this degree. Whilst there were many ups and downs along this journey and moments of self-doubt, I think it's safe to say I've made it, Alhamdulillah.
+
 \end{abstract}
 
 \renewcommand{\abstractname}{Abstract}
 \begin{abstract}
-\begin{itemize}
-\item Add more examples for completeness
-\item follow Figure (XX) or (Figure XX)	
-\item follow Section (XX) or (Section XX)
-\item follow Eq. (XX) or (Equation XX)
-\item follow Table (XX) or (Table XX)
-\item follow Appendix (X) or (Appendix A)
-\end{itemize}
+This study explores the literature on the inverse $z$-transform and its application in pricing discrete path-dependent options, a financial derivative whose payoffs depend on the path taken by the underlying asset price. Such options are labelled as exotic options, including lookback and barrier options. By examining various numerical approximation methods for the inverse $z$-transform, the research aims to evaluate their efficiency and accuracy. The focus is on the methods proposed by \citet{AbateWhitt1992a, AbateWhitt1992b} and \citet{Cavers1978FFT}, as well as the new approach by \citet{levendorskii2022sinh} involving a sinh deformation of the contour.
+
+We propose to back-track the deformation into a contour resembling the commonly used circular path through the use of optimisation algorithms, such as gradient descent and its variant, adaptive moment estimation. Extensive tests were carried out to analyse the effects of the parameters for the different numerical methods in terms of their efficiency and efficacy, and to determine the optimal setup. 
+
+Through the employment of the optimisation techniques, we find parameters for the conformal mapping, involving the sinh deformation, that resemble the unit circle to an accuracy greater than 1E-16. We provide a successful outlook on the trade-offs between accuracy and speed for the approximation methods, discuss the setups needed to achieve such results and offer efficient implementations of the methods.
 
 \end{abstract}
 
@@ -228,7 +237,7 @@ The Nyquist-Shannon sampling theorem states that a signal must be sampled at a r
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}\label{section:cavers}
-Building on our analysis in Section (\ref{rs_fourier_transform}), \citet{Cavers1978FFT} proposes sampling the $z$-transform of a function on a circular contour at equally spaced points and then applying the inverse fast Fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast Fourier transform (FFT), with a time complexity of O(NlogN). We can formulate this as:
+Building on our analysis in Section \ref{rs_fourier_transform}, \citet{Cavers1978FFT} proposes sampling the $z$-transform of a function on a circular contour at equally spaced points and then applying the inverse fast Fourier transform (IFFT) to these sampled points to approximate the original time-domain signal. The DTFT suffers from a high computational cost with a time complexity of O(N$^2$) given the need to perform O(N) operations for each of the N different points. Thus, the author employ a more efficient algorithm by \citet{cooley1965algorithm} to what is known as the fast Fourier transform (FFT), with a time complexity of O(NlogN). We can formulate this as:
 
 \begin{equation}\label{cavers}
 	f(n) = r^n \text{IFFT}[\tilde{f}(re^{2\pi ik / N})],
@@ -483,13 +492,13 @@ Having established the theoretical foundation, we now turn our attention to the 
 
 This chapter outlines the experimental setup, implementation and evaluation of the methods. We measure our results in terms of accuracy and computational efficiency against well-known transformation pairs (Table \ref{table:transform_pairs}) in an attempt to provide a thorough comparison of the methods.
 
-All experiments were designed to be used on Visual Studio Code 1.89.1 using Python 3.11.7, NumPy 1.26.3 and MatPlotLib 3.8.0; we use such an environment given its robustness and extensive support for scientific computing and optimisation tasks. Whilst we outline all experiments/methods as pseudocode to allow for easy adaptations to other computing environments, the python implementation of the key functions are provided in Appendix (\ref{chapter:code_listings}).
+All experiments were designed to be used on Visual Studio Code 1.89.1 using Python 3.11.7, NumPy 1.26.3 and MatPlotLib 3.8.0; we use such an environment given its robustness and extensive support for scientific computing and optimisation tasks. Whilst we outline all experiments/methods as pseudocode to allow for easy adaptations to other computing environments, the python implementation of the key functions are provided in Appendix \ref{chapter:code_listings}.
 
 % ========================================
 % Transform Pairs
 % ========================================
 \section{Transform Pairs}\label{section:transform_pairs}
-To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus on those listed in Table (\ref{table:transform_pairs}) as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $f(t)$, we derive the corresponding transform pair in the subsequent sections.
+To measure the \textit{success} of our implementations, we find it convenient to use analytical transform pairs for the unilateral $z$-transform. Whilst a wide array of transform pairs exist, we focus on those listed in \autoref{table:transform_pairs} as they are ``simple to compute and provide an excellent benchmark" for our use case \citep{loveless2021guido}. For each function $f(t)$, we derive the corresponding transform pair in the subsequent sections.
 
 \begin{table}[H]
     \centering
@@ -598,9 +607,9 @@ where we simplify it into the form:
 % Circular Contour
 % ========================================
 \section{Circular Contour}\label{section:circular_contour}
-``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Eq. (\ref{inverse_z-transform}), defined as $z = re^{i\theta}$, however the setting of $r$ is important as shown for Example (\ref{example:roc_poles}) in Figure (\ref{fig:effect_r}).
+``The inverse at point $T$ can be obtained from the contour integral where $C$ is a counter-clockwise closed path encircling the origin and entirely in the region of convergence'' \citep{horvath2020numerical}. A circular contour is commonly used to solve Eq. (\ref{inverse_z-transform}), defined as $z = re^{i\theta}$, however the setting of $r$ is important as shown for Example \ref{example:roc_poles} in \autoref{fig:effect_r}.
 
-We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section (\ref{section:abate_whitt}) and Section (\ref{section:cavers}). For each of the methods, we outline a series of experiments and validation tests to carry out.
+We thus formulate an algorithmic approach to the implementations of the NIZT outlined in Section \ref{section:abate_whitt} and Section \ref{section:cavers}. For each of the methods, we outline a series of experiments and validation tests to carry out.
 
 \begin{figure}[H]
     \begin{subfigure}{.25\linewidth}
@@ -617,7 +626,7 @@ We thus formulate an algorithmic approach to the implementations of the NIZT out
       \caption{r = 1.5}
     \end{subfigure}\hfill
     
-    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example (\ref{example:roc_poles}) with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
+    \caption{ Displaying the effect of the radius $r$ on a circular contour ($n = 100$). The red dots represent the poles of $H(z)$ in Example \ref{example:roc_poles} with (a) including the poles within the ROC, (b) excluding the poles but inclusive of the unit circle, and (c) excluding the poles but not stable.}
     \label{fig:effect_r}
 \end{figure}
 
@@ -650,12 +659,12 @@ Given a sufficient hyperparameter setup, we will require, as input,  just the fu
 \begin{equation}
 	| \epsilon | = \frac{1}{r^N - 1} \approx \frac{1}{r^N},
 \end{equation}
-where the approximation holds for large $r^N$. As discussed in Section (\ref{section:abate_whitt}), setting $r=10^{-\lambda / 2n}$  yields an accuracy of $10^{-\lambda}$, \textit{i.e.}, $\lambda$ significant digits. However, we have that if the machine accuracy is $\epsilon_m = 10^{-\lambda_m}$, the bound falls apart around $\lambda > \frac{2}{3} \lambda_m$ \citep[Remark 5.8]{AbateWhitt1992a}. \citet{loveless2023phelanguido} states that ``with IEEE 754 double precision representation of floating point numbers, $\epsilon_m = 2^{-52} \approx 10^{-15.65}$, and thus it makes little sense to set $\lambda > 10.5$, which yields the IZT up to about 10 or 11 significant digits".
+where the approximation holds for large $r^N$. As discussed in Section \ref{section:abate_whitt}, setting $r=10^{-\lambda / 2n}$  yields an accuracy of $10^{-\lambda}$, \textit{i.e.}, $\lambda$ significant digits. However, we have that if the machine accuracy is $\epsilon_m = 10^{-\lambda_m}$, the bound falls apart around $\lambda > \frac{2}{3} \lambda_m$ \citep[Remark 5.8]{AbateWhitt1992a}. \citet{loveless2023phelanguido} states that ``with IEEE 754 double precision representation of floating point numbers, $\epsilon_m = 2^{-52} \approx 10^{-15.65}$, and thus it makes little sense to set $\lambda > 10.5$, which yields the IZT up to about 10 or 11 significant digits".
 
 Thus, we investigate the effect of different values of $\lambda$ on the accuracy of the Abate-Whitt method when applied to the Heaviside step and polynomial transform pairs (Table \ref{table:transform_pairs}). We expect to observe an increase in accuracy as $\lambda$ increases, up to a certain point where the limitations of machine precision and rounding errors become dominant.
 
 \subsubsection{Computational Speed}\label{section:aw_speed}
-In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section (\ref{section:abate_whitt}) has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm (\ref{algo:abate_whitt}) for the inclusion of the single for loop. With each iteration, the dominant operation is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
+In addition to accuracy, computational efficiency is another important factor to consider. The Abate-Whitt algorithm described in Section \ref{section:abate_whitt} has a time complexity of O($n$), where $n$ is the number of terms used in the approximation. This is evident in Algorithm \ref{algo:abate_whitt} for the inclusion of the single for loop. With each iteration, the dominant operation is the evaluation of the input function $\tilde{f}$. Assuming the function evaluation time is bounded by some constant, the overall time complex remains O($n$). 
 
 We thus run tests to empirically verify this linear complexity. Plotting the computation time against $n$ should show an approximately linear relationship if the O($n$) analysis holds in practice. Practically, it is not feasible to eliminate any interference from external background processes. However, we make efforts to minimise such effects by executing multiple runs of each test and taking the average.
 
@@ -663,7 +672,7 @@ We thus run tests to empirically verify this linear complexity. Plotting the com
 % Cavers 1978
 % ========================================
 \subsection{Cavers 1978}
-As discussed in Section (\ref{section:cavers}), \citet{Cavers1978FFT} introduces a secondary grid defined by the parameter $J_\in \mathbb{R}^+$ and it follows on that our algorithm will require this as input. We also remind ourselves that the methods differs in regard to the type of $n$; the data type is a list of integers compared to the previously mentioned where we passed an integer. The implementation is presented as:
+As discussed in Section \ref{section:cavers}, \citet{Cavers1978FFT} introduces a secondary grid defined by the parameter $J_\in \mathbb{R}^+$ and it follows on that our algorithm will require this as input. We also remind ourselves that the methods differs in regard to the type of $n$; the data type is a list of integers compared to the previously mentioned where we passed an integer. The implementation is presented as:
 
 \begin{algorithm}[H]
     \caption{Implementation of \autoref{cavers}}
@@ -707,37 +716,44 @@ Whilst the latter makes use of the IFFT, we look into analysing the comparative 
 \end{algorithm}
 
 \subsubsection{Computational Accuracy}
-As discussed in Section (\ref{section:cavers}), achieving machine-level accuracy is possible but requires some optimisation of the hyper-parameters. We aim to view the accuracy in regard to changes of the hyper-parameter $n$, $J$ and the setting of $\gamma$. Our main focus is to try and achieve machine zero accuracy, E-16, with double precision. However, we also find it interesting to see the changes in accuracy making use of the numerical summation method outlined in Algorithm \ref{algo:cavers_sum}.
+As discussed in Section \ref{section:cavers}, achieving machine-level accuracy is possible but requires some optimisation of the hyper-parameters. We aim to view the accuracy in regard to changes of the hyper-parameter $n$, $J$ and the setting of $\gamma$. Our main focus is to try and achieve machine zero accuracy, E-16, with double precision. However, we also find it interesting to see the changes in accuracy making use of the numerical summation method outlined in Algorithm \ref{algo:cavers_sum}.
 
 \subsubsection{Computational Speed}
-Similar to the approach in Section \ref{section:aw_speed}, we plot the results against different N values, where we set J = 2N, for the different implementations. Given that IFFT has a time complexity of O(NLogN), we expect this to be the dominating factor in Algorithm (\ref{algo:cavers}). Similar to the approach in Section (\ref{section:aw_speed}), we take the average over multiple runs to minimise the interference of external processes.
+Similar to the approach in Section \ref{section:aw_speed}, we plot the results against different N values, where we set J = 2N, for the different implementations. Given that IFFT has a time complexity of O(NLogN), we expect this to be the dominating factor in Algorithm \ref{algo:cavers}. Similar to the approach in Section \ref{section:aw_speed}, we take the average over multiple runs to minimise the interference of external processes.
+
+% ========================================
+% NumPy Vectorisation
+% ========================================
+\subsection{NumPy Vectorisation}
+NumPy vectorisation is used to perform array operations more efficiently by eliminating the need for explicit loops in Python. By leveraging NumPy's underlying C implementations \citep{harris2020array}, we can maximise the performance of the algorithms used in our project.
+
+In the Abate and Whitt method, the computation involves a series of complex exponentials and summations. These computations can be handled in a single step rather than iterating through each element. This approach involves using vectorised indexing with \texttt{np.arange} to generate index arrays, and \texttt{np.sum} to efficiently compute the sum of array elements.
+
+The Cavers IFFT method relies heavily on the FFT package, which is already highly optimised in NumPy. However, the DFT summation can benefit from the use of NumPy's broadcasting to perform element-wise operations across arrays of different shapes without explicit loops, and using vectorised matrix multiplication to compute the powers. Summation is once again done with \texttt{np.sum} across specified axes, allowing for efficient aggregation of the results.
+
+Whilst we have outlined the general algorithm for the NIZT methods in the previous sections, we present a highly efficient Python implementations in Appendix \ref{chapter:code_listings}.
 
 % ========================================
 % Sinh Deformation
 % ========================================
 \section{Sinh Deformation}\label{section:sinh_deformation}
-A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section (\ref{section:abate_whitt}) and (\ref{section:cavers}). However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \omega < \pi\}$ through the conformal mapping:
+A circular contour integral is commonly used for approximating the inverse $z$-transform as we've seen in Section \ref{section:abate_whitt} and \ref{section:cavers}. However, this does not mean it may be the best option. \citet{levendorskii2022sinh} propose a new method for a numerical evaluation of Eq. (\ref{inverse_z-transform}) by deforming the commonly used circular contour $\{z = re^{i\theta} | -\pi < \theta < \pi\}$ through the conformal mapping:
 \begin{equation}\label{equation:conformal_mapping}
     \xi(y) = \sigma + ib\sinh(i\omega + y),
 \end{equation}
-where parameters are chosen such that $\sigma,y_\in \mathbb{R}$, $b_\in \mathbb{R}^+$, and $\omega$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $\tilde{f}(z)$. The authors state that the conformal mapping alleviates problems faced in literature \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing} in regards to a higher degree of accuracy with low compute. \todo{to look at these "typical" errors} Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
-
+where parameters are chosen such that $\sigma,y_\in \mathbb{R}$, $b_\in \mathbb{R}^+$, and $\omega$ is restricted to the interval $(-\pi/2, \pi / 2)$. The unique selection of parameters allows the contour to be tailored specifically to the characteristics of $\tilde{f}(z)$. The authors state that the conformal mapping alleviates problems faced in literature \citep{boyarchenko2014efficient, boyarchenko2019sinh, schmelzer2007computing} in regard to the degree of accuracy and computational time. Applying a change of variables to Eq. (\ref{inverse_z-transform}) yields
 \begin{equation}
     f(n) = \int_\mathbb{R} \frac{b}{2\pi} \xi(y)^{-n-1} \cosh(i\omega + y) \tilde{f}(\xi(y)) dy.
 \end{equation}
 
 By denoting the integrand as $x_n(y)$ and approximating the application of the infinite trapezoidal, we have 
 \begin{equation}
-    f(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j = 0}^{M_0} x_n(j \epsilon)(1 - \delta_{j0}/2) \right)
+    f(n) \approx 2 \epsilon\ \text{Re}\left( \sum_{j \in \mathbb{Z}} x_n(j \epsilon)(1 - \delta_{j0}/2) \right)
 \end{equation}
 
-\todo[inline]{need to look more into it}
+While the authors provide numerical examples, they omit the parameters needed to recreate the experiment and lack an explanation to the sufficient conditions for their numerical examples. However, \citet{levendorskii2023conditions} provide a more in-depth discussion into the sufficient conditions for the applicability of their NIZT, albeit ``rich" in complexity, and impose conditions for the use on certain processes. 
 
-\begin{itemize}
-    \item mention sufficient conditions under which this works (next paper)
-    \item talk about why he does this
-    \item our experiment in trying to recreate the unit circle and why
-\end{itemize}
+Considering the details, numerous factors and references ($\approx53.85\%$ self-citations), we instead propose to learn of the effects of the parameters and see if we can back-track the sinh deformation to that of the unit circle. By finding parameters that achieve a circular contour, we aim to provide a setup in creating a heuristic implementation to the previously mentioned circular contour methods.
 
 % ========================================
 % Deforming the Contour
@@ -813,7 +829,7 @@ In an attempt to recreate the unit circle from the conformal mapping (\autoref{e
         \label{fig:mixing_b_y_v2}
       \end{subfigure}
     
-    \caption{Displaying the effect of the parameters on the contour for Algorithm (\ref{algo:hyperbolic_sine}) with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
+    \caption{Displaying the effect of the parameters on the contour for Algorithm \ref{algo:hyperbolic_sine} with $\{-\frac{\pi}{2} \leq \theta \leq \frac{\pi}{2} \}$ and $n = 100$ points. Plots (b, c, d, e, f, g, h, i) highlights the changes in parameter the effects on the contour in comparison to the base contour (a). The black line represents the created contour, with the grey contour representing the base contour with parameters $\sigma = 0, b = 0.5, y = 1.0$.}
     \label{fig:deforming_all}
 \end{figure}
 
@@ -839,7 +855,7 @@ In relation to the base contour (\autoref{fig:base_deform}), we observe that inc
     \caption{Displaying the scaling effect of parameters $b$ and $y$. The initial deformation is created with \textbf{(a)} $\sigma = 0.0, b = 0.7, y = 0.7$ and the scaled results are constructed with \textbf{(b)} setting only $b = 0.7967054596179172$ and \textbf{(c)} setting only $y = 0.895588098866514$. The parameters were constructed with N = 100 points and chosen with an error tolerance of E-9.}
 \end{figure}
 
-To achieve an extent on the real axis of 1.0, we scale our original deformation (\autoref{fig:extent_default}) by the individual parameters. We see the differences in transformation in Figure (\ref{fig:extent_b}) and Figure (\ref{fig:extent_y}) for parameters $b$ and $y$, respectively.
+To achieve an extent on the real axis of 1.0, we scale our original deformation (\autoref{fig:extent_default}) by the individual parameters. We see the differences in transformation in \autoref{fig:extent_b} and \autoref{fig:extent_y} for parameters $b$ and $y$, respectively.
 
 % ========================================
 % Parameter Selection for the Sinh Deformation
@@ -855,12 +871,12 @@ L_1 = \sum_{i=0}^{n-1} \left( |z_i| - 1 \right)^2,
 \end{equation}
 where we square the deviation of each point $z_i$ from that of the unit radius to account for both positive and negative differences. The summation of all the squared deviations gives us our total loss. As a comparative measure, we compute the loss for the upper half of the unit circle for $n = 100$ points and $\theta_\in [0, \pi]$: $L_1\approx$ 7E-31.
 
-To minimise $L_1$ for a given contour, we initially use the gradient descent algorithm outlined in Algorithm (\ref{algo:gradient_descent}). We numerically estimate the partial derivative of $L_1$, with respect to $x$, using finite difference approximation with $\epsilon = 10^{-8}$; see \citet{burden1997numerical}:
+To minimise $L_1$ for a given contour, we initially use the gradient descent algorithm outlined in Algorithm \ref{algo:gradient_descent}. We numerically estimate the partial derivative of $L_1$, with respect to $x$, using finite difference approximation with $\epsilon = 10^{-8}$; see \citet{burden1997numerical}:
 \begin{equation}\label{eq:finite_diff}
 \frac{\partial L_1}{\partial x} \approx \frac{L_1(x + \epsilon) - L_1(x)}{\epsilon}
 \end{equation}
 
-From our understanding of the parameter $\sigma$, seen in Section (\ref{section:deforming_contour}), we set it to 0 and try to learn the parameters $b$ and $y$. The general steps is given by:
+From our understanding of the parameter $\sigma$, seen in Section \ref{section:deforming_contour}, we set it to 0 and try to learn the parameters $b$ and $y$. This is because $\sigma$ controls the shift in the $x$-axis as shown in \autoref{fig:negative_sigma} and \autoref{fig:positive_sigma}. The general steps is given by:
 
 \begin{algorithm}[H]
 \caption{GD for Minimising \( L_1 \)}
@@ -872,7 +888,7 @@ From our understanding of the parameter $\sigma$, seen in Section (\ref{section:
     \State $n \gets 100$
     \State $L_1 \gets \infty$
     \While {$L_1 < \ell$} \Comment until loss within acceptable tolerance 
-        \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
+        \State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm \ref{algo:hyperbolic_sine}
         \State $L_1 \gets \sum_{i=0}^{|z|} (|z_i| - 1)^2$
         \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$
         \State $b \gets b - \alpha \frac{\partial L_1}{\partial b}$
@@ -897,7 +913,7 @@ For the learning of these parameters, we stick to $n = 100$ points. Within our f
 \State $t \gets 0$
 \State $L_1 \gets \infty$
 \While {$L_1 > \ell$} \Comment $\ell$ denotes the acceptable tolerance
-\State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm (\ref{algo:hyperbolic_sine})
+\State $z \gets \texttt{hyperbolic\_sine}(\sigma, b, y, n)$ \Comment outlined in Algorithm \ref{algo:hyperbolic_sine}
         \State $L_1 \gets \sum_{i=0}^{|z|} (|z_i| - 1)^2$
 \State Compute gradients $\frac{\partial L_1}{\partial b}$ and $\frac{\partial L_1}{\partial y}$ \Comment using Eq.~(\ref{eq:finite_diff})
 \State $m_b \gets \beta_1 m_b + (1 - \beta_1) \frac{\partial L_1}{\partial b}$
@@ -919,7 +935,8 @@ For the learning of these parameters, we stick to $n = 100$ points. Within our f
 To achieve a sufficient set of parameters, we aim to exploit as much similarity with the unit circle as possible with our values of $b$ and $y$; we let $\ell = $ 1E-30. We set our initial parameter values based on the results of our gradient descent algorithm, with a learning rate of $\alpha =$ 1E-5. Following the recommendations of \citet{kingma2014adam} and \citet{goodfellow2016deep}, we set $\beta_1 = 0.9$ and $\beta_2 = 0.999$, based on their extensive experiments and theoretical considerations.
  
 \subsubsection{Distance between each points}\label{section:point_distance}
-In Section (\ref{section:circular_contour}), we see that the methods construct the circular contour with $n$ points spaced out evenly between $0 \leq \theta \leq \pi$. However, it is clearly shown that this is not always the case when constructing a contour using the conformal mapping, defined in Eq. (\ref{equation:conformal_mapping}), and illustrated in Figure (\ref{fig:deforming_all}).
+\todo[inline]{Redo calculations and double check - feels wrong}
+In Section \ref{section:circular_contour}, we see that the methods construct the circular contour with $n$ points spaced out evenly between $0 \leq \theta \leq \pi$. However, it is clearly shown that this is not always the case when constructing a contour using the conformal mapping, defined in Eq. (\ref{equation:conformal_mapping}), and illustrated in \autoref{fig:deforming_all}.
 
 \begin{example}\label{example:point_diff}
 Consider the upper-half of a circular contour $z_\in \mathbb{C}^n$ numerically constructed with $n = 100$ points of the form $z_k = re^{i(k(\pi + \frac{\pi}{n}) / n)}$, where $0 \leq k < n$ and $0 \leq \frac{k(\pi + \frac{\pi}{n})}{n} \leq \pi$. This enables the first point to be situated at $e^{i0}$ and the last point at to be situated at $e^{i\pi}$.
@@ -933,15 +950,6 @@ Numerically, this distance is approximately $0.0317$. Therefore, for a circular 
 \end{example}
 
 Thus, if we consider our sinh deformation, we can formulate a mini-experiment into finding the average distance between each point, constructed with the parameters found in the previous section, and see how this differs to the unit circle.
-
-% ========================================
-% Inverting the Z-Transform using Sinh Deformation
-% ========================================
-\subsection{Inverting The $\mathcal{Z}$-transform Using The Sinh Deformation}
-We propose a ``\textit{plug-and-play}" method in regard to using the sinh deformation to invert the $z$-transform. Similar to the structure of Eq. (\ref{eq:aw_inversion}) and (\ref{equation:cavers_sum}), we experiment with replacing the commonly used circular contour with that of the sinh deformation, constructed with the parameters achieved in Section (\ref{section:parameter_selection}). 
-
-We initially test this against the Heaviside step and Polynomial transform pairs (\autoref{table:transform_pairs}). If we achieve results to a certain degree of accuracy, we can then extend this to the rest of the transform pairs. We also find it interesting to see if there is some correlation between the $L_1$ loss of the contour and the accuracy of the results.  
- 
 % ========================================
 % Results
 % ========================================
@@ -951,7 +959,7 @@ We delve into the experimental results of our study outlined in the previous cha
 The use of optimisation techniques were conducted on a windows 11 system with an i9-13900k, 32GB 6000MHz RAM and a GeForce Nvidia RTX 4090. The numerical benchmarking of the NIZT methods were tested on a Sonoma 14.4.1 macOS (2020 MacBook Pro) system with a 1.4GHz Intel Core i5 and 8GB 2133MHz RAM.
 
 \section{Parameter Selection for the Sinh Deformation}
-Our first experiment is to find parameters $b$ and $y$ that result in a contour resembling the upper-half of the unit circle. We employ an adaptation of the gradient descent method, outlined in Algorithm (\ref{algo:gd_l1}), and then try to improve on this using the ADAM optimiser, outlined in Algorithm (\ref{algo:adam_l1}). Each implementation returns parameters achieving the best loss during its execution.
+Our first experiment is to find parameters $b$ and $y$ that result in a contour resembling the upper-half of the unit circle. We employ an adaptation of the gradient descent method, outlined in Algorithm \ref{algo:gd_l1}, and then try to improve on this using the ADAM optimiser, outlined in Algorithm \ref{algo:adam_l1}. Each implementation returns parameters achieving the best loss during its execution.
 
 % ========================================
 % Gradient Descent
@@ -975,7 +983,7 @@ Our first experiment is to find parameters $b$ and $y$ that result in a contour 
 
 From our first attempt at the gradient descent (GD) algorithm (\autoref{fig:gd_1e-3}), we see that the $L_1$ loss converges to a higher value than the best loss of $L_1 = 0.03390312294797621 \approx$ 3E-2 with parameters $b = 0.3227341040398728$ and $y = 1.8244690757568378$. This indicates that the GD algorithm did not effectively reduce the loss suggesting that the learning rate $\alpha$ might be too high, causing the algorithm  to overshoot the optimal parameter values.
 
-Given the sub-optimal convergence observed in Figure (\ref{fig:gd_1e-3}), we ran a second set of experiments with a reduced learning rate of $\alpha = 1 \times 10^{-5}$ over 1,000,000 iterations initially. We used the parameters that achieved the best loss from our first run and we see a much better convergence rate in Figure (\ref{fig:gd_1e-5}) for the first 1,000,000 iterations. We then extend this over till we see a notable decrease in the convergence rate at around iteration $5 \times 10^{6}$. By lowering the learning rate, the GD algorithm was able to achieve a lower $L_1$ loss of $0.0012438982603344348 \approx $ 1E-3.
+Given the sub-optimal convergence observed in \autoref{fig:gd_1e-3}, we ran a second set of experiments with a reduced learning rate of $\alpha = 1 \times 10^{-5}$ over 1,000,000 iterations initially. We used the parameters that achieved the best loss from our first run and we see a much better convergence rate in \autoref{fig:gd_1e-5} for the first 1,000,000 iterations. We then extend this over till we see a notable decrease in the convergence rate at around iteration $5 \times 10^{6}$. By lowering the learning rate, the GD algorithm was able to achieve a lower $L_1$ loss of $0.0012438982603344348 \approx $ 1E-3.
 
 \begin{figure}[H]
     \begin{subfigure}{.33\linewidth}
@@ -1015,10 +1023,10 @@ Whilst we can see the gradual improvements (\autoref{fig:gd_param_visuals}), thi
       \label{fig:first_adam}
     \end{subfigure}
     
-    \caption{$L_1$ loss plot over 1,000,000 iterations initialised with $n = 100$ points, $b = 0.14124692711511863 $ and $y = 2.6503746377415633$. The optimiser achieves Figure (\ref{fig:first_adam}) after its first execution constructed with parameters $b = 0.0369625708464355$ and $y = 3.9909964437511105$. }
+    \caption{$L_1$ loss plot over 1,000,000 iterations initialised with $n = 100$ points, $b = 0.14124692711511863 $ and $y = 2.6503746377415633$. The optimiser achieves \autoref{fig:first_adam} after its first execution constructed with parameters $b = 0.0369625708464355$ and $y = 3.9909964437511105$. }
 \end{figure}
 
-The Adaptive Moment Estimation (ADAM) optimiser provides a more sophisticated approach to parameter tuning as discussed in Section (\ref{section:ADAM}). We conducted our experiments initially with parameters set to $b = 0.14124692711511863$ and $y = 2.6503746377415633$, and the learning rate $\alpha$ was set to $1 \times 10^{5}$. At first glance, we see a much a better convergence and $L_1$ loss in Figure (\ref{fig:first_adam}), plotted over 1,000,000 iterations, compared to Figure (\ref{fig:gd_1e-5}), plotted over 5,000,000 iterations. We thus reiterate the experiment but change the initial parameters in hopes of achieving a better $L_1$ score. 
+The Adaptive Moment Estimation (ADAM) optimiser provides a more sophisticated approach to parameter tuning as discussed in Section \ref{section:ADAM}. We conducted our experiments initially with parameters set to $b = 0.14124692711511863$ and $y = 2.6503746377415633$, and the learning rate $\alpha$ was set to $1 \times 10^{5}$. At first glance, we see a much a better convergence and $L_1$ loss in \autoref{fig:first_adam}, plotted over 1,000,000 iterations, compared to \autoref{fig:gd_1e-5}, plotted over 5,000,000 iterations. We thus reiterate the experiment but change the initial parameters in hopes of achieving a better $L_1$ score. 
 
 Here, we document the results of various runs with re-feeding the parameters back-to-back for each run. The table below lists the best $L_1$ losses during different stages of these runs.
 
@@ -1059,7 +1067,7 @@ After multiple runs and adjustments to the initial learning rate, we achieve a l
     \caption{Visual representation for $n = 100$ points of the (a) circle contour with $r = 1$ and $0 \leq \theta < \pi$, and (b) sinh deformation with $\sigma = 0.0$, $b = 1.48835270677098$E-05, $y = 11.808402703087143$ and $-\frac{\pi}{2} \leq \omega < \frac{\pi}{2}$.}
 \end{figure}
 
-As discussed in Section (\ref{section:point_distance}), we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example (\ref{example:point_diff}). Figure (\ref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst Figure (\ref{fig:perfect_sinh}) has an average distance of 0.031728754743097394. The numerical implementations of the contours are accurate up to 5 significant figures. However, the similarity of both contours to each other goes up to 17 significant figures. With both this affirmation and that of the $L_1$ loss, we can say the parameters provide a good level of success in regard to constructing the circular contour with the conformal mapping.
+As discussed in Section \ref{section:point_distance}, we check to see the average distance between each point of both the circular contour and the sinh deformation. In an idealistic setting, we expect the difference between each point to be $\frac{\pi}{99} \approx 0.03173325912716963$ as shown in Example \ref{example:point_diff}. \autoref{fig:circle_contour}) has an average distance of 0.03172875474309711  whilst \autoref{fig:perfect_sinh} has an average distance of 0.031728754743097394. The numerical implementations of the contours are accurate up to 5 significant figures. However, the similarity of both contours to each other goes up to 17 significant figures. With both this affirmation and that of the $L_1$ loss, we can say the parameters provide a good level of success in regard to constructing the circular contour with the conformal mapping.
 
 % ========================================
 % Numerical Benchmarking
@@ -1306,10 +1314,10 @@ While the general case, in terms of efficiency and accuracy, are similar for eac
 \end{figure}
 
 \begin{figure}[H]\ContinuedFloat
-    
     \caption{Mean absolute error (MAE) of the Cavers DFT method for different values of $\lambda$ when applied to the transform pairs: (a, b) Heaviside Step, and (c, d) Polynomial. The different lines represent the MAE values of N, presented in the legend, with $J =$ 2N.}
     \label{fig:MAE_Cavers_DFT_2N}
 \end{figure}
+\vspace{-1.5em}
 
 In \autoref{fig:MAE_Cavers_IFFT_2N}, our lowest mean absolute error tends around the level of $1 \times 10^{-11}$. Whilst this is similar to the Abate and Whitt method, the Cavers IFFT method exhibits a non-linear time complexity, as shown in \autoref{fig:timings_cavers_log}. The key advantage of the Cavers method is its ability to reach $1 \times 10^{-16}$ with some adjustments to the parameters. Whilst the latter was performed with J=2N, \autoref{fig:MAE_Cavers_IFFT_8N} shows great success closing in on 1E-16 tolerance using J=8N. By incrasing the number of points within the secondary grid, the method can achieve machine-zero tolerance with double precision, but this enhancement comes at the cost of the increased time computational due to the added points with a time complexity of O(NLogN).
 
@@ -1319,6 +1327,7 @@ When comparing the Cavers DFT implementation (Algorithm \ref{algo:cavers}) with 
 % Comparative Analysis
 % ========================================
 \subsection{Comparative Analysis}
+Whilst we have explored the general changes for a wide range of values in the previous section, we present the results for the best error achieved across all 3 approximations methods for the each of the transform pairs (\autoref{table:transform_pairs}).
 
 \begin{longtable}{c|c|l|l|l}
     \hline
@@ -1326,18 +1335,19 @@ When comparing the Cavers DFT implementation (Algorithm \ref{algo:cavers}) with 
     \hline
     \endfirsthead
 
-    \multicolumn{5}{c}%
-    {\tablename\ \thetable\ -- \textit{Continued from previous page}} \\
+    \multicolumn{5}{r}%
+    {\textit{Continued from previous page}} \\
     \hline
     \textbf{Function} & \textbf{Method} & \textbf{Parameters} & \textbf{Error} & \textbf{Time (s)} \\
     \hline
     \endhead
 
-    \hline \multicolumn{5}{r}{\textit{Continued on next page}} \\
+    \hline \multicolumn{5}{r}{\tablename\ \thetable\ -- \textit{Continued on next page}} \\
     \endfoot
 
     \hline
-    \caption{Comparison for $n = 100$ on the transform pairs (i) Heaviside Step, (ii) Polynomial, (iii) Decaying Exponential with $a=0.5$ and $t=80$, and (iv) Sinusoidal with $\omega=\frac{\pi}{4}$ and $t=80$. The selected parameters for $\lambda$ and $\gamma$ yield the best results for the range [8, 20) in increments of 0.1. The corresponding time taken is the lowest achieved across 10 runs.} \\
+    \caption{NIZT comparison for $n = 100$ on the transform pairs (i) Heaviside Step, (ii) Polynomial, (iii) Decaying Exponential with $a=0.5$ and $t=80$, and (iv) Sinusoidal with $\omega=\frac{\pi}{4}$ and $t=80$. The selected parameters for $\lambda$ and $\gamma$ yield the best results for the range [8, 20) in increments of 0.1. The corresponding time taken is the lowest achieved across 10 runs.}
+    \label{table:NIZT_comparison}
     \endlastfoot
 
     Heaviside Step & Abate and Whitt & $\lambda = 10.9$ & 6.32E-12 & 0.0000420 \\
@@ -1381,16 +1391,33 @@ When comparing the Cavers DFT implementation (Algorithm \ref{algo:cavers}) with 
     & & $\gamma = 17.0$, J = 20N & 2.89E-17 & 0.0044700 \\
 \end{longtable}
 
+The Cavers IFFT method generally demonstrates superior accuracy across the different transform pairs. In contrast, the Cavers DFT summation method performs subpar in all cases given the singular exception of the Sinusoidal function for $J=20N$, where we achieve an error of 2.89E-17 and the latter achieves 9.29E-16. It can be clearly seen that the approximation formula by Cavers performs best with the Decaying Exponential and Sinusoidal transform pairs. We see an instance of surpassing machine-zero, with double precision, tolerance for the Decaying Exponential function with $\gamma = 11.2$ and J=10N; 4.60E-17. Given the lack of customisability for the Abate and Whitt method, our lowest error is displayed with the Decaying Exponential and Sinusoidal function at around 6E-13.
+
+Given our findings, we can indeed conclude that, in most cases, the Abate and Whitt method achieves its highest accuracy at around $\lambda \approx 11$. Whilst we do achieve $\approx$1E-13 accuracy, our extensive experimentation (\autoref{fig:MAE_Abate_Whitt}) shows that the MAE maxes out at around 11/12 significant figures. From both \autoref{table:NIZT_comparison} and \autoref{fig:MAE_Cavers_IFFT_8N}, Cavers can achieve a much higher degree of accuracy with some changes to the hyper-parameters. 
+
+While more accurate, Cavers incurs higher computational costs, especially as $\gamma$ and $J$ increase. The Heaviside Step function with J=20N takes 0.000141 seconds for the IFFT implementation and the DFT summation implementation takes 0.0045500 seconds. We ought to also mention that the computational cost is higher for Cavers DFT than the other methods in all cases. On the other hand, the method by Abate and Whitt seems to be the fastest or one of the fastest for all transform pairs. This can be seen to provide a more balanced approach with moderate accuracy and computational efficiency.
+
 % ========================================
 % Conclusion
 % ========================================
 \chapter{Conclusion}
-In conclusion, the results seen validate the theoretical considerations outlined in Section \ref{sec:experiment_aw}, demonstrating that the choice of parameters and the nature of the transform pair impact the accuracy and efficiency of the inverse $z$-transform using the approximation method (Section \ref{section:abate_whitt}).
 
 % ========================================
 % Summary
 % ========================================
 \section{Summary}
+This study successfully explores the relevancy of the inverse $z$-transform in the pricing of discrete path-dependent options. A greater outlook is given to Lookback and Barrier options and the necessitation for the use of numerical Fourier transform methods. The employment of numerical methods is discussed and outlined for both the general implementation and the Python implementation, making use of NumPy's vectorisation capabilities. 
+
+Whilst the latter involves a circular contour, we explore the idea of deforming the contour via a sinh function. The use optimisation techniques, such as gradient descent and its variant, the ADAM optimiser, is successfully employed to find parameters for the sinh deformation that achieves a contour resembling that of the unit circle; an accuracy greater than 1E-16, \textit{machine-zero}, with double precision. This sets the stage for heuristic implementations for the Abate and Whitt method as well as Caver's.
+
+In an attempt to compare the NIZT methods, we provide a comparison on the methods and a look into the sensitivity of the parameters to the output of the approximation formulas. The results seen validate the theoretical considerations demonstrating that the choice of parameters and the nature of the transform pair impact the accuracy and efficiency of the inverse $z$-transform.
+
+The method introduced by \citet{Cavers1978FFT}'s is shown to achieve an accuracy surpassing 1E-16 but suffers from a high-computational cost. The method introduced by \citet{AbateWhitt1992a, AbateWhitt1992b} offers an accuracy of around 1E-11 but with a computational cost lower than that of Cavers; a middle ground showcasing the trade-off between accuracy and efficiency.	
+
+% ========================================
+% Critical Evaluation
+% ========================================
+\section{Critical Evaluation}
 
 % ========================================
 % Future Work
@@ -1403,7 +1430,7 @@ In conclusion, the results seen validate the theoretical considerations outlined
 % Parameter Selection
 % ========================================
 \subsection{Parameter Selection}
-During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\ref{equation:conformal_mapping}).
+During the course of the project, there was no set method for selecting the parameters for Equation \ref{equation:conformal_mapping}, hence, our effort of employing numerous techniques in an attempt to find the optimal parameters. However, as of recently at the time of writing, \citet{boyarchenko2024efficient} have released a paper detailing parameter selection for the conformal mapping (\autoref{equation:conformal_mapping}).
 
 % ========================================
 % References 
