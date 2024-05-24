@@ -53,6 +53,9 @@ def ftilde(z, omega, t, N):
     return numerator / denominator
 \end{lstlisting}
 
+% ========================================
+% Contours
+% ========================================
 \newpage
 \section{Contours}
 
@@ -117,7 +120,7 @@ def abate_whitt(ftilde, n, lmbda):
 \end{lstlisting}
 
 \subsection{Cavers 1978}
-\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT}'s FFT NIZT (Equation \ref{cavers})]
+\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT} FFT NIZT (Equation \ref{cavers})]
 def cavers(ftilde, n, N, gamma):
     r = 10 ** (gamma / (N))
     k = np.arange(N)
@@ -127,7 +130,7 @@ def cavers(ftilde, n, N, gamma):
     return f
 \end{lstlisting}
 
-\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT}'s DFT NIZT (Equation \ref{equation:cavers_sum})]
+\begin{lstlisting}[language=Python, caption= Implementation of \citet{Cavers1978FFT} DFT NIZT (Equation \ref{equation:cavers_sum})]
 def cavers_dft(ftilde, n, J, gamma):
     r = 10 ** (gamma / J)
     
@@ -148,14 +151,14 @@ def cavers_dft(ftilde, n, J, gamma):
 \section{Optimisation Techniques}
 
 \subsection{Loss Function}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of \autoref{eq:loss_function} to quantify the deviation from the unit circle.]
 def loss(z):
     L1 = np.sum((np.abs(z) - 1) ** 2)
     return L1
 \end{lstlisting}
 
 \subsection{Gradient Descent}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Initial gradient descent setup as outlined in Algorithm \ref{algo:gd_l1}]
 def gradient_descent(N, learning_rate=1e-3, num_iterations=1_000_000):
 	# initial values
     b = 0.7
@@ -188,7 +191,7 @@ def gradient_descent(N, learning_rate=1e-3, num_iterations=1_000_000):
 \end{lstlisting}
 
 \subsection{ADAM Optimiser}
-\begin{lstlisting}[language=Python, caption= null]
+\begin{lstlisting}[language=Python, caption= Implementation of the initial ADAM optimiser run (Algorithm \ref{algo:adam_l1})]
 def adam_optimiser(N, initial_learning_rate=1e-3, num_iterations=1_000_000, beta1=0.9, beta2=0.999, epsilon=1e-5):
 	# initial values
     b = 0.14124692711511863
